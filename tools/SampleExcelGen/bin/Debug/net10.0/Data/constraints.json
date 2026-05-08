@@ -1,0 +1,976 @@
+﻿{
+    "mappingRules":  [
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Roughing",
+                             "millingType":  "End milling",
+                             "toolType":  "Carbide",
+                             "strategyType":  "Conventional",
+                             "graphNumber":  "3.2.2.4.1.1"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Finishing",
+                             "millingType":  "End milling",
+                             "toolType":  "Carbide",
+                             "strategyType":  "Conventional",
+                             "graphNumber":  "3.2.2.4.1.2"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Roughing",
+                             "millingType":  "Face milling",
+                             "toolType":  "Carbide",
+                             "strategyType":  "Conventional",
+                             "graphNumber":  "3.2.2.4.1.3"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Finishing",
+                             "millingType":  "Face milling",
+                             "toolType":  "Carbide",
+                             "strategyType":  "Conventional",
+                             "graphNumber":  "3.2.2.4.1.4"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Roughing",
+                             "millingType":  "End milling",
+                             "toolType":  "HSS",
+                             "strategyType":  "Conventional",
+                             "graphNumber":  "3.2.2.4.2.1_1_R"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Finishing",
+                             "millingType":  "End milling",
+                             "toolType":  "HSS",
+                             "strategyType":  "Conventional",
+                             "graphNumber":  "3.2.2.4.2.1_2_F"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Roughing",
+                             "millingType":  "Face milling",
+                             "toolType":  "HSS",
+                             "strategyType":  "Conventional",
+                             "graphNumber":  "3.2.2.4.2.2_1_R"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Finishing",
+                             "millingType":  "Face milling",
+                             "toolType":  "HSS",
+                             "strategyType":  "Conventional",
+                             "graphNumber":  "3.2.2.4.2.2_2_F"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Roughing",
+                             "millingType":  "End milling",
+                             "toolType":  "Carbide",
+                             "strategyType":  "HSM",
+                             "graphNumber":  "3.2.2.4.3.1"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Finishing",
+                             "millingType":  "End milling",
+                             "toolType":  "Carbide",
+                             "strategyType":  "HSM",
+                             "graphNumber":  "3.2.2.4.3.2"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Roughing",
+                             "millingType":  "Face milling",
+                             "toolType":  "Carbide",
+                             "strategyType":  "HSM",
+                             "graphNumber":  "3.2.2.4.3.3"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Finishing",
+                             "millingType":  "Face milling",
+                             "toolType":  "Carbide",
+                             "strategyType":  "HSM",
+                             "graphNumber":  "3.2.2.4.3.4"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Roughing",
+                             "millingType":  "End milling",
+                             "toolType":  "PCD",
+                             "strategyType":  "HSM",
+                             "graphNumber":  "3.2.2.4.4.1"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Finishing",
+                             "millingType":  "End milling",
+                             "toolType":  "PCD",
+                             "strategyType":  "HSM",
+                             "graphNumber":  "3.2.2.4.4.2"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Roughing",
+                             "millingType":  "Face milling",
+                             "toolType":  "PCD",
+                             "strategyType":  "HSM",
+                             "graphNumber":  "3.2.2.4.4.3"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Finishing",
+                             "millingType":  "Face milling",
+                             "toolType":  "PCD",
+                             "strategyType":  "HSM",
+                             "graphNumber":  "3.2.2.4.4.4"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Finishing",
+                             "millingType":  "Drilling",
+                             "toolType":  "Carbide",
+                             "strategyType":  "Conventional",
+                             "graphNumber":  "3.2.6.2.1.4_1_Drill"
+                         },
+                         {
+                             "material":  "Aluminum",
+                             "surfaceType":  "Finishing",
+                             "millingType":  "Reaming",
+                             "toolType":  "Carbide",
+                             "strategyType":  "Conventional",
+                             "graphNumber":  "3.2.6.2.1.4_2_Ream"
+                         }
+                     ],
+    "graphs":  [
+                   {
+                       "graphNumber":  "3.2.2.4.1.1",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  57,
+                                                  "y":  0.05
+                                              },
+                                              {
+                                                  "x":  57,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  113,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  113,
+                                                  "y":  0.35
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.35
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.021
+                                              },
+                                              {
+                                                  "x":  704,
+                                                  "y":  0.021
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  12
+                                                 },
+                                                 {
+                                                     "x":  6,
+                                                     "y":  12
+                                                 },
+                                                 {
+                                                     "x":  6,
+                                                     "y":  20
+                                                 },
+                                                 {
+                                                     "x":  0,
+                                                     "y":  20
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.1.2",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  57,
+                                                  "y":  0.05
+                                              },
+                                              {
+                                                  "x":  57,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.021
+                                              },
+                                              {
+                                                  "x":  704,
+                                                  "y":  0.021
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  0.1
+                                                 },
+                                                 {
+                                                     "x":  20,
+                                                     "y":  0.1
+                                                 },
+                                                 {
+                                                     "x":  20,
+                                                     "y":  7
+                                                 },
+                                                 {
+                                                     "x":  0.5,
+                                                     "y":  100
+                                                 },
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  100
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.1.3",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.35
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.35
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.044
+                                              },
+                                              {
+                                                  "x":  377,
+                                                  "y":  0.044
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  12
+                                                 },
+                                                 {
+                                                     "x":  50,
+                                                     "y":  12
+                                                 },
+                                                 {
+                                                     "x":  25,
+                                                     "y":  14.5
+                                                 },
+                                                 {
+                                                     "x":  25,
+                                                     "y":  25
+                                                 },
+                                                 {
+                                                     "x":  0,
+                                                     "y":  25
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.1.4",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.044
+                                              },
+                                              {
+                                                  "x":  377,
+                                                  "y":  0.044
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  4
+                                                 },
+                                                 {
+                                                     "x":  50,
+                                                     "y":  4
+                                                 },
+                                                 {
+                                                     "x":  6,
+                                                     "y":  16.5
+                                                 },
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  16.5
+                                                 },
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  0.1
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.2.1_1_R",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  600,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  600,
+                                                  "y":  0.07
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  12
+                                                 },
+                                                 {
+                                                     "x":  0,
+                                                     "y":  12
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.2.1_2_F",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  600,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  600,
+                                                  "y":  0.07
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  0.1
+                                                 },
+                                                 {
+                                                     "x":  1,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  1,
+                                                     "y":  30
+                                                 },
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  30
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.2.2_1_R",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  600,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  600,
+                                                  "y":  0.07
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  12
+                                                 },
+                                                 {
+                                                     "x":  0,
+                                                     "y":  12
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.2.2_2_F",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  151,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  600,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  600,
+                                                  "y":  0.07
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  0.1
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0.1
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  3
+                                                 },
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  3
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.3.1",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.06
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.35
+                                              },
+                                              {
+                                                  "x":  3300,
+                                                  "y":  0.35
+                                              },
+                                              {
+                                                  "x":  3770,
+                                                  "y":  0.22
+                                              },
+                                              {
+                                                  "x":  3770,
+                                                  "y":  0.06
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  20
+                                                 },
+                                                 {
+                                                     "x":  25,
+                                                     "y":  20
+                                                 },
+                                                 {
+                                                     "x":  25,
+                                                     "y":  25
+                                                 },
+                                                 {
+                                                     "x":  12.5,
+                                                     "y":  35
+                                                 },
+                                                 {
+                                                     "x":  9,
+                                                     "y":  35
+                                                 },
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  100
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.3.2",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.021
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  4000,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  4000,
+                                                  "y":  0.021
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  0.1
+                                                 },
+                                                 {
+                                                     "x":  14,
+                                                     "y":  0.1
+                                                 },
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  100
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.3.3",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.35
+                                              },
+                                              {
+                                                  "x":  5429,
+                                                  "y":  0.35
+                                              },
+                                              {
+                                                  "x":  5429,
+                                                  "y":  0.07
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  20
+                                                 },
+                                                 {
+                                                     "x":  28.33,
+                                                     "y":  20
+                                                 },
+                                                 {
+                                                     "x":  25,
+                                                     "y":  25
+                                                 },
+                                                 {
+                                                     "x":  0,
+                                                     "y":  25
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.3.4",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  1800,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  5429,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  5429,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  2670,
+                                                  "y":  0.03
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  3
+                                                 },
+                                                 {
+                                                     "x":  63,
+                                                     "y":  3
+                                                 },
+                                                 {
+                                                     "x":  63,
+                                                     "y":  4
+                                                 },
+                                                 {
+                                                     "x":  6,
+                                                     "y":  16.5
+                                                 },
+                                                 {
+                                                     "x":  0,
+                                                     "y":  16.5
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.4.1",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  1759,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  2199,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  3600,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  3600,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  1759,
+                                                  "y":  0.07
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  8
+                                                 },
+                                                 {
+                                                     "x":  12,
+                                                     "y":  8
+                                                 },
+                                                 {
+                                                     "x":  12,
+                                                     "y":  12
+                                                 },
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  12
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.4.2",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  1759,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  2199,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  3600,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  3600,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  1759,
+                                                  "y":  0.07
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  0.1
+                                                 },
+                                                 {
+                                                     "x":  12,
+                                                     "y":  0.1
+                                                 },
+                                                 {
+                                                     "x":  12,
+                                                     "y":  12
+                                                 },
+                                                 {
+                                                     "x":  8,
+                                                     "y":  8
+                                                 },
+                                                 {
+                                                     "x":  0.1,
+                                                     "y":  8
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.4.3",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  1759,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  2199,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  3600,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  3600,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  1759,
+                                                  "y":  0.07
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  8
+                                                 },
+                                                 {
+                                                     "x":  0,
+                                                     "y":  8
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.2.4.4.4",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  1759,
+                                                  "y":  0.07
+                                              },
+                                              {
+                                                  "x":  1759,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  2199,
+                                                  "y":  0.25
+                                              },
+                                              {
+                                                  "x":  3600,
+                                                  "y":  0.15
+                                              },
+                                              {
+                                                  "x":  3600,
+                                                  "y":  0.07
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  100,
+                                                     "y":  4
+                                                 },
+                                                 {
+                                                     "x":  0,
+                                                     "y":  4
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.6.2.1.4_1_Drill",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  14,
+                                                  "y":  0.01
+                                              },
+                                              {
+                                                  "x":  14,
+                                                  "y":  0.2
+                                              },
+                                              {
+                                                  "x":  680,
+                                                  "y":  0.2
+                                              },
+                                              {
+                                                  "x":  680,
+                                                  "y":  0.01
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  1000,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  1000,
+                                                     "y":  1000
+                                                 },
+                                                 {
+                                                     "x":  0,
+                                                     "y":  1000
+                                                 }
+                                             ]
+                   },
+                   {
+                       "graphNumber":  "3.2.6.2.1.4_2_Ream",
+                       "cuttingPolygon":  [
+                                              {
+                                                  "x":  50,
+                                                  "y":  0.01
+                                              },
+                                              {
+                                                  "x":  50,
+                                                  "y":  0.4
+                                              },
+                                              {
+                                                  "x":  500,
+                                                  "y":  0.4
+                                              },
+                                              {
+                                                  "x":  500,
+                                                  "y":  0.01
+                                              }
+                                          ],
+                       "engagementPolygon":  [
+                                                 {
+                                                     "x":  0,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  1000,
+                                                     "y":  0
+                                                 },
+                                                 {
+                                                     "x":  1000,
+                                                     "y":  1000
+                                                 },
+                                                 {
+                                                     "x":  0,
+                                                     "y":  1000
+                                                 }
+                                             ]
+                   }
+               ]
+}

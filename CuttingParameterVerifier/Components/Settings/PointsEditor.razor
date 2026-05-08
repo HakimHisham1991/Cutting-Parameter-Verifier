@@ -1,0 +1,40 @@
+@using CuttingParameterVerifier.Models
+
+<div class="table-responsive">
+    <table class="table table-sm align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>X</th>
+                <th>Y</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (var i = 0; i < Points.Count; i++)
+            {
+                var idx = i;
+                <tr>
+                    <td><input type="number" step="any" class="form-control form-control-sm" @bind="Points[idx].X" /></td>
+                    <td><input type="number" step="any" class="form-control form-control-sm" @bind="Points[idx].Y" /></td>
+                    <td>
+                        <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => RemoveAt(idx)" disabled="@(Points.Count <= 1)">Remove</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<button type="button" class="btn btn-sm btn-outline-primary" @onclick="Add">Add point</button>
+
+@code {
+    [Parameter, EditorRequired]
+    public List<Point2D> Points { get; set; } = null!;
+
+    private void Add() => Points.Add(new Point2D());
+
+    private void RemoveAt(int index)
+    {
+        if (Points.Count <= 1) return;
+        Points.RemoveAt(index);
+    }
+}

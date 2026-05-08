@@ -1,0 +1,250 @@
+@page "/settings"
+@rendermode InteractiveServer
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using CuttingParameterVerifier.Models
+@using CuttingParameterVerifier.Services
+@inject IConstraintService Constraints
+
+<PageTitle>Verifier settings</PageTitle>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Settings</h1>
+    <div class="d-flex gap-2">
+        <button type="button" class="btn btn-outline-secondary" @onclick="ReloadAsync">Reload</button>
+        <button type="button" class="btn btn-primary" @onclick="SaveAsync">Save configuration</button>
+    </div>
+</div>
+
+@if (!string.IsNullOrEmpty(_message))
+{
+    <div class="alert @(_isError ? "alert-danger" : "alert-success")">@_message</div>
+}
+
+<div class="row g-3">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header">Mapping table</div>
+            <div class="card-body">
+                <p class="text-muted small mb-2">Match is case-insensitive on all five fields. If no rule matches, both evaluations are N/A.</p>
+                <div class="table-responsive">
+                    <table class="table table-sm align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Material</th>
+                                <th>Surface type</th>
+                                <th>Milling type</th>
+                                <th>Tool type</th>
+                                <th>Strategy type</th>
+                                <th>Graph number</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var rule in _model.MappingRules)
+                            {
+                                <tr>
+                                    <td><input class="form-control form-control-sm" @bind="rule.Material" /></td>
+                                    <td><input class="form-control form-control-sm" @bind="rule.SurfaceType" /></td>
+                                    <td><input class="form-control form-control-sm" @bind="rule.MillingType" /></td>
+                                    <td><input class="form-control form-control-sm" @bind="rule.ToolType" /></td>
+                                    <td><input class="form-control form-control-sm" @bind="rule.StrategyType" /></td>
+                                    <td><input class="form-control form-control-sm" @bind="rule.GraphNumber" /></td>
+                                    <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => RemoveRule(rule)">Delete</button></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <button type="button" class="btn btn-sm btn-outline-primary" @onclick="AddRule">Add mapping row</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header">Graph selector</div>
+            <div class="card-body">
+                <label class="form-label">Graph number</label>
+                <select class="form-select" value="@_selectedGraphNumber" @onchange="OnGraphSelectionChanged">
+                    @foreach (var g in _model.Graphs.OrderBy(x => x.GraphNumber, StringComparer.OrdinalIgnoreCase))
+                    {
+                        <option value="@g.GraphNumber">@g.GraphNumber</option>
+                    }
+                </select>
+                <hr />
+                <button type="button" class="btn btn-sm btn-outline-primary w-100 mb-2" @onclick="AddGraph">Add graph</button>
+                <button type="button" class="btn btn-sm btn-outline-danger w-100" @onclick="RemoveSelectedGraph" disabled="@(_activeGraph is null)">Delete selected graph</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-header">Constraint polygons</div>
+            <div class="card-body">
+                @if (_activeGraph is null)
+                {
+                    <p class="text-muted mb-0">No graphs defined.</p>
+                }
+                else
+                {
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <h2 class="h6">Cutting (Vc, Fz)</h2>
+                            <PointsEditor @key="@($"{_activeGraph.GraphNumber}|c")" Points="_activeGraph.CuttingPolygon" />
+                        </div>
+                        <div class="col-md-6">
+                            <h2 class="h6">Engagement (ap, ae)</h2>
+                            <PointsEditor @key="@($"{_activeGraph.GraphNumber}|e")" Points="_activeGraph.EngagementPolygon" />
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <label class="form-label">Rename graph number</label>
+                        <div class="input-group">
+                            <input class="form-control" @bind="_activeGraph.GraphNumber" />
+                        </div>
+                        <div class="form-text">Identifiers may include dotted codes (for example 3.2.2.4.1.2).</div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    private static readonly JsonSerializerOptions CloneOpts = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        WriteIndented = false,
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+    };
+
+    private VerificationConfig _model = new();
+    private string _selectedGraphNumber = "";
+    private ConstraintGraph? _activeGraph;
+    private string? _message;
+    private bool _isError;
+
+    protected override void OnInitialized() => Reload();
+
+    private Task ReloadAsync()
+    {
+        Reload();
+        _message = "Reloaded from disk.";
+        _isError = false;
+        return Task.CompletedTask;
+    }
+
+    private void Reload()
+    {
+        var json = JsonSerializer.Serialize(Constraints.Load(), CloneOpts);
+        _model = JsonSerializer.Deserialize<VerificationConfig>(json, CloneOpts) ?? new VerificationConfig();
+        if (_model.Graphs.Count == 0)
+        {
+            _selectedGraphNumber = "";
+            _activeGraph = null;
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(_selectedGraphNumber) ||
+            _model.Graphs.All(g => !string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.Ordinal)))
+        {
+            _selectedGraphNumber = _model.Graphs[0].GraphNumber;
+        }
+
+        _activeGraph = _model.Graphs.First(g => string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.Ordinal));
+    }
+
+    protected override void OnParametersSet()
+    {
+        if (!string.IsNullOrWhiteSpace(_selectedGraphNumber))
+        {
+            _activeGraph = _model.Graphs.FirstOrDefault(g =>
+                string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.Ordinal));
+        }
+    }
+
+    private void OnGraphSelectionChanged(ChangeEventArgs e)
+    {
+        _selectedGraphNumber = e.Value?.ToString() ?? "";
+        _activeGraph = _model.Graphs.FirstOrDefault(g =>
+            string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.Ordinal));
+    }
+
+    private void AddRule() => _model.MappingRules.Add(new MappingRule());
+
+    private void RemoveRule(MappingRule r) => _model.MappingRules.Remove(r);
+
+    private void AddGraph()
+    {
+        var n = 1;
+        while (_model.Graphs.Any(g => string.Equals(g.GraphNumber, n.ToString(), StringComparison.Ordinal)))
+            n++;
+        var g = new ConstraintGraph
+        {
+            GraphNumber = n.ToString(),
+            CuttingPolygon = new List<Point2D> { new(0, 0), new(0, 1), new(1, 1), new(1, 0) },
+            EngagementPolygon = new List<Point2D> { new(0, 0), new(0, 1), new(1, 1), new(1, 0) }
+        };
+        _model.Graphs.Add(g);
+        _selectedGraphNumber = g.GraphNumber;
+        _activeGraph = g;
+    }
+
+    private void RemoveSelectedGraph()
+    {
+        if (_activeGraph is null) return;
+        _model.Graphs.Remove(_activeGraph);
+        _activeGraph = null;
+        if (_model.Graphs.Count == 0)
+        {
+            _selectedGraphNumber = "";
+            return;
+        }
+
+        _selectedGraphNumber = _model.Graphs[0].GraphNumber;
+        _activeGraph = _model.Graphs[0];
+    }
+
+    private async Task SaveAsync()
+    {
+        _message = null;
+        foreach (var g in _model.Graphs)
+        {
+            g.CuttingPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.CuttingPolygon);
+            g.EngagementPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.EngagementPolygon);
+        }
+
+        var errors = Validate(_model);
+        if (errors.Count > 0)
+        {
+            _isError = true;
+            _message = string.Join(" ", errors);
+            return;
+        }
+
+        Constraints.Save(_model);
+        _isError = false;
+        _message = "Saved to Data/constraints.json";
+        await Task.CompletedTask;
+    }
+
+    private static List<string> Validate(VerificationConfig cfg)
+    {
+        var errors = new List<string>();
+        var dupGraphs = cfg.Graphs.GroupBy(g => g.GraphNumber.Trim(), StringComparer.OrdinalIgnoreCase).Where(g => g.Count() > 1).Select(g => g.Key).ToList();
+        if (dupGraphs.Count > 0)
+            errors.Add($"Duplicate graph numbers: {string.Join(", ", dupGraphs)}.");
+
+        foreach (var g in cfg.Graphs)
+        {
+            if (g.CuttingPolygon.Count < 3)
+                errors.Add($"Graph {g.GraphNumber}: cutting polygon needs at least three vertices (after normalization).");
+            if (g.EngagementPolygon.Count < 3)
+                errors.Add($"Graph {g.GraphNumber}: engagement polygon needs at least three vertices (after normalization).");
+        }
+
+        return errors;
+    }
+}

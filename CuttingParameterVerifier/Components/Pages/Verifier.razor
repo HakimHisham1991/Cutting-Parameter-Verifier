@@ -1,0 +1,498 @@
+@page "/"
+@rendermode InteractiveServer
+@implements IDisposable
+@inject CuttingSessionState Session
+@inject IExcelService Excel
+@inject IJSRuntime Js
+
+<PageTitle>Cutting parameter verifier</PageTitle>
+
+<div class="cpv-toolbar card shadow-sm mb-3">
+    <div class="card-body d-flex flex-wrap gap-2 align-items-center justify-content-between">
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            @* InputFile must stay mounted until the browser file stream is finished — removing it causes _blazorFilesById errors. *@
+            <label class="btn btn-primary mb-0 @(_importBusy ? "cpv-upload-busy" : "")">
+                @if (_importBusy)
+                {
+                    <span>Import in progress…</span>
+                }
+                else
+                {
+                    <span>Upload Excel (.xlsx)</span>
+                }
+                <InputFile OnChange="OnExcelSelectedAsync" accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" hidden />
+            </label>
+            <a class="btn btn-outline-secondary" href="samples/sample.xlsx" download>Download sample sheet</a>
+            <button type="button" class="btn btn-outline-primary" @onclick="ExportAsync" disabled="@(!Session.Results.Any() || _importBusy)">Export results</button>
+        </div>
+        <div class="d-flex flex-wrap gap-2 align-items-center">
+            <label class="mb-0 text-muted small">Filter</label>
+            <select class="form-select form-select-sm cpv-filter" @bind="_filterValue" @bind:after="OnFilterChanged" disabled="@_importBusy">
+                <option value="All">All rows</option>
+                <option value="PassBoth">Pass on both</option>
+                <option value="AnyFail">Any fail</option>
+                <option value="AnyNa">Any N/A</option>
+            </select>
+        </div>
+    </div>
+</div>
+
+@if (_importBusy)
+{
+    <div class="alert @( _importFailed ? "alert-danger" : "alert-primary border-0 shadow-sm") mb-3 cpv-import-status" role="status" aria-live="polite">
+        <div class="d-flex align-items-start gap-3">
+            <div class="spinner-border spinner-border-sm mt-1 @( _importFailed ? "d-none" : "")" aria-hidden="true"></div>
+            <div class="flex-grow-1 min-w-0">
+                <div class="fw-semibold">@_importPhase</div>
+                @if (!string.IsNullOrWhiteSpace(_importDetail))
+                {
+                    <div class="small @( _importFailed ? "" : "text-muted") text-break mt-1">@_importDetail</div>
+                }
+                <div class="progress mt-2 cpv-import-progress" aria-hidden="true">
+                    <div class="progress-bar @( _importFailed ? "bg-danger" : "") @( _importPercent < 100 && !_importFailed ? "progress-bar-striped progress-bar-animated" : "")"
+                         role="progressbar"
+                         style="width: @(_importPercent)%"></div>
+                </div>
+                <div class="small mt-1 text-muted">@_importPercent%</div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Session.LastImportNotes.Count > 0)
+{
+    <div class="alert alert-info py-2">
+        @foreach (var n in Session.LastImportNotes)
+        {
+            <div>@n</div>
+        }
+    </div>
+}
+
+<div class="row g-3 cpv-main-row">
+    <div class="col-xxl-8 col-xl-8 col-12 cpv-verifier-table-col">
+        <div class="card shadow-sm h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Imported operations</span>
+                <span class="badge text-bg-secondary">@OrderedFilteredResults.Count() / @Session.Results.Count</span>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive cpv-table-scroll cpv-table-responsive">
+                    <table class="table table-sm table-striped table-hover mb-0 align-middle cpv-results-table">
+                        <thead class="table-light sticky-top">
+                            <tr>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.No))">No. @SortIndicator(TableSortColumn.No)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.OperationName))">Operation @SortIndicator(TableSortColumn.OperationName)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ToolName))">Tool @SortIndicator(TableSortColumn.ToolName)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Vc))">Vc @SortIndicator(TableSortColumn.Vc)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Fz))">Fz @SortIndicator(TableSortColumn.Fz)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Ae))">ae @SortIndicator(TableSortColumn.Ae)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Ap))">ap @SortIndicator(TableSortColumn.Ap)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Material))">Material @SortIndicator(TableSortColumn.Material)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.SurfaceType))">Surface @SortIndicator(TableSortColumn.SurfaceType)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.MillingType))">Milling @SortIndicator(TableSortColumn.MillingType)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ToolType))">Tool type @SortIndicator(TableSortColumn.ToolType)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.StrategyType))">Strategy @SortIndicator(TableSortColumn.StrategyType)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.GraphNumber))">Figure No. @SortIndicator(TableSortColumn.GraphNumber)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ParameterStatus))">Param @SortIndicator(TableSortColumn.ParameterStatus)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.EngagementStatus))">Engage @SortIndicator(TableSortColumn.EngagementStatus)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Remarks))">Remarks @SortIndicator(TableSortColumn.Remarks)</button>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var r in OrderedFilteredResults)
+                            {
+                                <tr class="@RowClass(r)">
+                                    <td>
+                                        @if (!string.IsNullOrWhiteSpace(r.GraphNumber) && r.Source.No.HasValue)
+                                        {
+                                            <button type="button"
+                                                    class="btn btn-link p-0 align-baseline"
+                                                    title="Jump to figure"
+                                                    @onclick="@(() => JumpToFigureAsync(r.GraphNumber))">
+                                                @r.Source.No
+                                            </button>
+                                        }
+                                        else
+                                        {
+                                            @r.Source.No
+                                        }
+                                    </td>
+                                    <td>@r.Source.OperationName</td>
+                                    <td>@r.Source.ToolName</td>
+                                    <td>@Format(r.Source.SurfaceSpeedVcMMin, "0.###")</td>
+                                    <td>@Format(r.Source.FeedPerToothFzMm, "0.####")</td>
+                                    <td>@Format(r.Source.RadialDocAeMm, "0.###")</td>
+                                    <td>@Format(r.Source.AxialDocApMm, "0.###")</td>
+                                    <td>@r.Source.Material</td>
+                                    <td>@r.Source.SurfaceType</td>
+                                    <td>@r.Source.MillingType</td>
+                                    <td>@r.Source.ToolType</td>
+                                    <td>@r.Source.StrategyType</td>
+                                    <td>@DisplayFigure(r.GraphNumber)</td>
+                                    <td><span class="@BadgeClass(r.ParameterStatus)">@BadgeText(r.ParameterStatus)</span></td>
+                                    <td><span class="@BadgeClass(r.EngagementStatus)">@BadgeText(r.EngagementStatus)</span></td>
+                                    <td class="small text-break cpv-remarks">@r.Source.Remarks</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-xxl-4 col-xl-4 col-12">
+        <GraphGallery />
+    </div>
+</div>
+
+@code {
+    private enum TableSortColumn
+    {
+        None,
+        No,
+        OperationName,
+        ToolName,
+        Vc,
+        Fz,
+        Ae,
+        Ap,
+        Material,
+        SurfaceType,
+        MillingType,
+        ToolType,
+        StrategyType,
+        GraphNumber,
+        ParameterStatus,
+        EngagementStatus,
+        Remarks
+    }
+
+    private static readonly StringComparer SortText = StringComparer.OrdinalIgnoreCase;
+
+    private string _filterValue = "All";
+    private TableSortColumn _sortColumn = TableSortColumn.No;
+    private bool _sortDescending;
+
+    private bool _importBusy;
+    private bool _importFailed;
+    private string _importPhase = "";
+    private string _importDetail = "";
+    private int _importPercent;
+
+    protected override void OnInitialized()
+    {
+        Session.Changed += OnSessionChanged;
+    }
+
+    private void OnSessionChanged() => InvokeAsync(StateHasChanged);
+
+    private void OnFilterChanged() => StateHasChanged();
+
+    private IEnumerable<ResultRow> FilteredResults => _filterValue switch
+    {
+        "PassBoth" => Session.Results.Where(r => r.ParameterStatus == PassFailNa.Pass && r.EngagementStatus == PassFailNa.Pass),
+        "AnyFail" => Session.Results.Where(r => r.ParameterStatus == PassFailNa.Fail || r.EngagementStatus == PassFailNa.Fail),
+        "AnyNa" => Session.Results.Where(r => r.ParameterStatus == PassFailNa.Na || r.EngagementStatus == PassFailNa.Na),
+        _ => Session.Results
+    };
+
+    private IEnumerable<ResultRow> OrderedFilteredResults => ApplySort(FilteredResults);
+
+    private void ToggleSort(TableSortColumn column)
+    {
+        if (_sortColumn == column)
+            _sortDescending = !_sortDescending;
+        else
+        {
+            _sortColumn = column;
+            _sortDescending = false;
+        }
+    }
+
+    private void ResetSortToNoAscending()
+    {
+        _sortColumn = TableSortColumn.No;
+        _sortDescending = false;
+    }
+
+    private string SortIndicator(TableSortColumn column) =>
+        _sortColumn != column ? "" : (_sortDescending ? " \u25BC" : " \u25B2");
+
+    private IEnumerable<ResultRow> ApplySort(IEnumerable<ResultRow> rows)
+    {
+        if (_sortColumn == TableSortColumn.None)
+            return rows;
+
+        var list = rows.ToList();
+        IOrderedEnumerable<ResultRow>? ordered = _sortColumn switch
+        {
+            TableSortColumn.No => _sortDescending
+                ? list.OrderByDescending(r => r.Source.No.HasValue).ThenByDescending(r => r.Source.No ?? int.MinValue)
+                : list.OrderBy(r => r.Source.No.HasValue ? 0 : 1).ThenBy(r => r.Source.No ?? int.MaxValue),
+            TableSortColumn.OperationName => _sortDescending
+                ? list.OrderByDescending(r => r.Source.OperationName, SortText)
+                : list.OrderBy(r => r.Source.OperationName, SortText),
+            TableSortColumn.ToolName => _sortDescending
+                ? list.OrderByDescending(r => r.Source.ToolName, SortText)
+                : list.OrderBy(r => r.Source.ToolName, SortText),
+            TableSortColumn.Vc => OrderNullableDouble(list, r => r.Source.SurfaceSpeedVcMMin),
+            TableSortColumn.Fz => OrderNullableDouble(list, r => r.Source.FeedPerToothFzMm),
+            TableSortColumn.Ae => OrderNullableDouble(list, r => r.Source.RadialDocAeMm),
+            TableSortColumn.Ap => OrderNullableDouble(list, r => r.Source.AxialDocApMm),
+            TableSortColumn.Material => _sortDescending
+                ? list.OrderByDescending(r => r.Source.Material, SortText)
+                : list.OrderBy(r => r.Source.Material, SortText),
+            TableSortColumn.SurfaceType => _sortDescending
+                ? list.OrderByDescending(r => r.Source.SurfaceType, SortText)
+                : list.OrderBy(r => r.Source.SurfaceType, SortText),
+            TableSortColumn.MillingType => _sortDescending
+                ? list.OrderByDescending(r => r.Source.MillingType, SortText)
+                : list.OrderBy(r => r.Source.MillingType, SortText),
+            TableSortColumn.ToolType => _sortDescending
+                ? list.OrderByDescending(r => r.Source.ToolType, SortText)
+                : list.OrderBy(r => r.Source.ToolType, SortText),
+            TableSortColumn.StrategyType => _sortDescending
+                ? list.OrderByDescending(r => r.Source.StrategyType, SortText)
+                : list.OrderBy(r => r.Source.StrategyType, SortText),
+            TableSortColumn.GraphNumber => _sortDescending
+                ? list.OrderByDescending(r => r.GraphNumber != null).ThenByDescending(r => r.GraphNumber ?? "", SortText)
+                : list.OrderBy(r => r.GraphNumber == null ? 1 : 0).ThenBy(r => r.GraphNumber ?? "", SortText),
+            TableSortColumn.ParameterStatus => _sortDescending
+                ? list.OrderByDescending(r => r.ParameterStatus)
+                : list.OrderBy(r => r.ParameterStatus),
+            TableSortColumn.EngagementStatus => _sortDescending
+                ? list.OrderByDescending(r => r.EngagementStatus)
+                : list.OrderBy(r => r.EngagementStatus),
+            TableSortColumn.Remarks => _sortDescending
+                ? list.OrderByDescending(r => r.Source.Remarks, SortText)
+                : list.OrderBy(r => r.Source.Remarks, SortText),
+            _ => list.OrderBy(_ => 0)
+        };
+
+        return ordered.ThenBy(r => r.Source.No.HasValue ? 0 : 1).ThenBy(r => r.Source.No ?? int.MaxValue);
+    }
+
+    private IOrderedEnumerable<ResultRow> OrderNullableDouble(List<ResultRow> list, Func<ResultRow, double?> selector) =>
+        _sortDescending
+            ? list.OrderByDescending(r => selector(r).HasValue).ThenByDescending(r => selector(r) ?? double.MinValue)
+            : list.OrderBy(r => selector(r).HasValue ? 0 : 1).ThenBy(r => selector(r) ?? double.MaxValue);
+
+    private static string? RowClass(ResultRow r)
+    {
+        if (!r.Source.IsValid)
+            return "cpv-row-invalid";
+        if (r.ParameterStatus == PassFailNa.Fail || r.EngagementStatus == PassFailNa.Fail)
+            return "cpv-row-fail";
+        return null;
+    }
+
+    private static string DisplayFigure(string? g) => string.IsNullOrWhiteSpace(g) ? "N/A" : g;
+
+    private Task JumpToFigureAsync(string? graphNumber)
+    {
+        if (string.IsNullOrWhiteSpace(graphNumber))
+            return Task.CompletedTask;
+
+        Session.SetSelectedGraphNumber(graphNumber);
+        return Task.CompletedTask;
+    }
+
+    private static string BadgeText(PassFailNa v) => v switch
+    {
+        PassFailNa.Pass => "Pass",
+        PassFailNa.Fail => "Fail",
+        _ => "N/A"
+    };
+
+    private static string BadgeClass(PassFailNa v) => v switch
+    {
+        PassFailNa.Pass => "badge text-bg-success",
+        PassFailNa.Fail => "badge text-bg-danger",
+        _ => "badge text-bg-secondary"
+    };
+
+    private static string Format(double? v, string fmt) => v is null ? "" : v.Value.ToString(fmt);
+
+    private async Task OnExcelSelectedAsync(InputFileChangeEventArgs e)
+    {
+        var file = e.File;
+        if (file is null || _importBusy) return;
+
+        // Open the browser stream before any UI swap — InputFile must remain in the DOM until this completes.
+        await using var read = file.OpenReadStream(maxAllowedSize: 40 * 1024 * 1024);
+
+        _importBusy = true;
+        _importFailed = false;
+        _importPhase = "Preparing import…";
+        _importDetail = file.Name;
+        _importPercent = 3;
+        await InvokeAsync(StateHasChanged);
+        await YieldUiAsync();
+
+        try
+        {
+            await using var ms = new MemoryStream(GetInitialBufferCapacity(file.Size));
+
+            _importPhase = "Reading file into memory…";
+            _importPercent = 12;
+            await InvokeAsync(StateHasChanged);
+            await YieldUiAsync();
+
+            await CopyStreamWithProgressAsync(read, ms, file.Size, file.Name);
+
+            ms.Position = 0;
+
+            _importPhase = "Parsing Excel workbook…";
+            _importDetail = "Detecting columns and building operation rows.";
+            _importPercent = 48;
+            await InvokeAsync(StateHasChanged);
+            await YieldUiAsync();
+
+            var rows = await Excel.ReadAsync(ms);
+
+            _importPhase = "Evaluating against constraint graphs…";
+            _importDetail = $"{rows.Count} row(s) loaded; checking polygons and mappings.";
+            _importPercent = 78;
+            await InvokeAsync(StateHasChanged);
+            await YieldUiAsync();
+
+            var notes = new List<string> { $"{rows.Count} row(s) imported from {file.Name}." };
+            if (rows.Count == 0)
+                notes.Add("No rows detected — check headers and worksheet layout.");
+
+            Session.SetImported(rows, notes);
+            ResetSortToNoAscending();
+
+            _importPhase = "Import complete.";
+            _importDetail = "";
+            _importPercent = 100;
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(450);
+        }
+        catch (Exception ex)
+        {
+            _importFailed = true;
+            _importPhase = "Import failed.";
+            _importDetail = ex.Message;
+            _importPercent = 100;
+            Session.SetImported(Array.Empty<CuttingDataRow>(), new List<string> { $"Import failed: {ex.Message}" });
+            await InvokeAsync(StateHasChanged);
+            await Task.Delay(2200);
+        }
+        finally
+        {
+            _importBusy = false;
+            _importFailed = false;
+            _importPhase = "";
+            _importDetail = "";
+            _importPercent = 0;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private static int GetInitialBufferCapacity(long size)
+    {
+        if (size <= 0 || size > 40 * 1024 * 1024) return 0;
+        try
+        {
+            return (int)Math.Min(size, int.MaxValue);
+        }
+        catch
+        {
+            return 0;
+        }
+    }
+
+    private async Task CopyStreamWithProgressAsync(Stream source, MemoryStream destination, long declaredSize, string fileDisplayName)
+    {
+        var buffer = new byte[96 * 1024];
+        long totalRead = 0;
+        var lastUiUtc = DateTime.UtcNow;
+        var lastShownPct = -1;
+
+        while (true)
+        {
+            var read = await source.ReadAsync(buffer.AsMemory(0, buffer.Length));
+            if (read == 0) break;
+            await destination.WriteAsync(buffer.AsMemory(0, read));
+            totalRead += read;
+
+            if (declaredSize <= 0) continue;
+
+            var spanPct = 12 + (int)(totalRead * 33 / declaredSize);
+            spanPct = Math.Clamp(spanPct, 12, 44);
+            var now = DateTime.UtcNow;
+            if (spanPct != lastShownPct || (now - lastUiUtc).TotalMilliseconds >= 180)
+            {
+                lastShownPct = spanPct;
+                lastUiUtc = now;
+                _importPercent = spanPct;
+                _importDetail = $"{FormatBytes(totalRead)} / {FormatBytes(declaredSize)} · {fileDisplayName}";
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+
+        if (declaredSize <= 0)
+        {
+            _importPercent = 44;
+            _importDetail = $"{FormatBytes(totalRead)} read · {fileDisplayName}";
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private async Task YieldUiAsync() => await Task.Delay(30);
+
+    private static string FormatBytes(long bytes)
+    {
+        if (bytes < 1024) return $"{bytes} B";
+        if (bytes < 1024 * 1024) return $"{bytes / 1024.0:0.#} KB";
+        return $"{bytes / (1024.0 * 1024):0.#} MB";
+    }
+
+    private async Task ExportAsync()
+    {
+        var list = OrderedFilteredResults.ToList();
+        await using var ms = new MemoryStream();
+        await Excel.WriteResultsAsync(ms, list);
+        var b64 = Convert.ToBase64String(ms.ToArray());
+        await Js.InvokeVoidAsync("cpvFiles.downloadBase64", "cutting-parameter-results.xlsx", b64);
+    }
+
+    public void Dispose()
+    {
+        Session.Changed -= OnSessionChanged;
+    }
+}

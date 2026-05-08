@@ -1,0 +1,190 @@
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using CuttingParameterVerifier.Models
+@using CuttingParameterVerifier.Components.Verifier
+@inject IJSRuntime Js
+@inject IConstraintService Constraints
+@inject CuttingSessionState Session
+@implements IDisposable
+
+<div class="graph-gallery card shadow-sm">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Constraint charts (all graphs)</span>
+        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="RefreshChartsAsync">Redraw</button>
+    </div>
+    <div class="card-body graph-scroll">
+        @if (_orderedGraphs.Count == 0)
+        {
+            <div class="text-muted small">No graphs found in constraints configuration.</div>
+        }
+        else
+        {
+            <ul class="nav nav-tabs flex-nowrap overflow-auto mb-2" role="tablist">
+                @foreach (var g in _orderedGraphs)
+                {
+                    var isActive = string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.OrdinalIgnoreCase);
+                    <li class="nav-item" role="presentation">
+                        <button type="button"
+                                id="@TabButtonId(g.GraphNumber)"
+                                class="nav-link @(isActive ? "active" : "")"
+                                role="tab"
+                                aria-selected="@(isActive ? "true" : "false")"
+                                @onclick="@(() => SelectGraph(g.GraphNumber))">
+                            @g.GraphNumber
+                        </button>
+                    </li>
+                }
+            </ul>
+
+            @if (_activeGraph is not null)
+            {
+                <div id="@GraphDomIds.FigureAnchor(_activeGraph.GraphNumber)" class="graph-pair">
+                    <div class="d-grid gap-2">
+                        <div class="chart-wrap">
+                            <canvas id="@GraphDomIds.Cutting(_activeGraph.GraphNumber)"></canvas>
+                        </div>
+                        <div class="chart-wrap">
+                            <canvas id="@GraphDomIds.Engagement(_activeGraph.GraphNumber)"></canvas>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+@code {
+    private List<ConstraintGraph> _orderedGraphs = new();
+    private bool _pendingRender;
+    private string? _selectedGraphNumber;
+    private ConstraintGraph? _activeGraph;
+    private bool _pendingFocus;
+
+    protected override void OnInitialized()
+    {
+        Session.Changed += OnSessionChanged;
+        Constraints.ConfigurationChanged += OnSessionChanged;
+    }
+
+    protected override void OnParametersSet() => ReloadGraphList();
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_pendingRender || firstRender)
+        {
+            _pendingRender = false;
+            await RenderChartsAsync();
+        }
+
+        if (_pendingFocus && _activeGraph is not null)
+        {
+            _pendingFocus = false;
+            await Js.InvokeVoidAsync("cpvCharts.scrollTabIntoView", TabButtonId(_activeGraph.GraphNumber));
+        }
+    }
+
+    private void OnSessionChanged()
+    {
+        ReloadGraphList();
+        _pendingRender = true;
+        InvokeAsync(StateHasChanged);
+    }
+
+    private void ReloadGraphList()
+    {
+        var cfg = Constraints.Load();
+        _orderedGraphs = cfg.Graphs
+            .OrderBy(g => g.GraphNumber, StringComparer.OrdinalIgnoreCase)
+            .ToList();
+
+        SyncSelectedGraph();
+    }
+
+    private void SyncSelectedGraph()
+    {
+        if (_orderedGraphs.Count == 0)
+        {
+            _selectedGraphNumber = null;
+            _activeGraph = null;
+            return;
+        }
+
+        var requested = Session.SelectedGraphNumber;
+        string? newSelected = null;
+        if (!string.IsNullOrWhiteSpace(requested) &&
+            _orderedGraphs.Any(g => string.Equals(g.GraphNumber, requested, StringComparison.OrdinalIgnoreCase)))
+        {
+            newSelected = requested.Trim();
+        }
+        else if (string.IsNullOrWhiteSpace(_selectedGraphNumber) ||
+                 !_orderedGraphs.Any(g => string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.OrdinalIgnoreCase)))
+        {
+            newSelected = _orderedGraphs[0].GraphNumber;
+        }
+        else
+        {
+            newSelected = _selectedGraphNumber;
+        }
+
+        if (!string.Equals(newSelected, _selectedGraphNumber, StringComparison.OrdinalIgnoreCase))
+            _pendingFocus = true;
+
+        _selectedGraphNumber = newSelected;
+        _activeGraph = _orderedGraphs.FirstOrDefault(g => string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private void SelectGraph(string graphNumber)
+    {
+        _selectedGraphNumber = graphNumber;
+        _activeGraph = _orderedGraphs.FirstOrDefault(g => string.Equals(g.GraphNumber, graphNumber, StringComparison.OrdinalIgnoreCase));
+        Session.SetSelectedGraphNumber(graphNumber);
+        _pendingRender = true;
+        _pendingFocus = true;
+    }
+
+    private static string TabButtonId(string graphNumber) => "tab-" + GraphDomIds.FigureAnchor(graphNumber);
+
+    private async Task RefreshChartsAsync()
+    {
+        _pendingRender = true;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task RenderChartsAsync()
+    {
+        try
+        {
+            var cfg = Constraints.Load();
+            var results = Session.Results;
+            var spec = ChartSpecBuilder.Build(cfg, results);
+            var json = JsonSerializer.Serialize(spec, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            });
+            await Js.InvokeVoidAsync("cpvCharts.renderAll", json);
+        }
+        catch (JSException)
+        {
+            // Chart.js may not be ready on first paint in rare cases; user can click Redraw.
+        }
+    }
+
+    public void Dispose()
+    {
+        Session.Changed -= OnSessionChanged;
+        Constraints.ConfigurationChanged -= OnSessionChanged;
+        try
+        {
+            _ = Js.InvokeVoidAsync("cpvCharts.destroyAll");
+        }
+        catch (JSDisconnectedException)
+        {
+            // Circuit gone.
+        }
+        catch (TaskCanceledException)
+        {
+            // Circuit gone.
+        }
+    }
+}
