@@ -1,0 +1,158 @@
+# =============================================================================
+# Deploy to MonsterASP over FTP (GitHub Actions)
+# =============================================================================
+#
+# WHEN THIS RUNS
+#   • Automatically on every push to the `main` branch.
+#   • Manually: GitHub → Actions → "Deploy to MonsterASP (FTP)" → Run workflow.
+#
+# ONE-TIME SETUP (Repository secrets)
+#   GitHub → Settings → Secrets and variables → Actions → New repository secret
+#
+#   MONSTERASP_FTP_SERVER (required)
+#     FTP hostname from MonsterASP Control Panel → Deploy (FTP / WebDeploy / Git).
+#     Example: ftp.site1234.siteasp.net  —  do not include ftp://
+#
+#   MONSTERASP_FTP_USERNAME (required)
+#   MONSTERASP_FTP_PASSWORD (required)
+#
+#   MONSTERASP_FTP_SERVER_DIR (optional but strongly recommended)
+#     Remote folder where the LIVE site is served from (wrong folder = you never see updates).
+#     MonsterASP often uses the website root:  /wwwroot/
+#     Must end with a slash / (this workflow will add one if you forget).
+#
+# OPTIONAL — Repository *variables* (Settings → Secrets and variables → Actions → Variables)
+#   MONSTERASP_FTP_PROTOCOL   e.g. ftps   (default in action: ftp — use ftps if your panel says FTPS)
+#   MONSTERASP_FTP_PORT       e.g. 21 or 990  (default: 21)
+#
+# WHY THE SITE MIGHT STILL SHOW OLD TEXT OR CSS
+#   • MONSTERASP_FTP_SERVER_DIR pointed at the wrong directory (very common).
+#   • Browser cache — hard refresh or try a private window.
+#   • Run this workflow manually with "Dangerous clean slate" enabled ONCE to wipe the
+#     remote folder and re-upload everything (then turn it off again).
+#
+# RUNTIME
+#   This publishes a framework-dependent build. Your MonsterASP plan must offer a
+#   matching .NET runtime for net10.0. If deploy works but the app does not start,
+#   check MonsterASP documentation or retarget the project to an LTS they support.
+#
+# ONE METHOD ONLY
+#   If the Control Panel has "Github deploy" / git pull into wwwroot enabled, either
+#   turn that off and rely on this workflow, or expect two deploy systems to overwrite
+#   each other. This workflow uploads the dotnet *publish* output (compiled app),
+#   not raw repo sources.
+#
+# =============================================================================
+
+name: Deploy to MonsterASP (FTP)
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      dangerous_clean_slate:
+        description: >
+          Delete ALL files in the remote deployment folder before upload.
+          Use once if the live site shows stale UI; leave off for normal deploys.
+        required: false
+        type: boolean
+        default: false
+      dry_run:
+        description: >
+          Log what would change on the server without uploading (safe connectivity test).
+        required: false
+        type: boolean
+        default: false
+
+concurrency:
+  group: monsterasp-ftp-deploy
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+    name: Publish and upload
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    # Avoid failing PR workflows from forks that cannot use your secrets.
+    if: ${{ github.event.repository.fork == false }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: |
+            10.0.x
+
+      - name: Check required FTP secrets
+        env:
+          MONSTERASP_FTP_SERVER: ${{ secrets.MONSTERASP_FTP_SERVER }}
+          MONSTERASP_FTP_USERNAME: ${{ secrets.MONSTERASP_FTP_USERNAME }}
+          MONSTERASP_FTP_PASSWORD: ${{ secrets.MONSTERASP_FTP_PASSWORD }}
+        run: |
+          set -e
+          missing=0
+          if [ -z "${MONSTERASP_FTP_SERVER:-}" ]; then
+            echo '::error::Missing secret MONSTERASP_FTP_SERVER. Add it under Settings → Secrets and variables → Actions.'
+            missing=1
+          fi
+          if [ -z "${MONSTERASP_FTP_USERNAME:-}" ]; then
+            echo '::error::Missing secret MONSTERASP_FTP_USERNAME.'
+            missing=1
+          fi
+          if [ -z "${MONSTERASP_FTP_PASSWORD:-}" ]; then
+            echo '::error::Missing secret MONSTERASP_FTP_PASSWORD.'
+            missing=1
+          fi
+          exit "$missing"
+
+      - name: Compute remote deployment folder
+        id: remote_dir
+        env:
+          RAW: ${{ secrets.MONSTERASP_FTP_SERVER_DIR }}
+        run: |
+          set -euo pipefail
+          dir="${RAW:-/wwwroot/}"
+          case "$dir" in
+            */) ;;
+            *) dir="${dir}/" ;;
+          esac
+          echo "Using server-dir: $dir"
+          echo "path=$dir" >> "$GITHUB_OUTPUT"
+
+      - name: Restore and publish web app
+        run: |
+          set -euo pipefail
+          dotnet restore CuttingParameterVerifier/CuttingParameterVerifier.csproj
+          dotnet publish CuttingParameterVerifier/CuttingParameterVerifier.csproj \
+            --configuration Release \
+            --output ./publish
+
+      - name: Deployment summary
+        run: |
+          set -euo pipefail
+          echo "::notice::Commit ${GITHUB_SHA} — publishing $(du -sh publish | cut -f1) to MonsterASP"
+
+      - name: Upload to MonsterASP (FTP)
+        uses: SamKirkland/FTP-Deploy-Action@v4.4.0
+        with:
+          server: ${{ secrets.MONSTERASP_FTP_SERVER }}
+          username: ${{ secrets.MONSTERASP_FTP_USERNAME }}
+          password: ${{ secrets.MONSTERASP_FTP_PASSWORD }}
+          local-dir: ./publish/
+          server-dir: ${{ steps.remote_dir.outputs.path }}
+          protocol: ${{ vars.MONSTERASP_FTP_PROTOCOL != '' && vars.MONSTERASP_FTP_PROTOCOL || 'ftp' }}
+          port: ${{ vars.MONSTERASP_FTP_PORT != '' && vars.MONSTERASP_FTP_PORT || 21 }}
+          timeout: 120000
+          log-level: verbose
+          # workflow_dispatch stores boolean inputs as the strings 'true' / 'false'.
+          dry-run: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run == 'true' }}
+          dangerous-clean-slate: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dangerous_clean_slate == 'true' }}

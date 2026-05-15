@@ -12,6 +12,8 @@ main[b-p8kdpkkocv] {
 
 .sidebar[b-p8kdpkkocv] {
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
+    display: flex;
+    flex-direction: column;
 }
 
 .top-row[b-p8kdpkkocv] {

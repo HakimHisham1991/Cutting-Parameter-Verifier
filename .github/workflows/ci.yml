@@ -1,4 +1,13 @@
-# Build the Blazor app + SampleExcelGen on every push/PR. Run manually from the Actions tab anytime.
+# -----------------------------------------------------------------------------
+# CI — build and verify the solution on every push and pull request.
+#
+# This workflow does NOT deploy. Delivery to hosting is handled separately so:
+#   • Pull requests and forks do not need FTP secrets.
+#   • Builds stay fast and easy to read in the Actions tab.
+#
+# Automatic FTP deploy to MonsterASP: see deploy-monsterasp.yml
+# -----------------------------------------------------------------------------
+
 name: CI
 
 on:
@@ -12,16 +21,15 @@ concurrency:
 
 jobs:
   build:
+    name: Build and publish (verify)
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: .
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup .NET
+      - name: Setup .NET SDK
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: |
@@ -30,5 +38,16 @@ jobs:
       - name: Restore
         run: dotnet restore CuttingParameterVerifier.sln
 
-      - name: Build
+      - name: Build (Release)
         run: dotnet build CuttingParameterVerifier.sln --configuration Release --no-restore
+
+      # Publishing catches Razor/static asset and publish-profile issues that `build` alone can miss.
+      - name: Publish web app (verify)
+        run: >-
+          dotnet publish CuttingParameterVerifier/CuttingParameterVerifier.csproj
+          --configuration Release
+          --no-build
+          --output ./publish-verify
+
+      - name: Show publish output (first files)
+        run: ls -la ./publish-verify | head -n 30
