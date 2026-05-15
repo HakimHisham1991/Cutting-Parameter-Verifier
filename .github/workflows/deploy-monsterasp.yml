@@ -1,55 +1,33 @@
 # =============================================================================
-# Deploy to MonsterASP over FTP (GitHub Actions)
+# Full CI/CD — this repository’s only GitHub Actions workflow (MonsterASP FTP)
 # =============================================================================
 #
-# WHEN THIS RUNS
-#   • Automatically on every push to the `main` branch.
-#   • Manually: GitHub → Actions → "Deploy to MonsterASP (FTP)" → Run workflow.
+# CI — every push & pull request
+#   Restore → Release build → dotnet publish (Razor / static assets validated).
 #
-# ONE-TIME SETUP (Repository secrets)
-#   GitHub → Settings → Secrets and variables → Actions → New repository secret
+# CD — not on pull_request
+#   • Push to `main` on the canonical repo (not a fork) → FTP upload
+#   • Manual: Actions → run workflow → optional Dry run / Dangerous clean slate
 #
-#   MONSTERASP_FTP_SERVER (required)
-#     FTP hostname from MonsterASP Control Panel → Deploy (FTP / WebDeploy / Git).
-#     Example: ftp.site1234.siteasp.net  —  do not include ftp://
+# Secrets (Settings → Secrets and variables → Actions)
+#   MONSTERASP_FTP_SERVER       Hostname only, no ftp://
+#   MONSTERASP_FTP_USERNAME
+#   MONSTERASP_FTP_PASSWORD
+#   MONSTERASP_FTP_SERVER_DIR   Optional; defaults to /wwwroot/ if unset
 #
-#   MONSTERASP_FTP_USERNAME (required)
-#   MONSTERASP_FTP_PASSWORD (required)
+# Variables (optional)
+#   MONSTERASP_FTP_PROTOCOL     e.g. ftps
+#   MONSTERASP_FTP_PORT         e.g. 21 or 990
 #
-#   MONSTERASP_FTP_SERVER_DIR (optional but strongly recommended)
-#     Remote folder where the LIVE site is served from (wrong folder = you never see updates).
-#     MonsterASP often uses the website root:  /wwwroot/
-#     Must end with a slash / (this workflow will add one if you forget).
-#
-# OPTIONAL — Repository *variables* (Settings → Secrets and variables → Actions → Variables)
-#   MONSTERASP_FTP_PROTOCOL   e.g. ftps   (default in action: ftp — use ftps if your panel says FTPS)
-#   MONSTERASP_FTP_PORT       e.g. 21 or 990  (default: 21)
-#
-# WHY THE SITE MIGHT STILL SHOW OLD TEXT OR CSS
-#   • MONSTERASP_FTP_SERVER_DIR pointed at the wrong directory (very common).
-#   • Browser cache — hard refresh or try a private window.
-#   • Run this workflow manually with "Dangerous clean slate" enabled ONCE to wipe the
-#     remote folder and re-upload everything (then turn it off again).
-#
-# RUNTIME
-#   This publishes a framework-dependent build. Your MonsterASP plan must offer a
-#   matching .NET runtime for net10.0. If deploy works but the app does not start,
-#   check MonsterASP documentation or retarget the project to an LTS they support.
-#
-# ONE METHOD ONLY
-#   If the Control Panel has "Github deploy" / git pull into wwwroot enabled, either
-#   turn that off and rely on this workflow, or expect two deploy systems to overwrite
-#   each other. This workflow uploads the dotnet *publish* output (compiled app),
-#   not raw repo sources.
-#
+# Stale live site: wrong MONSTERASP_FTP_SERVER_DIR, cache, or another deploy
+# (e.g. MonsterASP GitHub pull) overwriting files — use one deploy method.
 # =============================================================================
 
-name: Deploy to MonsterASP (FTP)
+name: MonsterASP CI/CD
 
 on:
   push:
-    branches:
-      - main
+  pull_request:
   workflow_dispatch:
     inputs:
       dangerous_clean_slate:
@@ -67,20 +45,17 @@ on:
         default: false
 
 concurrency:
-  group: monsterasp-ftp-deploy
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
-  deploy:
-    name: Publish and upload
+  build:
+    name: Build and publish (verify)
     runs-on: ubuntu-latest
-    timeout-minutes: 30
-
-    # Avoid failing PR workflows from forks that cannot use your secrets.
-    if: ${{ github.event.repository.fork == false }}
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
@@ -91,6 +66,58 @@ jobs:
         with:
           dotnet-version: |
             10.0.x
+
+      - name: Restore
+        run: dotnet restore CuttingParameterVerifier.sln
+
+      - name: Build (Release)
+        run: dotnet build CuttingParameterVerifier.sln --configuration Release --no-restore
+
+      - name: Publish web app (verify)
+        run: >-
+          dotnet publish CuttingParameterVerifier/CuttingParameterVerifier.csproj
+          --configuration Release
+          --no-build
+          --output ./publish
+
+      - name: Show publish output (first files)
+        run: ls -la ./publish | head -n 30
+
+      - name: Upload publish folder for MonsterASP deploy
+        if: >
+          github.event.repository.fork == false &&
+          github.event_name != 'pull_request' &&
+          (
+            (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+            github.event_name == 'workflow_dispatch'
+          )
+        uses: actions/upload-artifact@v4
+        with:
+          name: published-webapp
+          path: publish/
+          retention-days: 2
+
+  deploy-monsterasp:
+    name: Deploy to MonsterASP (FTP)
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    if: >
+      needs.build.result == 'success' &&
+      github.event.repository.fork == false &&
+      github.event_name != 'pull_request' &&
+      (
+        (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+        github.event_name == 'workflow_dispatch'
+      )
+
+    steps:
+      - name: Download publish folder
+        uses: actions/download-artifact@v4
+        with:
+          name: published-webapp
+          path: publish
 
       - name: Check required FTP secrets
         env:
@@ -128,18 +155,10 @@ jobs:
           echo "Using server-dir: $dir"
           echo "path=$dir" >> "$GITHUB_OUTPUT"
 
-      - name: Restore and publish web app
-        run: |
-          set -euo pipefail
-          dotnet restore CuttingParameterVerifier/CuttingParameterVerifier.csproj
-          dotnet publish CuttingParameterVerifier/CuttingParameterVerifier.csproj \
-            --configuration Release \
-            --output ./publish
-
       - name: Deployment summary
         run: |
           set -euo pipefail
-          echo "::notice::Commit ${GITHUB_SHA} — publishing $(du -sh publish | cut -f1) to MonsterASP"
+          echo "::notice::Commit ${GITHUB_SHA} — uploading $(du -sh publish | cut -f1) to MonsterASP"
 
       - name: Upload to MonsterASP (FTP)
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
@@ -153,6 +172,5 @@ jobs:
           port: ${{ vars.MONSTERASP_FTP_PORT != '' && vars.MONSTERASP_FTP_PORT || 21 }}
           timeout: 120000
           log-level: verbose
-          # workflow_dispatch stores boolean inputs as the strings 'true' / 'false'.
           dry-run: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run == 'true' }}
           dangerous-clean-slate: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dangerous_clean_slate == 'true' }}
