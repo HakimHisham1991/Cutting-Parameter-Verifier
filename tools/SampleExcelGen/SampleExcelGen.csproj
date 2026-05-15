@@ -10,4 +10,19 @@
   <ItemGroup>
     <ProjectReference Include="..\..\CuttingParameterVerifier\CuttingParameterVerifier.csproj" />
   </ItemGroup>
+
+  <!-- Tool output can keep a stale Data/constraints.json from incremental builds via project-reference content flow. Always mirror the verifier project's file. -->
+  <Target Name="SyncVerifierConstraintsJson" AfterTargets="Build">
+    <MakeDir Directories="$(OutputPath)Data\" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\CuttingParameterVerifier\Data\constraints.json"
+          DestinationFolder="$(OutputPath)Data\"
+          SkipUnchangedFiles="false" />
+  </Target>
+
+  <Target Name="SyncVerifierConstraintsJsonPublish" AfterTargets="Publish">
+    <MakeDir Directories="$(PublishDir)Data\" />
+    <Copy SourceFiles="$(MSBuildThisFileDirectory)..\..\CuttingParameterVerifier\Data\constraints.json"
+          DestinationFolder="$(PublishDir)Data\"
+          SkipUnchangedFiles="false" />
+  </Target>
 </Project>
