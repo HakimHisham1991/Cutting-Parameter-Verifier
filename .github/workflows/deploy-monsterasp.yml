@@ -183,7 +183,8 @@ jobs:
           server-dir: ${{ steps.remote_dir.outputs.path }}
           protocol: ${{ vars.MONSTERASP_FTP_PROTOCOL != '' && vars.MONSTERASP_FTP_PROTOCOL || 'ftp' }}
           port: ${{ vars.MONSTERASP_FTP_PORT != '' && vars.MONSTERASP_FTP_PORT || 21 }}
-          state-name: offline/.ftp-offline-state.json
+          # Relative to local-dir (./offline/) — do not prefix with "offline/" or the path doubles.
+          state-name: .ftp-offline-state.json
           timeout: 120000
           log-level: verbose
 
