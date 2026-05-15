@@ -13,4 +13,12 @@
     <PackageReference Include="ClosedXML" Version="0.104.2" />
   </ItemGroup>
 
+  <!-- Ensure constraints ship with publish output (implicit Content item only needs copy flags). -->
+  <ItemGroup>
+    <Content Update="Data\constraints.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
 </Project>

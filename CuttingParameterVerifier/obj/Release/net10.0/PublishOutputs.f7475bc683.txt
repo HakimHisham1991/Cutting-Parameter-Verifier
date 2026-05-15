@@ -1,0 +1,16 @@
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\CuttingParameterVerifier.exe
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\appsettings.Development.json
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\appsettings.json
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\Data\constraints.json
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\CuttingParameterVerifier.dll
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\CuttingParameterVerifier.runtimeconfig.json
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\CuttingParameterVerifier.pdb
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\ClosedXML.dll
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\ClosedXML.Parser.dll
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\DocumentFormat.OpenXml.dll
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\DocumentFormat.OpenXml.Framework.dll
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\ExcelNumberFormat.dll
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\RBush.dll
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\SixLabors.Fonts.dll
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\System.IO.Packaging.dll
+c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\bin\publish-test\CuttingParameterVerifier.deps.json
