@@ -22,10 +22,9 @@
 # Stale live site: wrong MONSTERASP_FTP_SERVER_DIR, cache, or another deploy
 # (e.g. MonsterASP GitHub pull) overwriting files — use one deploy method.
 #
-# FTP 550 / "Could not access file" / "GetHandle" on .dll: the site is still
-# running and has the DLL open. This workflow uploads app_offline.htm first,
-# waits, then retries FTP-delete on the main DLL before sync. If it still fails,
-# stop or recycle the application in the MonsterASP control panel and re-run.
+# FTP 550 on .dll: the bulk sync no longer replaces the app DLL (excluded). The
+# main assembly is uploaded in a separate step: delete + STOR retries. Also:
+# app_offline.htm, wait, recycle in panel if needed.
 # =============================================================================
 
 name: MonsterASP CI/CD
@@ -266,11 +265,88 @@ jobs:
           dry-run: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dry_run == 'true' }}
           dangerous-clean-slate: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.dangerous_clean_slate == 'true' }}
           # Keep app_offline.htm until the dedicated cleanup step (avoid site restarting mid-sync).
+          # Do not sync the entry DLL here — SFTPGo/IIS often 550 on in-place replace; upload it in the next step.
           exclude: |
             **/.git*
             **/.git*/**
             **/node_modules/**
             app_offline.htm
+            CuttingParameterVerifier.dll
+
+      - name: Upload main assembly (CuttingParameterVerifier.dll)
+        if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.dry_run != 'true' }}
+        env:
+          FTP_SERVER: ${{ secrets.MONSTERASP_FTP_SERVER }}
+          FTP_USERNAME: ${{ secrets.MONSTERASP_FTP_USERNAME }}
+          FTP_PASSWORD: ${{ secrets.MONSTERASP_FTP_PASSWORD }}
+          FTP_REMOTE_DIR: ${{ steps.remote_dir.outputs.path }}
+          FTP_PORT: ${{ vars.MONSTERASP_FTP_PORT != '' && vars.MONSTERASP_FTP_PORT || 21 }}
+          FTP_PROTOCOL: ${{ vars.MONSTERASP_FTP_PROTOCOL != '' && vars.MONSTERASP_FTP_PROTOCOL || 'ftp' }}
+        run: |
+          python << 'PY'
+          import os
+          import time
+          from ftplib import FTP, FTP_TLS
+
+          server = os.environ["FTP_SERVER"]
+          user = os.environ["FTP_USERNAME"]
+          password = os.environ["FTP_PASSWORD"]
+          port = int(os.environ.get("FTP_PORT") or "21")
+          protocol = (os.environ.get("FTP_PROTOCOL") or "ftp").lower().strip()
+          remote = (os.environ.get("FTP_REMOTE_DIR") or "/wwwroot/").replace("\\", "/")
+          dll = "CuttingParameterVerifier.dll"
+          local_path = os.path.join("publish", dll)
+
+          if not os.path.isfile(local_path):
+              print(f"::error::Missing {local_path}")
+              raise SystemExit(1)
+
+          def connect():
+              if protocol == "ftps":
+                  ftp = FTP_TLS()
+                  ftp.connect(server, port, timeout=300)
+                  ftp.login(user, password)
+                  ftp.prot_p()
+                  return ftp
+              ftp = FTP()
+              ftp.connect(server, port, timeout=300)
+              ftp.login(user, password)
+              return ftp
+
+          def cwd_segments(ftp, path):
+              for part in path.split("/"):
+                  if part:
+                      ftp.cwd(part)
+
+          rounds = 25
+          pause = 18
+          for r in range(rounds):
+              ftp = None
+              try:
+                  ftp = connect()
+                  cwd_segments(ftp, remote)
+                  try:
+                      ftp.delete(dll)
+                  except Exception as de:
+                      print(f"Round {r + 1}: delete (optional): {de}")
+                  with open(local_path, "rb") as fh:
+                      ftp.storbinary(f"STOR {dll}", fh, blocksize=65536)
+                  print(f"Uploaded {dll} OK (round {r + 1}).")
+                  ftp.quit()
+                  raise SystemExit(0)
+              except Exception as e:
+                  print(f"Round {r + 1}/{rounds}: upload failed: {e}")
+                  try:
+                      if ftp:
+                          ftp.quit()
+                  except Exception:
+                      pass
+                  if r < rounds - 1:
+                      time.sleep(pause)
+
+          print(f"::error::Could not STOR {dll} after {rounds} rounds — stop/recycle the site in MonsterASP, then re-run.")
+          raise SystemExit(1)
+          PY
 
       - name: Remove app_offline.htm (bring site back)
         if: ${{ github.event_name != 'workflow_dispatch' || github.event.inputs.dry_run != 'true' }}
