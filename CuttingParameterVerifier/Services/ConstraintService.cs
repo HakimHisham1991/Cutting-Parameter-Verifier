@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using CuttingParameterVerifier.Models;
@@ -6,6 +7,8 @@ namespace CuttingParameterVerifier.Services;
 
 public sealed class ConstraintService : IConstraintService
 {
+    internal const string BundledResourceLogicalName = "BundledConstraints.json";
+
     private readonly IWebHostEnvironment _env;
     private readonly ILogger<ConstraintService> _logger;
 
@@ -15,6 +18,9 @@ public sealed class ConstraintService : IConstraintService
         WriteIndented = true,
         DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
     };
+
+    /// <summary>Deserialize once — never mutated; used only to augment disk config.</summary>
+    private static readonly Lazy<VerificationConfig?> BundledBaseline = new(() => DeserializeBundledFromExecutingAssembly(JsonOptions));
 
     public event Action? ConfigurationChanged;
 
@@ -27,26 +33,62 @@ public sealed class ConstraintService : IConstraintService
     public VerificationConfig Load()
     {
         var path = GetConfigPath();
+
+        VerificationConfig cfg;
         try
         {
             if (!File.Exists(path))
             {
-                var created = DefaultVerificationConfigFactory.Create();
+                cfg = SnapshotBundledBaseline() ?? DefaultVerificationConfigFactory.Create();
                 Directory.CreateDirectory(Path.GetDirectoryName(path)!);
-                File.WriteAllText(path, JsonSerializer.Serialize(created, JsonOptions));
-                _logger.LogInformation("Created default constraints at {Path}", path);
-                return created;
+                File.WriteAllText(path, JsonSerializer.Serialize(cfg, JsonOptions));
+                _logger.LogInformation("Created initial constraints at {Path}", path);
+                return cfg;
             }
 
             var json = File.ReadAllText(path);
-            var cfg = JsonSerializer.Deserialize<VerificationConfig>(json, JsonOptions);
-            return cfg ?? DefaultVerificationConfigFactory.Create();
+            cfg = JsonSerializer.Deserialize<VerificationConfig>(json, JsonOptions) ?? SnapshotBundledBaseline() ?? DefaultVerificationConfigFactory.Create();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to load constraints; using defaults.");
-            return DefaultVerificationConfigFactory.Create();
+            _logger.LogError(ex, "Failed to load constraints file; rebuilding from bundled or defaults.");
+            cfg = SnapshotBundledBaseline() ?? DefaultVerificationConfigFactory.Create();
+            try
+            {
+                Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                File.WriteAllText(path, JsonSerializer.Serialize(cfg, JsonOptions));
+            }
+            catch (Exception inner)
+            {
+                _logger.LogWarning(inner, "Could not persist recovered constraints.");
+            }
         }
+
+        var bundled = BundledBaseline.Value;
+        if (bundled is not null)
+        {
+            var merged = MergeMissingMappingsAndGraphs(cfg, bundled);
+            if (merged.RuleCount > 0 || merged.GraphCount > 0)
+            {
+                _logger.LogWarning(
+                    "Augmented persisted constraints.json with missing bundled mappings ({Rules} rule(s)) and graphs ({Graphs} graph(s)); saving updated config. This usually means an older constraints file existed on hosting.",
+                    merged.RuleCount,
+                    merged.GraphCount);
+                try
+                {
+                    Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+                    File.WriteAllText(path, JsonSerializer.Serialize(cfg, JsonOptions));
+                }
+                catch (Exception ex)
+                {
+                    _logger.LogError(ex,
+                        "Could not save augmented constraints to {Path}. In-memory config is still complete for this process, but merges will repeat until the file becomes writable.",
+                        path);
+                }
+            }
+        }
+
+        return cfg;
     }
 
     public void Save(VerificationConfig config)
@@ -64,4 +106,93 @@ public sealed class ConstraintService : IConstraintService
     }
 
     private string GetConfigPath() => Path.Combine(_env.ContentRootPath, "Data", "constraints.json");
+
+    /// <summary>Detached copy via JSON round-trip — safe to write to disk without sharing references with <see cref="BundledBaseline"/>.</summary>
+    private static VerificationConfig? SnapshotBundledBaseline()
+    {
+        var bundled = BundledBaseline.Value;
+        if (bundled is null)
+            return null;
+        try
+        {
+            return JsonSerializer.Deserialize<VerificationConfig>(JsonSerializer.Serialize(bundled, JsonOptions), JsonOptions);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static VerificationConfig? DeserializeBundledFromExecutingAssembly(JsonSerializerOptions options)
+    {
+        var asm = Assembly.GetExecutingAssembly();
+        using var s = asm.GetManifestResourceStream(BundledResourceLogicalName);
+        if (s is null)
+            return null;
+        try
+        {
+            return JsonSerializer.Deserialize<VerificationConfig>(s, options);
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private sealed record MergeResult(int RuleCount, int GraphCount);
+
+    private MergeResult MergeMissingMappingsAndGraphs(VerificationConfig disk, VerificationConfig bundled)
+    {
+        var addedRules = 0;
+        foreach (var b in bundled.MappingRules)
+        {
+            if (HasEquivalentMapping(disk.MappingRules, b))
+                continue;
+            disk.MappingRules.Add(CloneMappingRule(b));
+            addedRules++;
+        }
+
+        var addedGraphs = 0;
+        foreach (var g in bundled.Graphs)
+        {
+            if (disk.Graphs.Any(x => SameGraphNumber(x.GraphNumber, g.GraphNumber)))
+                continue;
+            disk.Graphs.Add(CloneGraph(g));
+            addedGraphs++;
+        }
+
+        return new MergeResult(addedRules, addedGraphs);
+    }
+
+    private static bool HasEquivalentMapping(IReadOnlyList<MappingRule> rules, MappingRule candidate) =>
+        rules.Any(r => SameFiveTuple(r, candidate) && SameGraphNumber(r.GraphNumber, candidate.GraphNumber));
+
+    private static bool SameFiveTuple(MappingRule a, MappingRule b) =>
+        string.Equals(Norm(a.Material), Norm(b.Material), StringComparison.Ordinal) &&
+        string.Equals(Norm(a.SurfaceType), Norm(b.SurfaceType), StringComparison.Ordinal) &&
+        string.Equals(Norm(a.MillingType), Norm(b.MillingType), StringComparison.Ordinal) &&
+        string.Equals(Norm(a.ToolType), Norm(b.ToolType), StringComparison.Ordinal) &&
+        string.Equals(Norm(a.StrategyType), Norm(b.StrategyType), StringComparison.Ordinal);
+
+    private static bool SameGraphNumber(string a, string b) =>
+        string.Equals(a.Trim(), b.Trim(), StringComparison.OrdinalIgnoreCase);
+
+    private static string Norm(string s) => s.Trim().ToLowerInvariant();
+
+    private static MappingRule CloneMappingRule(MappingRule r) => new()
+    {
+        Material = r.Material,
+        SurfaceType = r.SurfaceType,
+        MillingType = r.MillingType,
+        ToolType = r.ToolType,
+        StrategyType = r.StrategyType,
+        GraphNumber = r.GraphNumber
+    };
+
+    private static ConstraintGraph CloneGraph(ConstraintGraph g) => new()
+    {
+        GraphNumber = g.GraphNumber,
+        CuttingPolygon = g.CuttingPolygon.Select(p => new Point2D(p.X, p.Y)).ToList(),
+        EngagementPolygon = g.EngagementPolygon.Select(p => new Point2D(p.X, p.Y)).ToList()
+    };
 }

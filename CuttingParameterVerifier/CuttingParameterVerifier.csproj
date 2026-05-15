@@ -19,6 +19,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
+    <!-- Fallback when hosting keeps an old persisted Data/constraints.json (missing _B rules/graphs): merge targets from bundled copy shipped in the DLL. -->
+    <EmbeddedResource Include="Data\constraints.json">
+      <LogicalName>BundledConstraints.json</LogicalName>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
