@@ -7,6 +7,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
     <RootNamespace>CuttingParameterVerifier</RootNamespace>
+    <!-- Never treat past publish folders inside the repo as Razor/static sources (breaks BLAZOR106). -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);publish-output\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>

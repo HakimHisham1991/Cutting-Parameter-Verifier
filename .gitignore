@@ -1,0 +1,8 @@
+# Build / publish artefacts (never commit publish dumps inside the web project tree)
+**/publish-output/
+**/bin/
+**/obj/
+**/publish-test/
+
+# OS / IDE
+.vs/
