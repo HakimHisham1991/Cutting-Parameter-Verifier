@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj": {}
+    "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj": {}
   },
   "projects": {
-    "c:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj": {
+    "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj",
+        "projectUniqueName": "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj",
         "projectName": "CuttingParameterVerifier",
-        "projectPath": "c:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj",
+        "projectPath": "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj",
         "packagesPath": "C:\\Users\\hakim.hisham\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\obj\\",
+        "outputPath": "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
