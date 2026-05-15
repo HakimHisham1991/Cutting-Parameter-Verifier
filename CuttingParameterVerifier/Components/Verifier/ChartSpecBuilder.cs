@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Linq;
 using CuttingParameterVerifier.Models;
 using CuttingParameterVerifier.Services;
 
@@ -11,9 +12,9 @@ internal static class ChartSpecBuilder
         var panels = new List<object>();
         foreach (var graph in cfg.Graphs.OrderBy(g => g.GraphNumber, StringComparer.OrdinalIgnoreCase))
         {
-            var subset = results.Where(r => r.GraphNumber != null &&
-                                            string.Equals(r.GraphNumber.Trim(), graph.GraphNumber.Trim(),
-                                                StringComparison.Ordinal)).ToList();
+            var subset = results.Where(r => RowMatchesGraph(r, graph.GraphNumber.Trim())).ToList();
+            var cutPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.CuttingPolygon);
+            var engPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.EngagementPolygon);
 
             var mappingContext = BuildMappingContextSubtitle(cfg, graph.GraphNumber);
             panels.Add(new
@@ -22,8 +23,8 @@ internal static class ChartSpecBuilder
                 cutCanvasId = GraphDomIds.Cutting(graph.GraphNumber),
                 engCanvasId = GraphDomIds.Engagement(graph.GraphNumber),
                 mappingContext,
-                cutting = BuildCuttingSide(graph.CuttingPolygon, subset),
-                engagement = BuildEngagementSide(graph.EngagementPolygon, subset)
+                cutting = BuildCuttingSide(cutPoly, subset),
+                engagement = BuildEngagementSide(engPoly, subset)
             });
         }
 
@@ -55,6 +56,11 @@ internal static class ChartSpecBuilder
         return string.Join("\n", blocks);
     }
 
+    private static bool RowMatchesGraph(ResultRow r, string graphNumber) =>
+        r.MatchedGraphNumbers is not null &&
+        r.MatchedGraphNumbers.Any(id =>
+            string.Equals(id.Trim(), graphNumber.Trim(), StringComparison.OrdinalIgnoreCase));
+
     private static object BuildCuttingSide(IReadOnlyList<Point2D> polygon, IReadOnlyList<ResultRow> subset)
     {
         var pass = new List<object>();
@@ -63,7 +69,7 @@ internal static class ChartSpecBuilder
 
         foreach (var r in subset)
         {
-            var status = r.ParameterStatus;
+            var status = ConstraintEval.EvaluateCutting(r.Source, polygon);
             if (r.Source.SurfaceSpeedVcMMin is null || r.Source.FeedPerToothFzMm is null)
                 continue;
 
@@ -89,7 +95,7 @@ internal static class ChartSpecBuilder
 
         foreach (var r in subset)
         {
-            var status = r.EngagementStatus;
+            var status = ConstraintEval.EvaluateEngagement(r.Source, polygon);
             if (r.Source.AxialDocApMm is null || r.Source.RadialDocAeMm is null)
                 continue;
 

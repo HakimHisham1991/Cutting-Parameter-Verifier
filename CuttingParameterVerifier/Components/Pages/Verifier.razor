@@ -136,12 +136,12 @@
                             {
                                 <tr class="@RowClass(r)">
                                     <td>
-                                        @if (!string.IsNullOrWhiteSpace(r.GraphNumber) && r.Source.No.HasValue)
+                                        @if (!string.IsNullOrWhiteSpace(r.PrimaryGraphNumber) && r.Source.No.HasValue)
                                         {
                                             <button type="button"
                                                     class="btn btn-link p-0 align-baseline"
-                                                    title="Jump to figure"
-                                                    @onclick="@(() => JumpToFigureAsync(r.GraphNumber))">
+                                                    title="Jump to first figure"
+                                                    @onclick="@(() => JumpToFigureAsync(r.PrimaryGraphNumber))">
                                                 @r.Source.No
                                             </button>
                                         }
@@ -161,7 +161,7 @@
                                     <td>@r.Source.MillingType</td>
                                     <td>@r.Source.ToolType</td>
                                     <td>@r.Source.StrategyType</td>
-                                    <td>@DisplayFigure(r.GraphNumber)</td>
+                                    <td>@DisplayFigure(r.FigureNumbersDisplay)</td>
                                     <td><span class="@BadgeClass(r.ParameterStatus)">@BadgeText(r.ParameterStatus)</span></td>
                                     <td><span class="@BadgeClass(r.EngagementStatus)">@BadgeText(r.EngagementStatus)</span></td>
                                     <td class="small text-break cpv-remarks">@r.Source.Remarks</td>
@@ -288,8 +288,8 @@
                 ? list.OrderByDescending(r => r.Source.StrategyType, SortText)
                 : list.OrderBy(r => r.Source.StrategyType, SortText),
             TableSortColumn.GraphNumber => _sortDescending
-                ? list.OrderByDescending(r => r.GraphNumber != null).ThenByDescending(r => r.GraphNumber ?? "", SortText)
-                : list.OrderBy(r => r.GraphNumber == null ? 1 : 0).ThenBy(r => r.GraphNumber ?? "", SortText),
+                ? list.OrderByDescending(r => r.FigureNumbersDisplay != null).ThenByDescending(r => r.FigureNumbersDisplay ?? "", SortText)
+                : list.OrderBy(r => r.FigureNumbersDisplay == null ? 1 : 0).ThenBy(r => r.FigureNumbersDisplay ?? "", SortText),
             TableSortColumn.ParameterStatus => _sortDescending
                 ? list.OrderByDescending(r => r.ParameterStatus)
                 : list.OrderBy(r => r.ParameterStatus),

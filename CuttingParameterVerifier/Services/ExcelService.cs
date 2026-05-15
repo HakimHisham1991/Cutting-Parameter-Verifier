@@ -68,7 +68,7 @@ public sealed class ExcelService : IExcelService
             ws.Cell(r, 14).Value = s.MillingType;
             ws.Cell(r, 15).Value = s.ToolType;
             ws.Cell(r, 16).Value = s.StrategyType;
-            ws.Cell(r, 17).Value = res.GraphNumber ?? "N/A";
+            ws.Cell(r, 17).Value = res.FigureNumbersDisplay ?? "N/A";
             ws.Cell(r, 18).Value = PassFailToString(res.ParameterStatus);
             ws.Cell(r, 19).Value = PassFailToString(res.EngagementStatus);
             ws.Cell(r, 20).Value = s.Remarks;
