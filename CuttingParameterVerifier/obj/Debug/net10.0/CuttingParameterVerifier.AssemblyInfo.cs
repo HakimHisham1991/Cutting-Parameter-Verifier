@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CuttingParameterVerifier")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+89f8f70cfcf3cf27fec1d8421201ab117fae7a71")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c53ce4936af782b280243463fa4c3736c7ad2576")]
 [assembly: System.Reflection.AssemblyProductAttribute("CuttingParameterVerifier")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CuttingParameterVerifier")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
