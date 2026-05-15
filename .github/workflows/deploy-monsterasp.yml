@@ -250,6 +250,8 @@ jobs:
           ftp.quit()
           print(f"::warning::Could not delete {dll} after {attempts} tries. Main FTP upload may still hit 550 — recycle the site in MonsterASP or increase wait, then re-run.")
           PY
+
+      - name: Upload site (FTP sync)
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
           server: ${{ secrets.MONSTERASP_FTP_SERVER }}
