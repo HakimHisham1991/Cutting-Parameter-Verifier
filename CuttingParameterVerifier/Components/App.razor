@@ -5,11 +5,14 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
-    <ResourcePreloader />
-    <link rel="stylesheet" href="@Assets["lib/bootstrap/dist/css/bootstrap.min.css"]" />
-    <link rel="stylesheet" href="@Assets["app.css"]" />
-    <link rel="stylesheet" href="@Assets["CuttingParameterVerifier.styles.css"]" />
-    <ImportMap />
+    @*
+      Plain wwwroot paths (not @Assets fingerprints): some shared hosts / IIS setups serve
+      fingerprinted or precompressed static-asset endpoints incorrectly, so styles never apply
+      even though the app runs. These files exist at the same paths after dotnet publish.
+    *@
+    <link rel="stylesheet" href="lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="app.css" />
+    <link rel="stylesheet" href="CuttingParameterVerifier.styles.css" />
     <link rel="icon" type="image/png" href="favicon.png" />
     <HeadOutlet />
 </head>
@@ -18,8 +21,8 @@
     <Routes />
     <ReconnectModal />
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.6/dist/chart.umd.min.js" crossorigin="anonymous"></script>
-    <script src="@Assets["js/verifierCharts.js"]"></script>
-    <script src="@Assets["_framework/blazor.web.js"]"></script>
+    <script src="js/verifierCharts.js"></script>
+    <script src="_framework/blazor.web.js"></script>
 </body>
 
 </html>
