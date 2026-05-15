@@ -77,8 +77,6 @@ c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\compressed\wbpkfjzrc5-{0}-63fj8s7r0e-63fj8s7r0e.gz
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\compressed\cy8xhv3qrz-{0}-0j3bgjxly4-0j3bgjxly4.gz
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\compressed\3cea78eoa2-{0}-abdmv1u4y3-abdmv1u4y3.gz
-c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\compressed\0niahpjl8g-{0}-hwaxidwiwj-hwaxidwiwj.gz
-c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\compressed\3p2cti9r57-{0}-xbbil6v7co-xbbil6v7co.gz
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\staticwebassets.build.json
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\staticwebassets.build.json.cache
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\staticwebassets.development.json
@@ -95,3 +93,6 @@ c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\compressed\4c50k3gavx-{0}-5ukn7vhzue-5ukn7vhzue.gz
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\compressed\8kakzlqw5w-{0}-5ukn7vhzue-5ukn7vhzue.gz
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\compressed\x3ewpxbnk4-{0}-4v4j6aiw80-4v4j6aiw80.gz
+C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\CuttingParameterVerifier.sourcelink.json
+C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\compressed\0niahpjl8g-{0}-ej96puwv3k-ej96puwv3k.gz
+C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Debug\net10.0\compressed\3p2cti9r57-{0}-cj5793hgrt-cj5793hgrt.gz
