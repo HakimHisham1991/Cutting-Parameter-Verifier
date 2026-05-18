@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SampleExcelGen")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3129dc4cf02071a4c0643534ec2aa812b3b0b983")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d6ccab0702be62dd79625d4f94e885143dba8f50")]
 [assembly: System.Reflection.AssemblyProductAttribute("SampleExcelGen")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SampleExcelGen")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

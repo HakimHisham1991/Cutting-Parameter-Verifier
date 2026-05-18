@@ -20,6 +20,9 @@ public sealed class CuttingSessionState : IDisposable
     public IReadOnlyList<string> LastImportNotes { get; private set; } = Array.Empty<string>();
     public string? SelectedGraphNumber { get; private set; }
 
+    /// <summary>Set when the user requests scrolling/focus on the figure from the results table (even if that tab is already selected).</summary>
+    private bool _figureFocusRequested;
+
     public event Action? Changed;
 
     public void SetImported(IReadOnlyList<CuttingDataRow> rows, IReadOnlyList<string>? notes = null)
@@ -44,6 +47,28 @@ public sealed class CuttingSessionState : IDisposable
 
         SelectedGraphNumber = next;
         Changed?.Invoke();
+    }
+
+    /// <summary>Selects a constraint figure tab and signals the gallery to scroll it into view (used from the results table).</summary>
+    public void SelectAndFocusFigure(string? graphNumber)
+    {
+        if (string.IsNullOrWhiteSpace(graphNumber))
+            return;
+
+        var next = graphNumber.Trim();
+        if (!string.Equals(SelectedGraphNumber, next, StringComparison.OrdinalIgnoreCase))
+            SelectedGraphNumber = next;
+
+        _figureFocusRequested = true;
+        Changed?.Invoke();
+    }
+
+    /// <summary>Consumed by the graph gallery after a session change.</summary>
+    public bool ConsumeFigureFocusRequest()
+    {
+        var v = _figureFocusRequested;
+        _figureFocusRequested = false;
+        return v;
     }
 
     private void OnConfigurationChanged() => Recompute();

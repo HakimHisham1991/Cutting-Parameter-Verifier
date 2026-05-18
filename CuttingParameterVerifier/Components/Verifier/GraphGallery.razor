@@ -80,12 +80,16 @@
         {
             _pendingFocus = false;
             await Js.InvokeVoidAsync("cpvCharts.scrollTabIntoView", TabButtonId(_activeGraph.GraphNumber));
+            await Js.InvokeVoidAsync("cpvCharts.scrollToFigure", GraphDomIds.FigureAnchor(_activeGraph.GraphNumber));
         }
     }
 
     private void OnSessionChanged()
     {
+        var figureFocus = Session.ConsumeFigureFocusRequest();
         ReloadGraphList();
+        if (figureFocus)
+            _pendingFocus = true;
         _pendingRender = true;
         InvokeAsync(StateHasChanged);
     }

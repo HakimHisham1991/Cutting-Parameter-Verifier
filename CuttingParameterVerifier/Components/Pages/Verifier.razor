@@ -135,21 +135,7 @@
                             @foreach (var r in OrderedFilteredResults)
                             {
                                 <tr class="@RowClass(r)">
-                                    <td>
-                                        @if (!string.IsNullOrWhiteSpace(r.PrimaryGraphNumber) && r.Source.No.HasValue)
-                                        {
-                                            <button type="button"
-                                                    class="btn btn-link p-0 align-baseline"
-                                                    title="Jump to first figure"
-                                                    @onclick="@(() => JumpToFigureAsync(r.PrimaryGraphNumber))">
-                                                @r.Source.No
-                                            </button>
-                                        }
-                                        else
-                                        {
-                                            @r.Source.No
-                                        }
-                                    </td>
+                                    <td>@r.Source.No</td>
                                     <td>@r.Source.OperationName</td>
                                     <td>@r.Source.ToolName</td>
                                     <td>@Format(r.Source.SurfaceSpeedVcMMin, "0.###")</td>
@@ -161,7 +147,32 @@
                                     <td>@r.Source.MillingType</td>
                                     <td>@r.Source.ToolType</td>
                                     <td>@r.Source.StrategyType</td>
-                                    <td>@DisplayFigure(r.FigureNumbersDisplay)</td>
+                                    <td class="text-break">
+                                        @{
+                                            var figTokens = GetFigureTokens(r);
+                                        }
+                                        @if (figTokens.Count == 0)
+                                        {
+                                            <text>N/A</text>
+                                        }
+                                        else
+                                        {
+                                            @for (var i = 0; i < figTokens.Count; i++)
+                                            {
+                                                if (i > 0)
+                                                {
+                                                    <text>, </text>
+                                                }
+                                                var tok = figTokens[i];
+                                                <button type="button"
+                                                        class="btn btn-link p-0 align-baseline"
+                                                        title="@($"Show figure {tok}")"
+                                                        @onclick="@(() => JumpToFigureAsync(tok))">
+                                                    @tok
+                                                </button>
+                                            }
+                                        }
+                                    </td>
                                     <td>
                                         @if (r.ParameterStatusesPerGraph is not null && r.ParameterStatusesPerGraph.Count > 0)
                                         {
@@ -351,14 +362,31 @@
         return null;
     }
 
-    private static string DisplayFigure(string? g) => string.IsNullOrWhiteSpace(g) ? "N/A" : g;
+    private static List<string> GetFigureTokens(ResultRow r)
+    {
+        if (r.MatchedGraphNumbers is { Count: > 0 })
+            return r.MatchedGraphNumbers.Select(s => s.Trim()).Where(s => s.Length > 0).ToList();
+
+        return SplitFigureDisplayTokens(r.FigureNumbersDisplay);
+    }
+
+    private static List<string> SplitFigureDisplayTokens(string? display)
+    {
+        if (string.IsNullOrWhiteSpace(display))
+            return new List<string>();
+
+        return display.Split(',', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries)
+            .Select(s => s.Trim())
+            .Where(s => s.Length > 0)
+            .ToList();
+    }
 
     private Task JumpToFigureAsync(string? graphNumber)
     {
         if (string.IsNullOrWhiteSpace(graphNumber))
             return Task.CompletedTask;
 
-        Session.SetSelectedGraphNumber(graphNumber);
+        Session.SelectAndFocusFigure(graphNumber);
         return Task.CompletedTask;
     }
 
