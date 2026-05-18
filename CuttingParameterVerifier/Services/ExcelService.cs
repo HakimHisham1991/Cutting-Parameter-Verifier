@@ -69,8 +69,8 @@ public sealed class ExcelService : IExcelService
             ws.Cell(r, 15).Value = s.ToolType;
             ws.Cell(r, 16).Value = s.StrategyType;
             ws.Cell(r, 17).Value = res.FigureNumbersDisplay ?? "N/A";
-            ws.Cell(r, 18).Value = PassFailToString(res.ParameterStatus);
-            ws.Cell(r, 19).Value = PassFailToString(res.EngagementStatus);
+            ws.Cell(r, 18).Value = PassFailListToExcel(res.ParameterStatusesPerGraph, res.ParameterStatus);
+            ws.Cell(r, 19).Value = PassFailListToExcel(res.EngagementStatusesPerGraph, res.EngagementStatus);
             ws.Cell(r, 20).Value = s.Remarks;
             r++;
         }
@@ -97,6 +97,10 @@ public sealed class ExcelService : IExcelService
         PassFailNa.Fail => "Fail",
         _ => "N/A"
     };
+
+    /// <summary>Comma-separated order matches Figure No. when multiple graphs apply.</summary>
+    private static string PassFailListToExcel(IReadOnlyList<PassFailNa>? perGraph, PassFailNa aggregate) =>
+        perGraph is { Count: > 0 } ? string.Join(", ", perGraph.Select(PassFailToString)) : PassFailToString(aggregate);
 
     private static Dictionary<string, int> BuildColumnMap(IXLRow headerRow)
     {

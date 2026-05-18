@@ -162,8 +162,40 @@
                                     <td>@r.Source.ToolType</td>
                                     <td>@r.Source.StrategyType</td>
                                     <td>@DisplayFigure(r.FigureNumbersDisplay)</td>
-                                    <td><span class="@BadgeClass(r.ParameterStatus)">@BadgeText(r.ParameterStatus)</span></td>
-                                    <td><span class="@BadgeClass(r.EngagementStatus)">@BadgeText(r.EngagementStatus)</span></td>
+                                    <td>
+                                        @if (r.ParameterStatusesPerGraph is not null && r.ParameterStatusesPerGraph.Count > 0)
+                                        {
+                                            @for (var i = 0; i < r.ParameterStatusesPerGraph.Count; i++)
+                                            {
+                                                if (i > 0)
+                                                {
+                                                    <text>, </text>
+                                                }
+                                                <span class="@BadgeClass(r.ParameterStatusesPerGraph[i])">@BadgeText(r.ParameterStatusesPerGraph[i])</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="@BadgeClass(r.ParameterStatus)">@BadgeText(r.ParameterStatus)</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (r.EngagementStatusesPerGraph is not null && r.EngagementStatusesPerGraph.Count > 0)
+                                        {
+                                            @for (var i = 0; i < r.EngagementStatusesPerGraph.Count; i++)
+                                            {
+                                                if (i > 0)
+                                                {
+                                                    <text>, </text>
+                                                }
+                                                <span class="@BadgeClass(r.EngagementStatusesPerGraph[i])">@BadgeText(r.EngagementStatusesPerGraph[i])</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="@BadgeClass(r.EngagementStatus)">@BadgeText(r.EngagementStatus)</span>
+                                        }
+                                    </td>
                                     <td class="small text-break cpv-remarks">@r.Source.Remarks</td>
                                 </tr>
                             }

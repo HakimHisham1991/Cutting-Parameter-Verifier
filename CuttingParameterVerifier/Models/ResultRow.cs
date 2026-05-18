@@ -17,6 +17,12 @@ public sealed class ResultRow
     public PassFailNa ParameterStatus { get; init; }
     public PassFailNa EngagementStatus { get; init; }
 
+    /// <summary>Per matched figure: cutting (Vc–Fz) check, same order as <see cref="MatchedGraphNumbers"/>.</summary>
+    public IReadOnlyList<PassFailNa>? ParameterStatusesPerGraph { get; init; }
+
+    /// <summary>Per matched figure: engagement (ap–ae) check, same order as <see cref="MatchedGraphNumbers"/>.</summary>
+    public IReadOnlyList<PassFailNa>? EngagementStatusesPerGraph { get; init; }
+
     /// <summary>Primary graph tab target (first matched figure).</summary>
     public string? PrimaryGraphNumber =>
         MatchedGraphNumbers is { Count: > 0 } ? MatchedGraphNumbers[0].Trim() : null;

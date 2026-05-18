@@ -24,6 +24,8 @@ public sealed class EvaluationService : IEvaluationService
                 {
                     Source = row,
                     MatchedGraphNumbers = null,
+                    ParameterStatusesPerGraph = null,
+                    EngagementStatusesPerGraph = null,
                     ParameterStatus = PassFailNa.Na,
                     EngagementStatus = PassFailNa.Na
                 });
@@ -37,6 +39,8 @@ public sealed class EvaluationService : IEvaluationService
                 {
                     Source = row,
                     MatchedGraphNumbers = null,
+                    ParameterStatusesPerGraph = null,
+                    EngagementStatusesPerGraph = null,
                     ParameterStatus = PassFailNa.Na,
                     EngagementStatus = PassFailNa.Na
                 });
@@ -67,6 +71,8 @@ public sealed class EvaluationService : IEvaluationService
             {
                 Source = row,
                 MatchedGraphNumbers = matched,
+                ParameterStatusesPerGraph = paramStatuses,
+                EngagementStatusesPerGraph = engStatuses,
                 ParameterStatus = ConstraintEval.AggregateAcrossGraphs(paramStatuses),
                 EngagementStatus = ConstraintEval.AggregateAcrossGraphs(engStatuses)
             });
