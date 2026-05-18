@@ -19,34 +19,49 @@ main[b-p8kdpkkocv] {
 .top-row[b-p8kdpkkocv] {
     background-color: #f7f7f7;
     border-bottom: 1px solid #d6d5d5;
-    justify-content: flex-end;
-    height: 3.5rem;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    min-height: 3.5rem;
+    height: auto;
+    padding-top: 0.65rem;
+    padding-bottom: 0.65rem;
     display: flex;
-    align-items: center;
 }
 
-    .top-row[b-p8kdpkkocv]  a, .top-row[b-p8kdpkkocv]  .btn-link {
-        white-space: nowrap;
-        margin-left: 1.5rem;
-        text-decoration: none;
-    }
+.app-brand[b-p8kdpkkocv] {
+    font-size: 1.1rem;
+    font-weight: 600;
+    flex-shrink: 0;
+}
 
-    .top-row[b-p8kdpkkocv]  a:hover, .top-row[b-p8kdpkkocv]  .btn-link:hover {
-        text-decoration: underline;
-    }
+.top-row-meta[b-p8kdpkkocv] {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.15rem;
+    text-align: right;
+}
 
-    .top-row[b-p8kdpkkocv]  a:first-child {
-        overflow: hidden;
-        text-overflow: ellipsis;
-    }
+.top-row-attribution[b-p8kdpkkocv] {
+    font-size: 0.72rem;
+    line-height: 1.35;
+    opacity: 0.9;
+}
+
+.top-row .app-brand[b-p8kdpkkocv] {
+    white-space: nowrap;
+}
 
 @media (max-width: 640.98px) {
     .top-row[b-p8kdpkkocv] {
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
-    .top-row[b-p8kdpkkocv]  a, .top-row[b-p8kdpkkocv]  .btn-link {
-        margin-left: 0;
+    .top-row-meta[b-p8kdpkkocv] {
+        align-items: flex-start;
+        text-align: left;
     }
 }
 
@@ -56,7 +71,7 @@ main[b-p8kdpkkocv] {
     }
 
     .sidebar[b-p8kdpkkocv] {
-        width: 250px;
+        width: 3.75rem;
         height: 100vh;
         position: sticky;
         top: 0;
@@ -66,12 +81,6 @@ main[b-p8kdpkkocv] {
         position: sticky;
         top: 0;
         z-index: 1;
-    }
-
-    .top-row.auth[b-p8kdpkkocv]  a:first-child {
-        flex: 1;
-        text-align: right;
-        width: 0;
     }
 
     .top-row[b-p8kdpkkocv], article[b-p8kdpkkocv] {
