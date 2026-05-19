@@ -1,5 +1,8 @@
 // Chart.js (UMD) must be loaded before this file — see App.razor.
 (function () {
+    /** Match ~75% UI scale (see wwwroot/app.css html { font-size: 75% }). */
+    const CPV_UI_SCALE = 0.75;
+
     const charts = {};
 
     function destroyAll() {
@@ -57,7 +60,7 @@
                 label: "Boundary",
                 data: boundary,
                 borderColor: "rgba(60,60,60,0.95)",
-                borderWidth: 2,
+                borderWidth: Math.max(1, 2 * CPV_UI_SCALE),
                 fill: false,
                 pointRadius: 0,
                 tension: 0
@@ -67,21 +70,21 @@
                 label: "Pass",
                 data: passPoints || [],
                 backgroundColor: "rgba(34,170,68,0.9)",
-                pointRadius: 4
+                pointRadius: Math.max(2, 4 * CPV_UI_SCALE)
             },
             {
                 type: "scatter",
                 label: "Fail",
                 data: failPoints || [],
                 backgroundColor: "rgba(204,34,34,0.9)",
-                pointRadius: 4
+                pointRadius: Math.max(2, 4 * CPV_UI_SCALE)
             },
             {
                 type: "scatter",
                 label: "N/A",
                 data: naPoints || [],
                 backgroundColor: "rgba(120,120,120,0.75)",
-                pointRadius: 3
+                pointRadius: Math.max(2, 3 * CPV_UI_SCALE)
             }
         ];
 
@@ -95,17 +98,28 @@
                 maintainAspectRatio: false,
                 interaction: { mode: "nearest", intersect: true },
                 plugins: {
-                    legend: { display: true, position: "bottom" },
-                    title: { display: true, text: title, font: { size: 12, weight: "600" }, padding: { bottom: sub ? 2 : 6 } },
+                    legend: {
+                        display: true,
+                        position: "bottom",
+                        labels: { font: { size: 12 * CPV_UI_SCALE } }
+                    },
+                    title: {
+                        display: true,
+                        text: title,
+                        font: { size: 12 * CPV_UI_SCALE, weight: "600" },
+                        padding: { bottom: sub ? 2 * CPV_UI_SCALE : 6 * CPV_UI_SCALE }
+                    },
                     subtitle: {
                         display: !!sub,
                         text: sub,
                         color: "#495057",
-                        font: { size: 10 },
-                        padding: { top: 0, bottom: 8 }
+                        font: { size: 10 * CPV_UI_SCALE },
+                        padding: { top: 0, bottom: 8 * CPV_UI_SCALE }
                     },
                     tooltip: {
                         displayColors: false,
+                        bodyFont: { size: 11 * CPV_UI_SCALE },
+                        titleFont: { size: 11 * CPV_UI_SCALE },
                         callbacks: {
                             title: function () {
                                 return null;
@@ -125,11 +139,13 @@
                 scales: {
                     x: {
                         type: "linear",
-                        title: { display: true, text: xLabel }
+                        title: { display: true, text: xLabel, font: { size: 12 * CPV_UI_SCALE } },
+                        ticks: { font: { size: 12 * CPV_UI_SCALE } }
                     },
                     y: {
                         type: "linear",
-                        title: { display: true, text: yLabel }
+                        title: { display: true, text: yLabel, font: { size: 12 * CPV_UI_SCALE } },
+                        ticks: { font: { size: 12 * CPV_UI_SCALE } }
                     }
                 }
             }

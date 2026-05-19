@@ -1,3 +1,8 @@
+/* Global UI scale (~75% of typical browser defaults). Bootstrap/rem spacing follows this root size. */
+html {
+    font-size: 75%;
+}
+
 html, body {
     font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -25,8 +30,8 @@ label.btn.cpv-upload-busy {
 }
 
 .cpv-import-status .cpv-import-progress {
-    height: 8px;
-    border-radius: 4px;
+    height: 6px;
+    border-radius: 3px;
     overflow: hidden;
 }
 
@@ -39,7 +44,7 @@ label.btn.cpv-upload-busy {
 }
 
 .cpv-table-scroll {
-    max-height: 70vh;
+    max-height: calc(70vh * 0.75);
     overflow: auto;
 }
 
@@ -111,7 +116,7 @@ table.table.cpv-results-table {
 }
 
 .graph-scroll {
-    max-height: 78vh;
+    max-height: calc(78vh * 0.75);
     overflow: auto;
     overflow-x: hidden;
 }
@@ -129,7 +134,7 @@ table.table.cpv-results-table {
 }
 
 .chart-wrap {
-    height: 240px;
+    height: 180px;
     width: 100%;
     max-width: 100%;
     min-width: 0;
