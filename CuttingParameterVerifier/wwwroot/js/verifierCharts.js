@@ -14,24 +14,71 @@
         });
     }
 
-    function scrollToFigure(anchorId) {
-        const el = document.getElementById(anchorId);
-        if (!el) return;
+    function galleryScrollPanel() {
+        return document.querySelector(".graph-gallery .card-body.graph-scroll");
+    }
+
+    /** Scroll vertically inside the chart card only — never scroll the document (avoids jumping away from the table). */
+    function scrollIntoContainerVert(el, container, smooth) {
+        if (!el || !container) return;
+        const pad = 8;
+        const cr = container.getBoundingClientRect();
+        const er = el.getBoundingClientRect();
+        let dy = 0;
+        if (er.top < cr.top + pad) dy -= Math.ceil(cr.top + pad - er.top);
+        else if (er.bottom > cr.bottom - pad) dy += Math.ceil(er.bottom - (cr.bottom - pad));
+        if (dy === 0) return;
+        const target = container.scrollTop + dy;
         try {
-            el.scrollIntoView({ behavior: "smooth", block: "start" });
+            if (smooth && typeof container.scrollTo === "function") {
+                container.scrollTo({ top: target, behavior: "smooth" });
+            } else {
+                container.scrollTop = target;
+            }
         } catch {
-            el.scrollIntoView();
+            container.scrollTop = target;
         }
+    }
+
+    /** Scroll horizontally inside the tab strip only. */
+    function scrollIntoContainerHoriz(el, container, smooth) {
+        if (!el || !container) return;
+        const pad = 8;
+        const cr = container.getBoundingClientRect();
+        const er = el.getBoundingClientRect();
+        let dx = 0;
+        if (er.left < cr.left + pad) dx -= Math.ceil(cr.left + pad - er.left);
+        else if (er.right > cr.right - pad) dx += Math.ceil(er.right - (cr.right - pad));
+        if (dx === 0) return;
+        const target = container.scrollLeft + dx;
+        try {
+            if (smooth && typeof container.scrollTo === "function") {
+                container.scrollTo({ left: target, behavior: "smooth" });
+            } else {
+                container.scrollLeft = target;
+            }
+        } catch {
+            container.scrollLeft = target;
+        }
+    }
+
+    function scrollToFigure(anchorId) {
+        const panel = galleryScrollPanel();
+        const el = document.getElementById(anchorId);
+        if (!panel || !el || !panel.contains(el)) return;
+        scrollIntoContainerVert(el, panel, true);
     }
 
     function scrollTabIntoView(id) {
         const el = document.getElementById(id);
         if (!el) return;
-        try {
-            el.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "nearest" });
-        } catch {
-            try { el.scrollIntoView(); } catch { /* ignore */ }
+        const tabs = el.closest("ul.nav-tabs");
+        if (tabs) {
+            scrollIntoContainerHoriz(el, tabs, true);
+            return;
         }
+        const panel = galleryScrollPanel();
+        if (panel && panel.contains(el)) scrollIntoContainerVert(el, panel, true);
     }
 
     function closeRing(points) {

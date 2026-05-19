@@ -2,11 +2,25 @@
     position: relative;
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
+    min-height: 100dvh;
 }
 
 main {
     flex: 1;
     min-width: 0;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+article.content {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
     overflow-x: hidden;
 }
 
@@ -27,6 +41,7 @@ main {
     padding-top: 0.65rem;
     padding-bottom: 0.65rem;
     display: flex;
+    flex-shrink: 0;
 }
 
 .app-brand {
@@ -68,13 +83,20 @@ main {
 @media (min-width: 641px) {
     .page {
         flex-direction: row;
+        align-items: stretch;
     }
 
     .sidebar {
         width: 3.75rem;
         height: 100vh;
+        height: 100dvh;
         position: sticky;
         top: 0;
+    }
+
+    main {
+        min-height: 100vh;
+        min-height: 100dvh;
     }
 
     .top-row {
