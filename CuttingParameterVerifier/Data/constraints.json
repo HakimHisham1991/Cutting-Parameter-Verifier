@@ -2,143 +2,143 @@
   "mappingRules": [
     {
       "material": "Aluminium",
-      "surfaceType": "Roughing",
-      "millingType": "End milling",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
       "graphNumber": "3.2.2.4.1.1_A"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Roughing",
-      "millingType": "End milling",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
       "graphNumber": "3.2.2.4.1.1_B"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Finishing",
-      "millingType": "End milling",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
       "graphNumber": "3.2.2.4.1.2"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Roughing",
-      "millingType": "Face milling",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
       "graphNumber": "3.2.2.4.1.3"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Finishing",
-      "millingType": "Face milling",
+      "surfaceType": "Finish",
+      "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
       "graphNumber": "3.2.2.4.1.4"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Roughing",
-      "millingType": "End milling",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "End Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
       "graphNumber": "3.2.2.4.2.1_1_R"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Finishing",
-      "millingType": "End milling",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
       "graphNumber": "3.2.2.4.2.1_2_F"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Roughing",
-      "millingType": "Face milling",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "Face Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
       "graphNumber": "3.2.2.4.2.2_1_R"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Finishing",
-      "millingType": "Face milling",
+      "surfaceType": "Finish",
+      "millingType": "Face Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
       "graphNumber": "3.2.2.4.2.2_2_F"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Roughing",
-      "millingType": "End milling",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
       "graphNumber": "3.2.2.4.3.1"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Finishing",
-      "millingType": "End milling",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
       "graphNumber": "3.2.2.4.3.2"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Roughing",
-      "millingType": "Face milling",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
       "graphNumber": "3.2.2.4.3.3"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Finishing",
-      "millingType": "Face milling",
+      "surfaceType": "Finish",
+      "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
       "graphNumber": "3.2.2.4.3.4"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Roughing",
-      "millingType": "End milling",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "End Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
       "graphNumber": "3.2.2.4.4.1"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Finishing",
-      "millingType": "End milling",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
       "graphNumber": "3.2.2.4.4.2"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Roughing",
-      "millingType": "Face milling",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "Face Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
       "graphNumber": "3.2.2.4.4.3"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Finishing",
-      "millingType": "Face milling",
+      "surfaceType": "Finish",
+      "millingType": "Face Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
       "graphNumber": "3.2.2.4.4.4"
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Finishing",
+      "surfaceType": "Finish",
       "millingType": "Drilling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
@@ -146,11 +146,43 @@
     },
     {
       "material": "Aluminium",
-      "surfaceType": "Finishing",
+      "surfaceType": "Finish",
       "millingType": "Reaming",
       "toolType": "Carbide",
       "strategyType": "Conventional",
       "graphNumber": "3.2.6.2.1.4_2_Ream"
+    },
+    {
+      "material": "Aluminium",
+      "surfaceType": "Free Roughing",
+      "millingType": "End Milling",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "FREE ROUGHING"
+    },
+    {
+      "material": "Aluminium",
+      "surfaceType": "Free Roughing",
+      "millingType": "Face Milling",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "FREE ROUGHING"
+    },
+    {
+      "material": "Aluminium",
+      "surfaceType": "Free Roughing",
+      "millingType": "Drilling",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "FREE ROUGHING"
+    },
+    {
+      "material": "Aluminium",
+      "surfaceType": "Free Roughing",
+      "millingType": "Tapping",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "FREE ROUGHING"
     }
   ],
   "graphs": [
@@ -1032,6 +1064,45 @@
         {
           "x": 100,
           "y": 0.1
+        }
+      ]
+    },
+    {
+      "graphNumber": "FREE ROUGHING",
+      "cuttingPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 10000
+        },
+        {
+          "x": 10000,
+          "y": 10000
+        },
+        {
+          "x": 10000,
+          "y": 0
+        }
+      ],
+      "engagementPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 10000
+        },
+        {
+          "x": 10000,
+          "y": 10000
+        },
+        {
+          "x": 10000,
+          "y": 0
         }
       ]
     }

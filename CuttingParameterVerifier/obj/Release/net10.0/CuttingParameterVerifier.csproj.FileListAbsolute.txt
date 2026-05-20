@@ -34,8 +34,6 @@ c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\scopedcss\Components\Layout\ReconnectModal.razor.rz.scp.css
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\scopedcss\bundle\CuttingParameterVerifier.styles.css
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\scopedcss\projectbundle\CuttingParameterVerifier.bundle.scp.css
-c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\n5q7rw704x-{0}-tpqp0nw6yf-tpqp0nw6yf.gz
-c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\x3ewpxbnk4-{0}-4v4j6aiw80-4v4j6aiw80.gz
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\mgdggq08x0-{0}-c2jlpeoesf-c2jlpeoesf.gz
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\cf8wgnbkyj-{0}-aexeepp0ev-aexeepp0ev.gz
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\3pt63mm2di-{0}-ausgxo2sd3-ausgxo2sd3.gz
@@ -94,5 +92,7 @@ C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\
 C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\wbpkfjzrc5-{0}-4d85u1mtcx-4d85u1mtcx.gz
 C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\0niahpjl8g-{0}-ej96puwv3k-ej96puwv3k.gz
 C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\3p2cti9r57-{0}-cj5793hgrt-cj5793hgrt.gz
-C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\4c50k3gavx-{0}-rrpoej2i8e-rrpoej2i8e.gz
-C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\8kakzlqw5w-{0}-rrpoej2i8e-rrpoej2i8e.gz
+C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\n5q7rw704x-{0}-hzmyx6l4gl-hzmyx6l4gl.gz
+C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\x3ewpxbnk4-{0}-31pzm0s8k5-31pzm0s8k5.gz
+C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\4c50k3gavx-{0}-y7idcv4v5l-y7idcv4v5l.gz
+C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\CuttingParameterVerifier\obj\Release\net10.0\compressed\8kakzlqw5w-{0}-y7idcv4v5l-y7idcv4v5l.gz
