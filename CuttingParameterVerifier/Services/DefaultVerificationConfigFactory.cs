@@ -23,22 +23,22 @@ public static class DefaultVerificationConfigFactory
 
     private static IEnumerable<MappingRule> CreateDefaultMappings()
     {
-        yield return Rule("Aluminium", "Controlled Roughing", "End milling", "Carbide", "Conventional", "3.2.2.4.1.1");
-        yield return Rule("Aluminium", "Finishing", "End milling", "Carbide", "Conventional", "3.2.2.4.1.2");
-        yield return Rule("Aluminium", "Controlled Roughing", "Face milling", "Carbide", "Conventional", "3.2.2.4.1.3");
-        yield return Rule("Aluminium", "Finishing", "Face milling", "Carbide", "Conventional", "3.2.2.4.1.4");
-        yield return Rule("Aluminium", "Controlled Roughing", "End milling", "HSS", "Conventional", "3.2.2.4.2.1");
-        yield return Rule("Aluminium", "Finishing", "End milling", "HSS", "Conventional", "3.2.2.4.2.1");
-        yield return Rule("Aluminium", "Controlled Roughing", "Face milling", "HSS", "Conventional", "3.2.2.4.2.2");
-        yield return Rule("Aluminium", "Finishing", "Face milling", "HSS", "Conventional", "3.2.2.4.2.2");
-        yield return Rule("Aluminium", "Controlled Roughing", "End milling", "Carbide", "HSM", "3.2.2.4.3.1");
-        yield return Rule("Aluminium", "Finishing", "End milling", "Carbide", "HSM", "3.2.2.4.3.1");
-        yield return Rule("Aluminium", "Controlled Roughing", "Face milling", "Carbide", "HSM", "3.2.2.4.3.3");
-        yield return Rule("Aluminium", "Finishing", "Face milling", "Carbide", "HSM", "3.2.2.4.3.4");
-        yield return Rule("Aluminium", "Controlled Roughing", "End milling", "PCD", "HSM", "3.2.2.4.4.1");
-        yield return Rule("Aluminium", "Finishing", "End milling", "PCD", "HSM", "3.2.2.4.4.2");
-        yield return Rule("Aluminium", "Controlled Roughing", "Face milling", "PCD", "HSM", "3.2.2.4.4.3");
-        yield return Rule("Aluminium", "Finishing", "Face milling", "PCD", "HSM", "3.2.2.4.4.4");
+        yield return Rule("Aluminium", "Controlled Roughing", "End Milling", "Carbide", "Conventional", "3.2.2.4.1.1");
+        yield return Rule("Aluminium", "Finish", "End Milling", "Carbide", "Conventional", "3.2.2.4.1.2");
+        yield return Rule("Aluminium", "Controlled Roughing", "Face Milling", "Carbide", "Conventional", "3.2.2.4.1.3");
+        yield return Rule("Aluminium", "Finish", "Face Milling", "Carbide", "Conventional", "3.2.2.4.1.4");
+        yield return Rule("Aluminium", "Controlled Roughing", "End Milling", "HSS", "Conventional", "3.2.2.4.2.1");
+        yield return Rule("Aluminium", "Finish", "End Milling", "HSS", "Conventional", "3.2.2.4.2.1");
+        yield return Rule("Aluminium", "Controlled Roughing", "Face Milling", "HSS", "Conventional", "3.2.2.4.2.2");
+        yield return Rule("Aluminium", "Finish", "Face Milling", "HSS", "Conventional", "3.2.2.4.2.2");
+        yield return Rule("Aluminium", "Controlled Roughing", "End Milling", "Carbide", "HSM", "3.2.2.4.3.1");
+        yield return Rule("Aluminium", "Finish", "End Milling", "Carbide", "HSM", "3.2.2.4.3.1");
+        yield return Rule("Aluminium", "Controlled Roughing", "Face Milling", "Carbide", "HSM", "3.2.2.4.3.3");
+        yield return Rule("Aluminium", "Finish", "Face Milling", "Carbide", "HSM", "3.2.2.4.3.4");
+        yield return Rule("Aluminium", "Controlled Roughing", "End Milling", "PCD", "HSM", "3.2.2.4.4.1");
+        yield return Rule("Aluminium", "Finish", "End Milling", "PCD", "HSM", "3.2.2.4.4.2");
+        yield return Rule("Aluminium", "Controlled Roughing", "Face Milling", "PCD", "HSM", "3.2.2.4.4.3");
+        yield return Rule("Aluminium", "Finish", "Face Milling", "PCD", "HSM", "3.2.2.4.4.4");
     }
 
     private static MappingRule Rule(string m, string s, string mi, string t, string st, string graph) => new()
