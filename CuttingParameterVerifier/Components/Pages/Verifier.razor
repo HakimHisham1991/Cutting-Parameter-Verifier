@@ -91,46 +91,61 @@
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.No))">No. @SortIndicator(TableSortColumn.No)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.AcType))">A/C Type @SortIndicator(TableSortColumn.AcType)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.PartNumber))">Part Number @SortIndicator(TableSortColumn.PartNumber)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Material))">Material Type @SortIndicator(TableSortColumn.Material)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ToolRefNumber))">Tool Ref. Number @SortIndicator(TableSortColumn.ToolRefNumber)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ToolName))">Cutter Description @SortIndicator(TableSortColumn.ToolName)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.MillingType))">Cutter Type @SortIndicator(TableSortColumn.MillingType)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ToolType))">Tool Type (Carbide/HSS/PCD) @SortIndicator(TableSortColumn.ToolType)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.SurfaceType))">Finish Type (Finish / Controlled Roughing / Free Roughing) @SortIndicator(TableSortColumn.SurfaceType)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ToolDiameterMm))">Tool Diameter (mm) @SortIndicator(TableSortColumn.ToolDiameterMm)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.NumberOfFlutes))">Number of Flutes (teeth) @SortIndicator(TableSortColumn.NumberOfFlutes)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Vc))">Speed Vc (m/min) @SortIndicator(TableSortColumn.Vc)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Fz))">Feed per Tooth [Fz] (mm/tooth) @SortIndicator(TableSortColumn.Fz)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Ae))">Radial (ae) D.O.C (mm) @SortIndicator(TableSortColumn.Ae)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Ap))">Axial (ap) D.O.C (mm) @SortIndicator(TableSortColumn.Ap)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.StrategyType))">Strategy Type @SortIndicator(TableSortColumn.StrategyType)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.OperationName))">Operation @SortIndicator(TableSortColumn.OperationName)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ToolName))">Tool @SortIndicator(TableSortColumn.ToolName)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Vc))">Vc @SortIndicator(TableSortColumn.Vc)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Fz))">Fz @SortIndicator(TableSortColumn.Fz)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Ae))">ae @SortIndicator(TableSortColumn.Ae)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Ap))">ap @SortIndicator(TableSortColumn.Ap)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Material))">Material @SortIndicator(TableSortColumn.Material)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.SurfaceType))">Surface @SortIndicator(TableSortColumn.SurfaceType)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.MillingType))">Milling @SortIndicator(TableSortColumn.MillingType)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ToolType))">Tool type @SortIndicator(TableSortColumn.ToolType)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.StrategyType))">Strategy @SortIndicator(TableSortColumn.StrategyType)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.GraphNumber))">Figure No. @SortIndicator(TableSortColumn.GraphNumber)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ParameterStatus))">Param @SortIndicator(TableSortColumn.ParameterStatus)</button>
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ParameterStatus))">Param Check @SortIndicator(TableSortColumn.ParameterStatus)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.EngagementStatus))">Engage @SortIndicator(TableSortColumn.EngagementStatus)</button>
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.EngagementStatus))">Engage Check @SortIndicator(TableSortColumn.EngagementStatus)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Remarks))">Remarks @SortIndicator(TableSortColumn.Remarks)</button>
@@ -142,17 +157,22 @@
                             {
                                 <tr class="@RowClass(r)">
                                     <td>@r.Source.No</td>
-                                    <td>@r.Source.OperationName</td>
+                                    <td>@r.Source.AcType</td>
+                                    <td>@r.Source.PartNumber</td>
+                                    <td>@r.Source.Material</td>
+                                    <td>@r.Source.ToolRefNumber</td>
                                     <td>@r.Source.ToolName</td>
+                                    <td>@r.Source.MillingType</td>
+                                    <td>@r.Source.ToolType</td>
+                                    <td>@r.Source.SurfaceType</td>
+                                    <td>@Format(r.Source.DiameterMm, "0.###")</td>
+                                    <td>@FormatInt(r.Source.NumberOfTeethZ)</td>
                                     <td>@Format(r.Source.SurfaceSpeedVcMMin, "0.###")</td>
                                     <td>@Format(r.Source.FeedPerToothFzMm, "0.####")</td>
                                     <td>@Format(r.Source.RadialDocAeMm, "0.###")</td>
                                     <td>@Format(r.Source.AxialDocApMm, "0.###")</td>
-                                    <td>@r.Source.Material</td>
-                                    <td>@r.Source.SurfaceType</td>
-                                    <td>@r.Source.MillingType</td>
-                                    <td>@r.Source.ToolType</td>
                                     <td>@r.Source.StrategyType</td>
+                                    <td>@r.Source.OperationName</td>
                                     <td class="text-break">
                                         @{
                                             var figTokens = GetFigureTokens(r);
@@ -235,6 +255,9 @@
     {
         None,
         No,
+        AcType,
+        PartNumber,
+        ToolRefNumber,
         OperationName,
         ToolName,
         Vc,
@@ -243,6 +266,8 @@
         Ap,
         Material,
         SurfaceType,
+        ToolDiameterMm,
+        NumberOfFlutes,
         MillingType,
         ToolType,
         StrategyType,
@@ -314,6 +339,15 @@
             TableSortColumn.No => _sortDescending
                 ? list.OrderByDescending(r => r.Source.No.HasValue).ThenByDescending(r => r.Source.No ?? int.MinValue)
                 : list.OrderBy(r => r.Source.No.HasValue ? 0 : 1).ThenBy(r => r.Source.No ?? int.MaxValue),
+            TableSortColumn.AcType => _sortDescending
+                ? list.OrderByDescending(r => r.Source.AcType, SortText)
+                : list.OrderBy(r => r.Source.AcType, SortText),
+            TableSortColumn.PartNumber => _sortDescending
+                ? list.OrderByDescending(r => r.Source.PartNumber, SortText)
+                : list.OrderBy(r => r.Source.PartNumber, SortText),
+            TableSortColumn.ToolRefNumber => _sortDescending
+                ? list.OrderByDescending(r => r.Source.ToolRefNumber, SortText)
+                : list.OrderBy(r => r.Source.ToolRefNumber, SortText),
             TableSortColumn.OperationName => _sortDescending
                 ? list.OrderByDescending(r => r.Source.OperationName, SortText)
                 : list.OrderBy(r => r.Source.OperationName, SortText),
@@ -330,6 +364,8 @@
             TableSortColumn.SurfaceType => _sortDescending
                 ? list.OrderByDescending(r => r.Source.SurfaceType, SortText)
                 : list.OrderBy(r => r.Source.SurfaceType, SortText),
+            TableSortColumn.ToolDiameterMm => OrderNullableDouble(list, r => r.Source.DiameterMm),
+            TableSortColumn.NumberOfFlutes => OrderNullableInt(list, r => r.Source.NumberOfTeethZ),
             TableSortColumn.MillingType => _sortDescending
                 ? list.OrderByDescending(r => r.Source.MillingType, SortText)
                 : list.OrderBy(r => r.Source.MillingType, SortText),
@@ -361,6 +397,11 @@
         _sortDescending
             ? list.OrderByDescending(r => selector(r).HasValue).ThenByDescending(r => selector(r) ?? double.MinValue)
             : list.OrderBy(r => selector(r).HasValue ? 0 : 1).ThenBy(r => selector(r) ?? double.MaxValue);
+
+    private IOrderedEnumerable<ResultRow> OrderNullableInt(List<ResultRow> list, Func<ResultRow, int?> selector) =>
+        _sortDescending
+            ? list.OrderByDescending(r => selector(r).HasValue).ThenByDescending(r => selector(r) ?? int.MinValue)
+            : list.OrderBy(r => selector(r).HasValue ? 0 : 1).ThenBy(r => selector(r) ?? int.MaxValue);
 
     private static string? RowClass(ResultRow r)
     {
@@ -414,6 +455,8 @@
     };
 
     private static string Format(double? v, string fmt) => v is null ? "" : v.Value.ToString(fmt);
+
+    private static string FormatInt(int? v) => v is null ? "" : v.Value.ToString();
 
     private async Task OnExcelSelectedAsync(InputFileChangeEventArgs e)
     {

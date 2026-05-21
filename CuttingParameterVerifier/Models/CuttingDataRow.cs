@@ -4,6 +4,19 @@ namespace CuttingParameterVerifier.Models;
 public sealed class CuttingDataRow
 {
     public int? No { get; set; }
+    /// <summary>Excel column "A/C Type" (CAM template).</summary>
+    public string AcType { get; set; } = "";
+    /// <summary>Excel column "Part Number".</summary>
+    public string PartNumber { get; set; } = "";
+    /// <summary>Excel column "Tool Ref. Number".</summary>
+    public string ToolRefNumber { get; set; } = "";
+    /// <summary>Excel column "Justification".</summary>
+    public string Justification { get; set; } = "";
+    /// <summary>Excel column "Ramp Angle (Deg)".</summary>
+    public double? RampAngleDeg { get; set; }
+    /// <summary>Excel column "Approach / Plunge Feed (mm/min)".</summary>
+    public double? ApproachPlungeFeedMmMin { get; set; }
+
     public string OperationName { get; set; } = "";
     public string ToolName { get; set; } = "";
     public double? DiameterMm { get; set; }

@@ -48,10 +48,12 @@ static void WriteSampleWorkbook(string path)
 
     var headers = new[]
     {
-        "No.", "Operation Name", "Tool Name", "Diameter, Ø (mm)", "Number of teeth/flutes (Z)",
-        "Tool Speed, n (RPM)", "Feed Rate, Vf (mm/min)", "Surface Speed, Vc (m/min)", "Feed per tooth, Fz (mm)",
-        "Radial D.O.C, ae (mm)", "Axial D.O.C, ap (mm)", "Material", "Surface Type", "Milling Type", "Tool Type",
-        "Strategy Type"
+        "No.", "A/C Type", "Part Number", "Material Type", "Tool Ref. Number", "Cutter Description",
+        "Cutter Type", "Tool Type (Carbide/HSS/PCD)",
+        "Finish Type (Finish / Controlled Roughing / Free Roughing)",
+        "Tool Diameter (mm)", "Number of Flutes (teeth)", "Feed Rate 100% (mm/min)", "Speed Rate 100% (rpm)",
+        "Axial (ap) D.O.C (mm)", "Radial (ae) D.O.C (mm)", "Feed per Tooth [Fz] (mm/tooth)", "Speed Vc (m/min)",
+        "Justification", "Ramp Angle (Deg)", "Approach / Plunge Feed (mm/min)", "Strategy Type", "Operation Name"
     };
 
     for (var c = 0; c < headers.Length; c++)
@@ -82,26 +84,26 @@ static void WriteSampleWorkbook(string path)
 
     Row(2, new object[]
     {
-        1, "Finish floor", "EM10", 10, 3, 12000, 2400, 600, 0.12, 2.0, 1.5, "Aluminum", "Finishing", "End milling",
-        "Carbide", "Conventional"
+        1, "", "", "Aluminum", "", "EM10", "End milling", "Carbide", "Finishing",
+        10, 3, 2400, 12000, 1.5, 2.0, 0.12, 600, "", "", "", "Conventional", "Finish floor"
     });
 
     Row(3, new object[]
     {
-        2, "Finish wall", "EM10", 10, 3, 12000, 2400, 600, 0.35, 2.0, 1.5, "Aluminum", "Finishing", "End milling",
-        "Carbide", "Conventional"
+        2, "", "", "Aluminum", "", "EM10", "End milling", "Carbide", "Finishing",
+        10, 3, 2400, 12000, 1.5, 2.0, 0.35, 600, "", "", "", "Conventional", "Finish wall"
     });
 
     Row(4, new object[]
     {
-        3, "Rough pocket", "EM12", 12, 4, 9000, 3600, 400, 0.08, 4.0, 3.0, "Steel", "Roughing", "End milling",
-        "Carbide", "Conventional"
+        3, "", "", "Steel", "", "EM12", "End milling", "Carbide", "Roughing",
+        12, 4, 3600, 9000, 3.0, 4.0, 0.08, 400, "", "", "", "Conventional", "Rough pocket"
     });
 
     Row(5, new object[]
     {
-        4, "Invalid row demo", "EM10", 10, 3, 12000, 2400, "", "", 2.0, 1.5, "", "Finishing", "End milling",
-        "Carbide", "Conventional"
+        4, "", "", "", "", "EM10", "End milling", "Carbide", "Finishing",
+        10, 3, 2400, 12000, 1.5, 2.0, "", "", "", "", "", "Conventional", "Invalid row demo"
     });
 
     ws.Columns().AdjustToContents();
