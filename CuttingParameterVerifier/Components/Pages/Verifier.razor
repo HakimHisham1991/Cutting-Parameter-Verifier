@@ -121,22 +121,28 @@
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.NumberOfFlutes))">Number of Flutes (teeth) @SortIndicator(TableSortColumn.NumberOfFlutes)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Vc))">Speed Vc (m/min) @SortIndicator(TableSortColumn.Vc)</button>
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.FeedRate100))">Feed Rate 100% (mm/min) @SortIndicator(TableSortColumn.FeedRate100)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Fz))">Feed per Tooth [Fz] (mm/tooth) @SortIndicator(TableSortColumn.Fz)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Ae))">Radial (ae) D.O.C (mm) @SortIndicator(TableSortColumn.Ae)</button>
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.SpeedRate100))">Speed Rate 100% (rpm) @SortIndicator(TableSortColumn.SpeedRate100)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Ap))">Axial (ap) D.O.C (mm) @SortIndicator(TableSortColumn.Ap)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Ae))">Radial (ae) D.O.C (mm) @SortIndicator(TableSortColumn.Ae)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Fz))">Feed per Tooth [Fz] (mm/tooth) @SortIndicator(TableSortColumn.Fz)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Vc))">Speed Vc (m/min) @SortIndicator(TableSortColumn.Vc)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.StrategyType))">Strategy Type @SortIndicator(TableSortColumn.StrategyType)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.OperationName))">Operation @SortIndicator(TableSortColumn.OperationName)</button>
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.OperationName))">Operation Name @SortIndicator(TableSortColumn.OperationName)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.GraphNumber))">Figure No. @SortIndicator(TableSortColumn.GraphNumber)</button>
@@ -167,10 +173,12 @@
                                     <td>@r.Source.SurfaceType</td>
                                     <td>@Format(r.Source.DiameterMm, "0.###")</td>
                                     <td>@FormatInt(r.Source.NumberOfTeethZ)</td>
-                                    <td>@Format(r.Source.SurfaceSpeedVcMMin, "0.###")</td>
-                                    <td>@Format(r.Source.FeedPerToothFzMm, "0.####")</td>
-                                    <td>@Format(r.Source.RadialDocAeMm, "0.###")</td>
+                                    <td>@Format(r.Source.FeedRateVfMmMin, "0.###")</td>
+                                    <td>@Format(r.Source.ToolSpeedNRpm, "0.###")</td>
                                     <td>@Format(r.Source.AxialDocApMm, "0.###")</td>
+                                    <td>@Format(r.Source.RadialDocAeMm, "0.###")</td>
+                                    <td>@Format(r.Source.FeedPerToothFzMm, "0.####")</td>
+                                    <td>@Format(r.Source.SurfaceSpeedVcMMin, "0.###")</td>
                                     <td>@r.Source.StrategyType</td>
                                     <td>@r.Source.OperationName</td>
                                     <td class="text-break">
@@ -268,6 +276,8 @@
         SurfaceType,
         ToolDiameterMm,
         NumberOfFlutes,
+        FeedRate100,
+        SpeedRate100,
         MillingType,
         ToolType,
         StrategyType,
@@ -366,6 +376,8 @@
                 : list.OrderBy(r => r.Source.SurfaceType, SortText),
             TableSortColumn.ToolDiameterMm => OrderNullableDouble(list, r => r.Source.DiameterMm),
             TableSortColumn.NumberOfFlutes => OrderNullableInt(list, r => r.Source.NumberOfTeethZ),
+            TableSortColumn.FeedRate100 => OrderNullableDouble(list, r => r.Source.FeedRateVfMmMin),
+            TableSortColumn.SpeedRate100 => OrderNullableDouble(list, r => r.Source.ToolSpeedNRpm),
             TableSortColumn.MillingType => _sortDescending
                 ? list.OrderByDescending(r => r.Source.MillingType, SortText)
                 : list.OrderBy(r => r.Source.MillingType, SortText),
