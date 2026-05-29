@@ -6,6 +6,29 @@ namespace CuttingParameterVerifier.Services;
 
 public sealed class ExcelService : IExcelService
 {
+    private readonly IConstraintService _constraints;
+
+    public ExcelService(IConstraintService constraints)
+    {
+        _constraints = constraints;
+    }
+
+    /// <summary>Distinctive header groups used to locate the column header row (supports title rows above the table).</summary>
+    private static readonly string[][] HeaderSignatures =
+    [
+        ["material type", "material"],
+        ["operation name"],
+        ["machining type", "strategy type"],
+        ["cutter type", "milling type"],
+        ["tool type (carbide", "carbide/hss/pcd", "tool type"],
+        ["finish type", "surface type"],
+        ["part number"],
+        ["no.", "no", "#"],
+    ];
+
+    private const int MinHeaderSignatureMatches = 4;
+    private const int MaxHeaderScanRows = 50;
+
     public async Task<IReadOnlyList<CuttingDataRow>> ReadAsync(Stream xlsxStream, CancellationToken cancellationToken = default)
     {
         await Task.Yield();
@@ -15,15 +38,20 @@ public sealed class ExcelService : IExcelService
         var ws = workbook.Worksheets.FirstOrDefault();
         if (ws is null) return Array.Empty<CuttingDataRow>();
 
-        var headerRow = ws.FirstRowUsed();
+        var headerRow = FindHeaderRow(ws);
         if (headerRow is null) return Array.Empty<CuttingDataRow>();
 
         var colMap = BuildColumnMap(headerRow);
+        var headerRowNumber = headerRow.RowNumber();
+        var knownMapping = GetKnownMappingValues(_constraints.Load());
         var rows = new List<CuttingDataRow>();
-        foreach (var row in ws.RowsUsed().Skip(1))
+        foreach (var row in ws.RowsUsed().Where(r => r.RowNumber() > headerRowNumber))
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var entity = MapRow(row, colMap);
+            if (IsBlankDataRow(row, colMap))
+                continue;
+
+            var entity = MapRow(row, colMap, knownMapping);
             rows.Add(entity);
         }
 
@@ -41,11 +69,12 @@ public sealed class ExcelService : IExcelService
         {
             "No.", "A/C Type", "Part Number", "Material Type", "Tool Ref. Number",
             "Cutter Description", "Cutter Type", "Tool Type (Carbide/HSS/PCD)",
+            "Machining Type (Conventional/HSM)",
             "Finish Type (Finish / Controlled Roughing / Free Roughing)",
             "Tool Diameter (mm)", "Number of Flutes (teeth)",
             "n (RPM)", "Vf (mm/min)", "Vc (m/min)",
             "Fz (mm)", "ae (mm)", "ap (mm)",
-            "Strategy Type", "Operation Name",
+            "Operation Name",
             "Figure No.", "Parameter In Spec", "Engagement In Spec", "Remarks"
         };
 
@@ -65,16 +94,16 @@ public sealed class ExcelService : IExcelService
             ws.Cell(r, 6).Value = s.ToolName;
             ws.Cell(r, 7).Value = s.MillingType;
             ws.Cell(r, 8).Value = s.ToolType;
-            ws.Cell(r, 9).Value = s.SurfaceType;
-            WriteDouble(ws.Cell(r, 10), s.DiameterMm);
-            WriteInt(ws.Cell(r, 11), s.NumberOfTeethZ);
-            WriteDouble(ws.Cell(r, 12), s.ToolSpeedNRpm);
-            WriteDouble(ws.Cell(r, 13), s.FeedRateVfMmMin);
-            WriteDouble(ws.Cell(r, 14), s.SurfaceSpeedVcMMin);
-            WriteDouble(ws.Cell(r, 15), s.FeedPerToothFzMm);
-            WriteDouble(ws.Cell(r, 16), s.RadialDocAeMm);
-            WriteDouble(ws.Cell(r, 17), s.AxialDocApMm);
-            ws.Cell(r, 18).Value = s.StrategyType;
+            ws.Cell(r, 9).Value = s.StrategyType;
+            ws.Cell(r, 10).Value = s.SurfaceType;
+            WriteDouble(ws.Cell(r, 11), s.DiameterMm);
+            WriteInt(ws.Cell(r, 12), s.NumberOfTeethZ);
+            WriteDouble(ws.Cell(r, 13), s.ToolSpeedNRpm);
+            WriteDouble(ws.Cell(r, 14), s.FeedRateVfMmMin);
+            WriteDouble(ws.Cell(r, 15), s.SurfaceSpeedVcMMin);
+            WriteDouble(ws.Cell(r, 16), s.FeedPerToothFzMm);
+            WriteDouble(ws.Cell(r, 17), s.RadialDocAeMm);
+            WriteDouble(ws.Cell(r, 18), s.AxialDocApMm);
             ws.Cell(r, 19).Value = s.OperationName;
             ws.Cell(r, 20).Value = res.FigureNumbersDisplay ?? "N/A";
             ws.Cell(r, 21).Value = PassFailListToExcel(res.ParameterStatusesPerGraph, res.ParameterStatus);
@@ -110,6 +139,62 @@ public sealed class ExcelService : IExcelService
     private static string PassFailListToExcel(IReadOnlyList<PassFailNa>? perGraph, PassFailNa aggregate) =>
         perGraph is { Count: > 0 } ? string.Join(", ", perGraph.Select(PassFailToString)) : PassFailToString(aggregate);
 
+    private static IXLRow? FindHeaderRow(IXLWorksheet ws)
+    {
+        var firstUsed = ws.FirstRowUsed()?.RowNumber();
+        if (firstUsed is null) return null;
+
+        var lastRow = ws.LastRowUsed()?.RowNumber() ?? firstUsed.Value;
+        var scanThrough = Math.Min(lastRow, firstUsed.Value + MaxHeaderScanRows - 1);
+
+        IXLRow? bestRow = null;
+        var bestScore = 0;
+
+        for (var rowNumber = firstUsed.Value; rowNumber <= scanThrough; rowNumber++)
+        {
+            var row = ws.Row(rowNumber);
+            if (!row.CellsUsed().Any())
+                continue;
+
+            var colMap = BuildColumnMap(row);
+            var score = ScoreColumnMap(colMap);
+            if (score > bestScore)
+            {
+                bestScore = score;
+                bestRow = row;
+            }
+        }
+
+        if (bestRow is not null && bestScore >= MinHeaderSignatureMatches)
+            return bestRow;
+
+        return ws.FirstRowUsed();
+    }
+
+    private static int ScoreColumnMap(Dictionary<string, int> map)
+    {
+        var score = 0;
+        foreach (var group in HeaderSignatures)
+        {
+            if (FindColumn(map, group) is not null)
+                score++;
+        }
+
+        return score;
+    }
+
+    private static bool IsBlankDataRow(IXLRow row, Dictionary<string, int> colMap)
+    {
+        foreach (var col in colMap.Values)
+        {
+            var cell = row.Cell(col);
+            if (cell.IsEmpty()) continue;
+            if (!string.IsNullOrWhiteSpace(cell.GetString())) return false;
+        }
+
+        return true;
+    }
+
     private static Dictionary<string, int> BuildColumnMap(IXLRow headerRow)
     {
         var map = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
@@ -126,7 +211,37 @@ public sealed class ExcelService : IExcelService
     private static string NormalizeHeader(string raw) =>
         raw.Trim().ToLowerInvariant().Replace("  ", " ");
 
-    private static CuttingDataRow MapRow(IXLRow row, Dictionary<string, int> colMap)
+    private sealed class KnownMappingValues
+    {
+        public HashSet<string> Materials { get; init; } = [];
+        public HashSet<string> SurfaceTypes { get; init; } = [];
+        public HashSet<string> MillingTypes { get; init; } = [];
+        public HashSet<string> ToolTypes { get; init; } = [];
+        public HashSet<string> StrategyTypes { get; init; } = [];
+    }
+
+    private static KnownMappingValues GetKnownMappingValues(VerificationConfig config)
+    {
+        var rules = config.MappingRules;
+        return new KnownMappingValues
+        {
+            Materials = CollectDistinctMappingValues(rules.Select(r => r.Material)),
+            SurfaceTypes = CollectDistinctMappingValues(rules.Select(r => r.SurfaceType)),
+            MillingTypes = CollectDistinctMappingValues(rules.Select(r => r.MillingType)),
+            ToolTypes = CollectDistinctMappingValues(rules.Select(r => r.ToolType)),
+            StrategyTypes = CollectDistinctMappingValues(rules.Select(r => r.StrategyType)),
+        };
+    }
+
+    private static HashSet<string> CollectDistinctMappingValues(IEnumerable<string> values) =>
+        values
+            .Where(v => !string.IsNullOrWhiteSpace(v))
+            .Select(NormalizeMappingToken)
+            .ToHashSet(StringComparer.Ordinal);
+
+    private static string NormalizeMappingToken(string value) => value.Trim().ToLowerInvariant();
+
+    private static CuttingDataRow MapRow(IXLRow row, Dictionary<string, int> colMap, KnownMappingValues knownMapping)
     {
         var e = new CuttingDataRow();
 
@@ -151,6 +266,9 @@ public sealed class ExcelService : IExcelService
             "tool type (carbide",
             "carbide/hss/pcd",
             "tool type");
+
+        // "Machining Type (Conventional/HSM)" replaces "Strategy Type" (legacy position at end of row).
+        e.StrategyType = ReadString(row, colMap, "machining type", "strategy type");
 
         // "Finish Type (...)" replaces "Surface Type".
         e.SurfaceType = ReadString(row, colMap, "finish type", "surface type");
@@ -216,16 +334,13 @@ public sealed class ExcelService : IExcelService
         // Column title uses "Approach / Plunge" — avoid a bare "approach" substring key (could match unrelated headers).
         e.ApproachPlungeFeedMmMin = ReadDouble(row, colMap, "approach / plunge", "plunge feed");
 
-        e.StrategyType = ReadString(row, colMap, "strategy type");
-
-        // New template lists Strategy Type before Operation Name; name is unchanged.
         e.OperationName = ReadString(row, colMap, "operation name");
 
-        Validate(e);
+        Validate(e, knownMapping);
         return e;
     }
 
-    private static void Validate(CuttingDataRow e)
+    private static void Validate(CuttingDataRow e, KnownMappingValues knownMapping)
     {
         void Req(string name, bool ok)
         {
@@ -236,14 +351,37 @@ public sealed class ExcelService : IExcelService
         Req("Fz (feed per tooth)", e.FeedPerToothFzMm is > 0);
         Req("ae (radial DOC)", e.RadialDocAeMm is > 0);
         Req("ap (axial DOC)", e.AxialDocApMm is > 0);
-        Req("Material / Material Type", !string.IsNullOrWhiteSpace(e.Material));
-        Req("Finish Type / Surface Type", !string.IsNullOrWhiteSpace(e.SurfaceType));
-        Req("Cutter Type / Milling Type", !string.IsNullOrWhiteSpace(e.MillingType));
-        Req("Tool Type (Carbide/HSS/PCD)", !string.IsNullOrWhiteSpace(e.ToolType));
-        Req("Strategy Type", !string.IsNullOrWhiteSpace(e.StrategyType));
+        ValidateMappingField(e, knownMapping.Materials, e.Material, "Material Type");
+        ValidateMappingField(e, knownMapping.MillingTypes, e.MillingType, "Cutter Type");
+        ValidateMappingField(e, knownMapping.ToolTypes, e.ToolType, "Tool Type (Carbide/HSS/PCD)");
+        ValidateMappingField(e, knownMapping.StrategyTypes, e.StrategyType, "Machining Type (Conventional/HSM)");
+        ValidateMappingField(
+            e,
+            knownMapping.SurfaceTypes,
+            e.SurfaceType,
+            "Finish Type (Finish / Controlled Roughing / Free Roughing)");
 
         e.IsValid = e.ValidationErrors.Count == 0;
         e.Remarks = e.IsValid ? "" : string.Join("; ", e.ValidationErrors);
+    }
+
+    private static void ValidateMappingField(
+        CuttingDataRow e,
+        IReadOnlySet<string> knownValues,
+        string actual,
+        string columnLabel)
+    {
+        if (string.IsNullOrWhiteSpace(actual))
+        {
+            e.ValidationErrors.Add($"{columnLabel} is missing or invalid.");
+            return;
+        }
+
+        if (knownValues.Count == 0)
+            return;
+
+        if (!knownValues.Contains(NormalizeMappingToken(actual)))
+            e.ValidationErrors.Add($"{columnLabel} is missing or invalid.");
     }
 
     private static int? FindColumn(Dictionary<string, int> map, params string[] keys)

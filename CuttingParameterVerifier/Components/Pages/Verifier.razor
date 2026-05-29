@@ -5,7 +5,7 @@
 @inject IExcelService Excel
 @inject IJSRuntime Js
 
-<PageTitle>Cutting parameter verifier</PageTitle>
+<PageTitle>CAM Cutting Verifier</PageTitle>
 
 <div class="cpv-verifier-page">
     <div class="row g-3 mb-3 cpv-verifier-chrome-row">
@@ -112,6 +112,9 @@
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ToolType))">Tool Type (Carbide/HSS/PCD) @SortIndicator(TableSortColumn.ToolType)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.StrategyType))">Machining Type (Conventional/HSM) @SortIndicator(TableSortColumn.StrategyType)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.SurfaceType))">Finish Type (Finish / Controlled Roughing / Free Roughing) @SortIndicator(TableSortColumn.SurfaceType)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
@@ -137,9 +140,6 @@
                                 </th>
                                 <th class="cpv-sortable" scope="col">
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Vc))">Speed Vc (m/min) @SortIndicator(TableSortColumn.Vc)</button>
-                                </th>
-                                <th class="cpv-sortable" scope="col">
-                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.StrategyType))">Strategy Type @SortIndicator(TableSortColumn.StrategyType)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.OperationName))">Operation Name @SortIndicator(TableSortColumn.OperationName)</button>
@@ -170,6 +170,7 @@
                                     <td>@r.Source.ToolName</td>
                                     <td>@r.Source.MillingType</td>
                                     <td>@r.Source.ToolType</td>
+                                    <td>@r.Source.StrategyType</td>
                                     <td>@r.Source.SurfaceType</td>
                                     <td>@Format(r.Source.DiameterMm, "0.###")</td>
                                     <td>@FormatInt(r.Source.NumberOfTeethZ)</td>
@@ -179,7 +180,6 @@
                                     <td>@Format(r.Source.RadialDocAeMm, "0.###")</td>
                                     <td>@Format(r.Source.FeedPerToothFzMm, "0.####")</td>
                                     <td>@Format(r.Source.SurfaceSpeedVcMMin, "0.###")</td>
-                                    <td>@r.Source.StrategyType</td>
                                     <td>@r.Source.OperationName</td>
                                     <td class="text-break">
                                         @{

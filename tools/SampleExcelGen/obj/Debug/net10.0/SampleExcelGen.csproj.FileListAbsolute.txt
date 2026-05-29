@@ -33,3 +33,4 @@ c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\tools\SampleExcelGen\obj\Debug\net10.0\ref\SampleExcelGen.dll
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\tools\SampleExcelGen\bin\Debug\net10.0\Data\constraints.json
 c:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\tools\SampleExcelGen\obj\Debug\net10.0\SampleExcelGen.sourcelink.json
+C:\Users\Public\Documents\Cutting-Parameter-Verifier\Cutting-Parameter-Verifier\tools\SampleExcelGen\bin\Debug\net10.0\Data\sample-constraints.json

@@ -45,10 +45,23 @@ article.content[b-p8kdpkkocv] {
     flex-shrink: 0;
 }
 
+.app-brand-block[b-p8kdpkkocv] {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    flex-shrink: 0;
+}
+
 .app-brand[b-p8kdpkkocv] {
     font-size: 1.1rem;
     font-weight: 600;
-    flex-shrink: 0;
+    line-height: 1.25;
+}
+
+.app-version[b-p8kdpkkocv] {
+    font-size: 0.75rem;
+    line-height: 1.2;
+    letter-spacing: 0.02em;
 }
 
 .top-row-meta[b-p8kdpkkocv] {
@@ -65,7 +78,7 @@ article.content[b-p8kdpkkocv] {
     opacity: 0.9;
 }
 
-.top-row .app-brand[b-p8kdpkkocv] {
+.top-row .app-brand-block .app-brand[b-p8kdpkkocv] {
     white-space: nowrap;
 }
 

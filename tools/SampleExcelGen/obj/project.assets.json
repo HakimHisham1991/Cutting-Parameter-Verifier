@@ -324,11 +324,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\tools\\SampleExcelGen\\SampleExcelGen.csproj",
+      "projectUniqueName": "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\tools\\SampleExcelGen\\SampleExcelGen.csproj",
       "projectName": "SampleExcelGen",
-      "projectPath": "c:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\tools\\SampleExcelGen\\SampleExcelGen.csproj",
+      "projectPath": "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\tools\\SampleExcelGen\\SampleExcelGen.csproj",
       "packagesPath": "C:\\Users\\hakim.hisham\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\tools\\SampleExcelGen\\obj\\",
+      "outputPath": "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\tools\\SampleExcelGen\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -351,8 +351,8 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "c:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj": {
-              "projectPath": "c:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj"
+            "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj": {
+              "projectPath": "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj"
             }
           }
         }
