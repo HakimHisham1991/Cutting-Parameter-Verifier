@@ -1,6 +1,7 @@
 {
   "mappingRules": [
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Controlled Roughing",
       "millingType": "End Milling",
@@ -9,6 +10,7 @@
       "graphNumber": "3.2.2.4.1.1_A"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Controlled Roughing",
       "millingType": "End Milling",
@@ -17,6 +19,7 @@
       "graphNumber": "3.2.2.4.1.1_B"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "End Milling",
@@ -25,6 +28,7 @@
       "graphNumber": "3.2.2.4.1.2"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Controlled Roughing",
       "millingType": "Face Milling",
@@ -33,6 +37,7 @@
       "graphNumber": "3.2.2.4.1.3"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "Face Milling",
@@ -41,6 +46,7 @@
       "graphNumber": "3.2.2.4.1.4"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Controlled Roughing",
       "millingType": "End Milling",
@@ -49,6 +55,7 @@
       "graphNumber": "3.2.2.4.2.1_1_R"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "End Milling",
@@ -57,6 +64,7 @@
       "graphNumber": "3.2.2.4.2.1_2_F"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Controlled Roughing",
       "millingType": "Face Milling",
@@ -65,6 +73,7 @@
       "graphNumber": "3.2.2.4.2.2_1_R"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "Face Milling",
@@ -73,6 +82,7 @@
       "graphNumber": "3.2.2.4.2.2_2_F"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Controlled Roughing",
       "millingType": "End Milling",
@@ -81,6 +91,7 @@
       "graphNumber": "3.2.2.4.3.1"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "End Milling",
@@ -89,6 +100,7 @@
       "graphNumber": "3.2.2.4.3.2"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Controlled Roughing",
       "millingType": "Face Milling",
@@ -97,6 +109,7 @@
       "graphNumber": "3.2.2.4.3.3"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "Face Milling",
@@ -105,6 +118,7 @@
       "graphNumber": "3.2.2.4.3.4"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Controlled Roughing",
       "millingType": "End Milling",
@@ -113,6 +127,7 @@
       "graphNumber": "3.2.2.4.4.1"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "End Milling",
@@ -121,6 +136,7 @@
       "graphNumber": "3.2.2.4.4.2"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Controlled Roughing",
       "millingType": "Face Milling",
@@ -129,6 +145,7 @@
       "graphNumber": "3.2.2.4.4.3"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "Face Milling",
@@ -137,6 +154,7 @@
       "graphNumber": "3.2.2.4.4.4"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "Drilling",
@@ -145,6 +163,7 @@
       "graphNumber": "3.2.6.2.1.4_1_Drill"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "Reaming",
@@ -153,6 +172,7 @@
       "graphNumber": "3.2.6.2.1.4_2_Ream"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Free Roughing",
       "millingType": "End Milling",
@@ -161,6 +181,7 @@
       "graphNumber": "FREE ROUGHING"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Free Roughing",
       "millingType": "Face Milling",
@@ -169,6 +190,7 @@
       "graphNumber": "FREE ROUGHING"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Free Roughing",
       "millingType": "Drilling",
@@ -177,12 +199,49 @@
       "graphNumber": "FREE ROUGHING"
     },
     {
+      "processSpecs": "AIPI 03-11-001",
       "material": "Aluminium",
       "surfaceType": "Free Roughing",
       "millingType": "Tapping",
       "toolType": "Carbide",
       "strategyType": "Conventional",
       "graphNumber": "FREE ROUGHING"
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "End Milling",
+      "toolType": "HSS E",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.1"
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
+      "toolType": "HSS E",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.2"
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Roughing",
+      "millingType": "End Milling",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.1"
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.2"
     }
   ],
   "graphs": [
@@ -1102,6 +1161,84 @@
         },
         {
           "x": 10000,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "graphNumber": "TABLE 1.1",
+      "cuttingPolygon": [
+        {
+          "x": 80,
+          "y": 0.08
+        },
+        {
+          "x": 600,
+          "y": 0.08
+        },
+        {
+          "x": 600,
+          "y": 0.3
+        },
+        {
+          "x": 80,
+          "y": 0.3
+        }
+      ],
+      "engagementPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 999
+        },
+        {
+          "x": 999,
+          "y": 999
+        },
+        {
+          "x": 999,
+          "y": 0
+        }
+      ]
+    },
+    {
+      "graphNumber": "TABLE 1.2",
+      "cuttingPolygon": [
+        {
+          "x": 0,
+          "y": 0.06
+        },
+        {
+          "x": 800,
+          "y": 0.06
+        },
+        {
+          "x": 800,
+          "y": 0.2
+        },
+        {
+          "x": 0,
+          "y": 0.2
+        }
+      ],
+      "engagementPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 999
+        },
+        {
+          "x": 999,
+          "y": 999
+        },
+        {
+          "x": 999,
           "y": 0
         }
       ]

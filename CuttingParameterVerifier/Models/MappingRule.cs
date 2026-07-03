@@ -1,8 +1,9 @@
 namespace CuttingParameterVerifier.Models;
 
-/// <summary>Maps a five-dimensional CAM context key to a constraint graph identifier.</summary>
+/// <summary>Maps a six-dimensional CAM context key to a constraint graph identifier.</summary>
 public sealed class MappingRule
 {
+    public string ProcessSpecs { get; set; } = "";
     public string Material { get; set; } = "";
     public string SurfaceType { get; set; } = "";
     public string MillingType { get; set; } = "";

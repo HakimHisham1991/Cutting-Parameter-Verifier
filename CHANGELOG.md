@@ -2,14 +2,6 @@
 
 All notable changes to this project are documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
-
-Version numbers use **MAJOR.MINOR.PATCH**:
-
-- **MAJOR** — incompatible changes (breaking API, config schema, or import/export contract)
-- **MINOR** — backward-compatible functionality
-- **PATCH** — backward-compatible bug fixes
-
 ## [Unreleased]
 
 ### Added
@@ -23,6 +15,19 @@ Version numbers use **MAJOR.MINOR.PATCH**:
 ### Fixed
 
 - Nothing yet.
+
+---
+
+## [1.2.0] - 2026-07-04
+
+### Added
+
+- **Process Specs** column in the verifier results table and Excel import/export (after **A/C Type**).
+- **Process Specs** column in Settings mapping table (before **Material**); mapping resolution, chart subtitles, and bundled `constraints.json` include the new field. Blank **Process Specs** in a mapping row matches any imported value.
+
+### Changed
+
+- Mapping lookup expanded from five to six fields (Process Specs + Material, Surface/Finish, Cutter, Tool, Strategy).
 
 ---
 
@@ -83,7 +88,8 @@ Version numbers use **MAJOR.MINOR.PATCH**:
 - Sample Excel generator (`tools/SampleExcelGen`) and downloadable `sample.xlsx`.
 - GitHub Actions CI workflow (restore + Release build).
 
-[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.1.2...HEAD
+[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.2.0...HEAD
+[1.2.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.1.2...v1.2.0
 [1.1.2]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.0.0...v1.1.0

@@ -67,7 +67,7 @@ public sealed class ExcelService : IExcelService
         var ws = wb.AddWorksheet("Results");
         var headers = new[]
         {
-            "No.", "A/C Type", "Part Number", "Material Type", "Tool Ref. Number",
+            "No.", "A/C Type", "Process Specs", "Part Number", "Material Type", "Tool Ref. Number",
             "Cutter Description", "Cutter Type", "Tool Type (Carbide/HSS/PCD)",
             "Machining Type (Conventional/HSM)",
             "Finish Type (Finish / Controlled Roughing / Free Roughing)",
@@ -88,27 +88,28 @@ public sealed class ExcelService : IExcelService
             var s = res.Source;
             WriteInt(ws.Cell(r, 1), s.No);
             ws.Cell(r, 2).Value = s.AcType;
-            ws.Cell(r, 3).Value = s.PartNumber;
-            ws.Cell(r, 4).Value = s.Material;
-            ws.Cell(r, 5).Value = s.ToolRefNumber;
-            ws.Cell(r, 6).Value = s.ToolName;
-            ws.Cell(r, 7).Value = s.MillingType;
-            ws.Cell(r, 8).Value = s.ToolType;
-            ws.Cell(r, 9).Value = s.StrategyType;
-            ws.Cell(r, 10).Value = s.SurfaceType;
-            WriteDouble(ws.Cell(r, 11), s.DiameterMm);
-            WriteInt(ws.Cell(r, 12), s.NumberOfTeethZ);
-            WriteDouble(ws.Cell(r, 13), s.ToolSpeedNRpm);
-            WriteDouble(ws.Cell(r, 14), s.FeedRateVfMmMin);
-            WriteDouble(ws.Cell(r, 15), s.SurfaceSpeedVcMMin);
-            WriteDouble(ws.Cell(r, 16), s.FeedPerToothFzMm);
-            WriteDouble(ws.Cell(r, 17), s.RadialDocAeMm);
-            WriteDouble(ws.Cell(r, 18), s.AxialDocApMm);
-            ws.Cell(r, 19).Value = s.OperationName;
-            ws.Cell(r, 20).Value = res.FigureNumbersDisplay ?? "N/A";
-            ws.Cell(r, 21).Value = PassFailListToExcel(res.ParameterStatusesPerGraph, res.ParameterStatus);
-            ws.Cell(r, 22).Value = PassFailListToExcel(res.EngagementStatusesPerGraph, res.EngagementStatus);
-            ws.Cell(r, 23).Value = s.Remarks;
+            ws.Cell(r, 3).Value = s.ProcessSpecs;
+            ws.Cell(r, 4).Value = s.PartNumber;
+            ws.Cell(r, 5).Value = s.Material;
+            ws.Cell(r, 6).Value = s.ToolRefNumber;
+            ws.Cell(r, 7).Value = s.ToolName;
+            ws.Cell(r, 8).Value = s.MillingType;
+            ws.Cell(r, 9).Value = s.ToolType;
+            ws.Cell(r, 10).Value = s.StrategyType;
+            ws.Cell(r, 11).Value = s.SurfaceType;
+            WriteDouble(ws.Cell(r, 12), s.DiameterMm);
+            WriteInt(ws.Cell(r, 13), s.NumberOfTeethZ);
+            WriteDouble(ws.Cell(r, 14), s.ToolSpeedNRpm);
+            WriteDouble(ws.Cell(r, 15), s.FeedRateVfMmMin);
+            WriteDouble(ws.Cell(r, 16), s.SurfaceSpeedVcMMin);
+            WriteDouble(ws.Cell(r, 17), s.FeedPerToothFzMm);
+            WriteDouble(ws.Cell(r, 18), s.RadialDocAeMm);
+            WriteDouble(ws.Cell(r, 19), s.AxialDocApMm);
+            ws.Cell(r, 20).Value = s.OperationName;
+            ws.Cell(r, 21).Value = res.FigureNumbersDisplay ?? "N/A";
+            ws.Cell(r, 22).Value = PassFailListToExcel(res.ParameterStatusesPerGraph, res.ParameterStatus);
+            ws.Cell(r, 23).Value = PassFailListToExcel(res.EngagementStatusesPerGraph, res.EngagementStatus);
+            ws.Cell(r, 24).Value = s.Remarks;
             r++;
         }
 
@@ -213,6 +214,7 @@ public sealed class ExcelService : IExcelService
 
     private sealed class KnownMappingValues
     {
+        public HashSet<string> ProcessSpecs { get; init; } = [];
         public HashSet<string> Materials { get; init; } = [];
         public HashSet<string> SurfaceTypes { get; init; } = [];
         public HashSet<string> MillingTypes { get; init; } = [];
@@ -225,6 +227,7 @@ public sealed class ExcelService : IExcelService
         var rules = config.MappingRules;
         return new KnownMappingValues
         {
+            ProcessSpecs = CollectDistinctMappingValues(rules.Select(r => r.ProcessSpecs)),
             Materials = CollectDistinctMappingValues(rules.Select(r => r.Material)),
             SurfaceTypes = CollectDistinctMappingValues(rules.Select(r => r.SurfaceType)),
             MillingTypes = CollectDistinctMappingValues(rules.Select(r => r.MillingType)),
@@ -248,6 +251,7 @@ public sealed class ExcelService : IExcelService
         e.No = ReadInt(row, colMap, "no.", "no", "#");
         // Prefer distinctive substrings first so substring matching does not latch onto an unrelated column.
         e.AcType = ReadString(row, colMap, "a/c type");
+        e.ProcessSpecs = ReadString(row, colMap, "process specs");
         e.PartNumber = ReadString(row, colMap, "part number");
         e.ToolRefNumber = ReadString(row, colMap, "tool ref", "tool ref.");
 
@@ -351,6 +355,7 @@ public sealed class ExcelService : IExcelService
         Req("Fz (feed per tooth)", e.FeedPerToothFzMm is > 0);
         Req("ae (radial DOC)", e.RadialDocAeMm is > 0);
         Req("ap (axial DOC)", e.AxialDocApMm is > 0);
+        ValidateMappingField(e, knownMapping.ProcessSpecs, e.ProcessSpecs, "Process Specs", requiredWhenKnown: false);
         ValidateMappingField(e, knownMapping.Materials, e.Material, "Material Type");
         ValidateMappingField(e, knownMapping.MillingTypes, e.MillingType, "Cutter Type");
         ValidateMappingField(e, knownMapping.ToolTypes, e.ToolType, "Tool Type (Carbide/HSS/PCD)");
@@ -369,11 +374,13 @@ public sealed class ExcelService : IExcelService
         CuttingDataRow e,
         IReadOnlySet<string> knownValues,
         string actual,
-        string columnLabel)
+        string columnLabel,
+        bool requiredWhenKnown = true)
     {
         if (string.IsNullOrWhiteSpace(actual))
         {
-            e.ValidationErrors.Add($"{columnLabel} is missing or invalid.");
+            if (requiredWhenKnown || knownValues.Count > 0)
+                e.ValidationErrors.Add($"{columnLabel} is missing or invalid.");
             return;
         }
 

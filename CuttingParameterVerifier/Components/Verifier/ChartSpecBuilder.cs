@@ -31,7 +31,7 @@ internal static class ChartSpecBuilder
         return new { panels };
     }
 
-    /// <summary>Subtitle: Material | Surface | Milling | Tool | Strategy — one line per mapping rule.</summary>
+    /// <summary>Subtitle: Process Specs | Material | Surface | Milling | Tool | Strategy — one line per mapping rule.</summary>
     private static string BuildMappingContextSubtitle(VerificationConfig cfg, string graphNumber)
     {
         var key = graphNumber.Trim();
@@ -46,7 +46,7 @@ internal static class ChartSpecBuilder
         var blocks = rules
             .Select(r =>
             {
-                var parts = new[] { T(r.Material), T(r.SurfaceType), T(r.MillingType), T(r.ToolType), T(r.StrategyType) }
+                var parts = new[] { T(r.ProcessSpecs), T(r.Material), T(r.SurfaceType), T(r.MillingType), T(r.ToolType), T(r.StrategyType) }
                     .Where(p => p.Length > 0);
                 return string.Join(" | ", parts);
             })

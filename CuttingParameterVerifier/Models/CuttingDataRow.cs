@@ -6,6 +6,8 @@ public sealed class CuttingDataRow
     public int? No { get; set; }
     /// <summary>Excel column "A/C Type" (CAM template).</summary>
     public string AcType { get; set; } = "";
+    /// <summary>Excel column "Process Specs".</summary>
+    public string ProcessSpecs { get; set; } = "";
     /// <summary>Excel column "Part Number".</summary>
     public string PartNumber { get; set; } = "";
     /// <summary>Excel column "Tool Ref. Number".</summary>

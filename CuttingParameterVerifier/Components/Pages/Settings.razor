@@ -27,13 +27,14 @@
             <div class="card-header">Mapping table</div>
             <div class="card-body">
                 <p class="text-muted small mb-2">
-                    Match is case-insensitive on all five fields. If no rule matches, both evaluations are N/A.
-                    You can add multiple rows with the same material / surface / milling / tool / strategy but different graph numbers — the operation is matched to every listed figure (results show them comma-separated and each chart plots the point).
+                    Match is case-insensitive on all six fields. Leave <strong>Process Specs</strong> blank to match any imported value. If no rule matches, both evaluations are N/A.
+                    You can add multiple rows with the same process specs / material / surface / milling / tool / strategy but different graph numbers — the operation is matched to every listed figure (results show them comma-separated and each chart plots the point).
                 </p>
                 <div class="table-responsive">
                     <table class="table table-sm align-middle">
                         <thead class="table-light">
                             <tr>
+                                <th>Process Specs</th>
                                 <th>Material</th>
                                 <th>Surface type</th>
                                 <th>Milling type</th>
@@ -47,6 +48,7 @@
                             @foreach (var rule in _model.MappingRules)
                             {
                                 <tr>
+                                    <td><input class="form-control form-control-sm" @bind="rule.ProcessSpecs" /></td>
                                     <td><input class="form-control form-control-sm" @bind="rule.Material" /></td>
                                     <td><input class="form-control form-control-sm" @bind="rule.SurfaceType" /></td>
                                     <td><input class="form-control form-control-sm" @bind="rule.MillingType" /></td>

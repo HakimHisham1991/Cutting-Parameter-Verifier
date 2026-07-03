@@ -11,7 +11,8 @@ public sealed class MappingService : IMappingService
         var ordered = new List<string>();
         foreach (var rule in config.MappingRules)
         {
-            if (Match(rule.Material, row.Material) &&
+            if (MatchProcessSpecs(rule.ProcessSpecs, row.ProcessSpecs) &&
+                Match(rule.Material, row.Material) &&
                 Match(rule.SurfaceType, row.SurfaceType) &&
                 Match(rule.MillingType, row.MillingType) &&
                 Match(rule.ToolType, row.ToolType) &&
@@ -26,6 +27,10 @@ public sealed class MappingService : IMappingService
 
         return ordered;
     }
+
+    private static bool MatchProcessSpecs(string expected, string actual) =>
+        string.IsNullOrWhiteSpace(expected) ||
+        string.Equals(Normalize(expected), Normalize(actual), StringComparison.Ordinal);
 
     private static bool Match(string expected, string actual) =>
         string.Equals(Normalize(expected), Normalize(actual), StringComparison.Ordinal);

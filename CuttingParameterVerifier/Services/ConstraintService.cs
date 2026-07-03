@@ -165,9 +165,10 @@ public sealed class ConstraintService : IConstraintService
     }
 
     private static bool HasEquivalentMapping(IReadOnlyList<MappingRule> rules, MappingRule candidate) =>
-        rules.Any(r => SameFiveTuple(r, candidate) && SameGraphNumber(r.GraphNumber, candidate.GraphNumber));
+        rules.Any(r => SameMappingKey(r, candidate) && SameGraphNumber(r.GraphNumber, candidate.GraphNumber));
 
-    private static bool SameFiveTuple(MappingRule a, MappingRule b) =>
+    private static bool SameMappingKey(MappingRule a, MappingRule b) =>
+        string.Equals(Norm(a.ProcessSpecs), Norm(b.ProcessSpecs), StringComparison.Ordinal) &&
         string.Equals(Norm(a.Material), Norm(b.Material), StringComparison.Ordinal) &&
         string.Equals(Norm(a.SurfaceType), Norm(b.SurfaceType), StringComparison.Ordinal) &&
         string.Equals(Norm(a.MillingType), Norm(b.MillingType), StringComparison.Ordinal) &&
@@ -181,6 +182,7 @@ public sealed class ConstraintService : IConstraintService
 
     private static MappingRule CloneMappingRule(MappingRule r) => new()
     {
+        ProcessSpecs = r.ProcessSpecs,
         Material = r.Material,
         SurfaceType = r.SurfaceType,
         MillingType = r.MillingType,

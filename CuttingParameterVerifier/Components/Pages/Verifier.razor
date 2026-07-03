@@ -94,6 +94,9 @@
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.AcType))">A/C Type @SortIndicator(TableSortColumn.AcType)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ProcessSpecs))">Process Specs @SortIndicator(TableSortColumn.ProcessSpecs)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.PartNumber))">Part Number @SortIndicator(TableSortColumn.PartNumber)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
@@ -164,6 +167,7 @@
                                 <tr class="@RowClass(r)">
                                     <td>@r.Source.No</td>
                                     <td>@r.Source.AcType</td>
+                                    <td>@r.Source.ProcessSpecs</td>
                                     <td>@r.Source.PartNumber</td>
                                     <td>@r.Source.Material</td>
                                     <td>@r.Source.ToolRefNumber</td>
@@ -264,6 +268,7 @@
         None,
         No,
         AcType,
+        ProcessSpecs,
         PartNumber,
         ToolRefNumber,
         OperationName,
@@ -352,6 +357,9 @@
             TableSortColumn.AcType => _sortDescending
                 ? list.OrderByDescending(r => r.Source.AcType, SortText)
                 : list.OrderBy(r => r.Source.AcType, SortText),
+            TableSortColumn.ProcessSpecs => _sortDescending
+                ? list.OrderByDescending(r => r.Source.ProcessSpecs, SortText)
+                : list.OrderBy(r => r.Source.ProcessSpecs, SortText),
             TableSortColumn.PartNumber => _sortDescending
                 ? list.OrderByDescending(r => r.Source.PartNumber, SortText)
                 : list.OrderBy(r => r.Source.PartNumber, SortText),

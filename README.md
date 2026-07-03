@@ -1,5 +1,7 @@
 # Cutting Parameter Verifier
 
+**Current version:** 1.2.0
+
 A Blazor web application for verifying CNC milling cutting parameters against configurable constraint graphs. Upload a CAM Excel export, and the app maps each operation to the correct figure(s), checks whether cutting and engagement parameters fall inside approved polygons, and visualizes results in interactive charts.
 
 Repository: [github.com/HakimHisham1991/Cutting-Parameter-Verifier](https://github.com/HakimHisham1991/Cutting-Parameter-Verifier)
@@ -34,7 +36,7 @@ Manufacturing teams often define acceptable cutting-parameter envelopes as 2D co
 For every imported row, the app:
 
 1. **Parses** the Excel row into a structured operation record.
-2. **Maps** the row to one or more constraint graph identifiers (figure numbers) using a five-field lookup table.
+2. **Maps** the row to one or more constraint graph identifiers (figure numbers) using a six-field lookup table.
 3. **Evaluates** two independent checks:
    - **Parameter check (cutting)** — is the point `(Vc, Fz)` inside the cutting polygon?
    - **Engagement check** — is the point `(ap, ae)` inside the engagement polygon?
@@ -50,7 +52,7 @@ Configuration (mapping rules and polygon vertices) is stored in `Data/constraint
 |------|------------|
 | **Import** | Upload `.xlsx` workbooks; flexible column header matching (legacy and current CAM templates) |
 | **Validation** | Rows missing required fields are flagged invalid with remarks; they receive N/A for checks |
-| **Mapping** | Case-insensitive five-tuple match: Material, Surface/Finish type, Milling/Cutter type, Tool type, Strategy type |
+| **Mapping** | Case-insensitive six-tuple match: Process Specs (blank = any), Material, Surface/Finish type, Milling/Cutter type, Tool type, Strategy type |
 | **Multi-graph** | One operation can match multiple figures; per-figure Pass/Fail shown comma-separated |
 | **Charts** | Tabbed gallery with cutting (Vc vs Fz) and engagement (ap vs ae) charts per figure |
 | **Table** | Sortable columns, row filters (All / Pass both / Any fail / Any N/A), click figure links to jump to chart |
@@ -178,6 +180,7 @@ Route: `/`
 |--------|----------------|
 | No. | Row index from Excel |
 | A/C Type | Aircraft/program type |
+| Process Specs | Process specification identifier (used in mapping when configured) |
 | Part Number | Part identifier |
 | Material Type | Material (used in mapping) |
 | Tool Ref. Number | Tool reference |
@@ -206,7 +209,7 @@ Route: `/settings`
 
 Three areas:
 
-1. **Mapping table** — rows linking `(Material, Surface type, Milling type, Tool type, Strategy type)` → `Graph number`. Matching is case-insensitive. Duplicate five-tuples with different graph numbers are allowed (one operation can map to multiple figures).
+1. **Mapping table** — rows linking `(Process Specs, Material, Surface type, Milling type, Tool type, Strategy type)` → `Graph number`. Matching is case-insensitive. Leave **Process Specs** blank to match any imported value. Duplicate six-tuples with different graph numbers are allowed (one operation can map to multiple figures).
 2. **Graph selector** — add, delete, or rename figure identifiers (e.g. `3.2.2.4.1.2`).
 3. **Constraint polygons** — edit vertex lists for:
    - **Cutting (Vc, Fz)** — X = Vc, Y = Fz
@@ -226,6 +229,7 @@ The importer reads the **first worksheet** and maps columns by header text (case
 |---------------|---------------------|-------|
 | No. | No | Row number |
 | A/C Type | No | |
+| Process Specs | No | Used in mapping when configured |
 | Part Number | No | |
 | Material Type | **Yes** | Also accepts `Material` |
 | Tool Ref. Number | No | |
@@ -274,6 +278,7 @@ Path: `CuttingParameterVerifier/Data/constraints.json`
 {
   "mappingRules": [
     {
+      "processSpecs": "",
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "End Milling",
@@ -351,7 +356,7 @@ Cutting-Parameter-Verifier/
 │   ├── Models/                        # DTOs and domain types
 │   ├── Services/
 │   │   ├── ExcelService.cs            # Import / export
-│   │   ├── MappingService.cs          # Five-tuple → figure lookup
+│   │   ├── MappingService.cs          # Six-tuple → figure lookup
 │   │   ├── EvaluationService.cs       # Pass/Fail evaluation
 │   │   ├── ConstraintService.cs       # Load/save constraints.json
 │   │   ├── ConstraintEval.cs          # Point-in-polygon checks
