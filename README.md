@@ -69,7 +69,7 @@ flowchart LR
     B --> C{Row valid?}
     C -->|No| D[N/A checks + remarks]
     C -->|Yes| E[Mapping rules]
-    E --> F{Figure(s) found?}
+    E --> F{Figures found?}
     F -->|No| D
     F -->|Yes| G[For each figure]
     G --> H[Cutting polygon<br/>Vc × Fz]
