@@ -18,6 +18,19 @@ All notable changes to this project are documented in this file.
 
 ---
 
+## [1.3.0] - 2026-07-07
+
+### Added
+
+- **Diameter-scaled engagement mode** per constraint graph: toggle **Scale with Ø** on Settings splits engagement into separate **ae vs Ø** and **ap vs Ø** polygons (mm). Ratio limits such as max ae = 1D and ap = 0.5D–1D appear as lines through the origin and scale with tool diameter.
+- Verifier chart gallery shows two engagement charts (ae vs Ø, ap vs Ø) when diameter-scaled mode is enabled; existing graphs keep the single ap × ae chart.
+
+### Changed
+
+- Settings engagement editor labels polygon axes (ap/ae or Ø) instead of generic X/Y.
+
+---
+
 ## [1.2.0] - 2026-07-04
 
 ### Added
@@ -88,7 +101,8 @@ All notable changes to this project are documented in this file.
 - Sample Excel generator (`tools/SampleExcelGen`) and downloadable `sample.xlsx`.
 - GitHub Actions CI workflow (restore + Release build).
 
-[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.2.0...HEAD
+[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.3.0...HEAD
+[1.3.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.1.2...v1.2.0
 [1.1.2]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.1.1...v1.1.2
 [1.1.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.1.0...v1.1.1

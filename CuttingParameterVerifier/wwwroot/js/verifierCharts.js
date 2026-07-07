@@ -217,17 +217,42 @@
                     p.cutting.na,
                     p.mappingContext
                 );
-                buildScatterChart(
-                    p.engCanvasId,
-                    `Engagement: ${g}`,
-                    "ap (mm)",
-                    "ae (mm)",
-                    p.engagement.polygon,
-                    p.engagement.pass,
-                    p.engagement.fail,
-                    p.engagement.na,
-                    p.mappingContext
-                );
+                if (p.engagementMode === "diameterScaled") {
+                    buildScatterChart(
+                        p.engAeCanvasId,
+                        `Engagement ae vs Ø: ${g}`,
+                        "Ø (mm)",
+                        "ae (mm)",
+                        p.engagementAeVsDiameter.polygon,
+                        p.engagementAeVsDiameter.pass,
+                        p.engagementAeVsDiameter.fail,
+                        p.engagementAeVsDiameter.na,
+                        p.mappingContext
+                    );
+                    buildScatterChart(
+                        p.engApCanvasId,
+                        `Engagement ap vs Ø: ${g}`,
+                        "Ø (mm)",
+                        "ap (mm)",
+                        p.engagementApVsDiameter.polygon,
+                        p.engagementApVsDiameter.pass,
+                        p.engagementApVsDiameter.fail,
+                        p.engagementApVsDiameter.na,
+                        p.mappingContext
+                    );
+                } else {
+                    buildScatterChart(
+                        p.engCanvasId,
+                        `Engagement: ${g}`,
+                        "ap (mm)",
+                        "ae (mm)",
+                        p.engagement.polygon,
+                        p.engagement.pass,
+                        p.engagement.fail,
+                        p.engagement.na,
+                        p.mappingContext
+                    );
+                }
             });
         },
         destroyAll: destroyAll,

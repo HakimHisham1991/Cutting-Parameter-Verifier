@@ -195,6 +195,9 @@ public sealed class ConstraintService : IConstraintService
     {
         GraphNumber = g.GraphNumber,
         CuttingPolygon = g.CuttingPolygon.Select(p => new Point2D(p.X, p.Y)).ToList(),
-        EngagementPolygon = g.EngagementPolygon.Select(p => new Point2D(p.X, p.Y)).ToList()
+        EngagementPolygon = g.EngagementPolygon.Select(p => new Point2D(p.X, p.Y)).ToList(),
+        EngagementMode = g.EngagementMode,
+        EngagementAeVsDiameterPolygon = g.EngagementAeVsDiameterPolygon.Select(p => new Point2D(p.X, p.Y)).ToList(),
+        EngagementApVsDiameterPolygon = g.EngagementApVsDiameterPolygon.Select(p => new Point2D(p.X, p.Y)).ToList()
     };
 }

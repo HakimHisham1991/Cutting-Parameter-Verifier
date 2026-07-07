@@ -14,18 +14,39 @@ internal static class ChartSpecBuilder
         {
             var subset = results.Where(r => RowMatchesGraph(r, graph.GraphNumber.Trim())).ToList();
             var cutPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.CuttingPolygon);
-            var engPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.EngagementPolygon);
-
             var mappingContext = BuildMappingContextSubtitle(cfg, graph.GraphNumber);
-            panels.Add(new
+
+            if (graph.EngagementMode == EngagementMode.DiameterScaled)
             {
-                graphNumber = graph.GraphNumber,
-                cutCanvasId = GraphDomIds.Cutting(graph.GraphNumber),
-                engCanvasId = GraphDomIds.Engagement(graph.GraphNumber),
-                mappingContext,
-                cutting = BuildCuttingSide(cutPoly, subset),
-                engagement = BuildEngagementSide(engPoly, subset)
-            });
+                var aePoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.EngagementAeVsDiameterPolygon);
+                var apPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.EngagementApVsDiameterPolygon);
+                panels.Add(new
+                {
+                    graphNumber = graph.GraphNumber,
+                    engagementMode = "diameterScaled",
+                    cutCanvasId = GraphDomIds.Cutting(graph.GraphNumber),
+                    engAeCanvasId = GraphDomIds.EngagementAeVsDiameter(graph.GraphNumber),
+                    engApCanvasId = GraphDomIds.EngagementApVsDiameter(graph.GraphNumber),
+                    mappingContext,
+                    cutting = BuildCuttingSide(cutPoly, subset),
+                    engagementAeVsDiameter = BuildEngagementAeVsDiameterSide(aePoly, subset),
+                    engagementApVsDiameter = BuildEngagementApVsDiameterSide(apPoly, subset)
+                });
+            }
+            else
+            {
+                var engPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.EngagementPolygon);
+                panels.Add(new
+                {
+                    graphNumber = graph.GraphNumber,
+                    engagementMode = "apAe",
+                    cutCanvasId = GraphDomIds.Cutting(graph.GraphNumber),
+                    engCanvasId = GraphDomIds.Engagement(graph.GraphNumber),
+                    mappingContext,
+                    cutting = BuildCuttingSide(cutPoly, subset),
+                    engagement = BuildEngagementSide(engPoly, subset)
+                });
+            }
         }
 
         return new { panels };
@@ -101,6 +122,58 @@ internal static class ChartSpecBuilder
 
             var x = r.Source.AxialDocApMm.Value;
             var y = r.Source.RadialDocAeMm.Value;
+            Bucket(status, ScatterPoint(x, y, status, r.Source.No), pass, fail, na);
+        }
+
+        return new
+        {
+            polygon = polygon.Select(p => new { x = p.X, y = p.Y }).ToList(),
+            pass,
+            fail,
+            na
+        };
+    }
+
+    private static object BuildEngagementAeVsDiameterSide(IReadOnlyList<Point2D> polygon, IReadOnlyList<ResultRow> subset)
+    {
+        var pass = new List<object>();
+        var fail = new List<object>();
+        var na = new List<object>();
+
+        foreach (var r in subset)
+        {
+            var status = ConstraintEval.EvaluateEngagementAeVsDiameter(r.Source, polygon);
+            if (r.Source.DiameterMm is null or <= 0 || r.Source.RadialDocAeMm is null)
+                continue;
+
+            var x = r.Source.DiameterMm.Value;
+            var y = r.Source.RadialDocAeMm.Value;
+            Bucket(status, ScatterPoint(x, y, status, r.Source.No), pass, fail, na);
+        }
+
+        return new
+        {
+            polygon = polygon.Select(p => new { x = p.X, y = p.Y }).ToList(),
+            pass,
+            fail,
+            na
+        };
+    }
+
+    private static object BuildEngagementApVsDiameterSide(IReadOnlyList<Point2D> polygon, IReadOnlyList<ResultRow> subset)
+    {
+        var pass = new List<object>();
+        var fail = new List<object>();
+        var na = new List<object>();
+
+        foreach (var r in subset)
+        {
+            var status = ConstraintEval.EvaluateEngagementApVsDiameter(r.Source, polygon);
+            if (r.Source.DiameterMm is null or <= 0 || r.Source.AxialDocApMm is null)
+                continue;
+
+            var x = r.Source.DiameterMm.Value;
+            var y = r.Source.AxialDocApMm.Value;
             Bucket(status, ScatterPoint(x, y, status, r.Source.No), pass, fail, na);
         }
 

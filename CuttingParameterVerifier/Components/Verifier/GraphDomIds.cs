@@ -4,6 +4,8 @@ internal static class GraphDomIds
 {
     public static string Cutting(string graphNumber) => "cut-" + Sanitize(graphNumber);
     public static string Engagement(string graphNumber) => "eng-" + Sanitize(graphNumber);
+    public static string EngagementAeVsDiameter(string graphNumber) => "eng-ae-dia-" + Sanitize(graphNumber);
+    public static string EngagementApVsDiameter(string graphNumber) => "eng-ap-dia-" + Sanitize(graphNumber);
     public static string FigureAnchor(string graphNumber) => "fig-" + Sanitize(graphNumber);
 
     private static string Sanitize(string graphNumber)

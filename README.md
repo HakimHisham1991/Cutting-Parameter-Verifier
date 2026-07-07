@@ -1,6 +1,6 @@
 # Cutting Parameter Verifier
 
-**Current version:** 1.2.0
+**Current version:** 1.3.0
 
 A Blazor web application for verifying CNC milling cutting parameters against configurable constraint graphs. Upload a CAM Excel export, and the app maps each operation to the correct figure(s), checks whether cutting and engagement parameters fall inside approved polygons, and visualizes results in interactive charts.
 
@@ -39,7 +39,7 @@ For every imported row, the app:
 2. **Maps** the row to one or more constraint graph identifiers (figure numbers) using a six-field lookup table.
 3. **Evaluates** two independent checks:
    - **Parameter check (cutting)** — is the point `(Vc, Fz)` inside the cutting polygon?
-   - **Engagement check** — is the point `(ap, ae)` inside the engagement polygon?
+   - **Engagement check** — is the point inside the engagement polygon(s)? Either ap × ae (fixed mm) or ae vs Ø + ap vs Ø (diameter-scaled) depending on graph mode.
 4. **Displays** Pass / Fail / N/A in a sortable results table and plots points on Chart.js scatter charts.
 
 Configuration (mapping rules and polygon vertices) is stored in `Data/constraints.json` and can be edited from the **Settings** page without redeploying the app.
@@ -54,7 +54,7 @@ Configuration (mapping rules and polygon vertices) is stored in `Data/constraint
 | **Validation** | Rows missing required fields are flagged invalid with remarks; they receive N/A for checks |
 | **Mapping** | Case-insensitive six-tuple match: Process Specs (blank = any), Material, Surface/Finish type, Milling/Cutter type, Tool type, Strategy type |
 | **Multi-graph** | One operation can match multiple figures; per-figure Pass/Fail shown comma-separated |
-| **Charts** | Tabbed gallery with cutting (Vc vs Fz) and engagement (ap vs ae) charts per figure |
+| **Charts** | Tabbed gallery with cutting (Vc vs Fz) and engagement charts per figure (ap vs ae, or ae vs Ø + ap vs Ø when diameter-scaled) |
 | **Table** | Sortable columns, row filters (All / Pass both / Any fail / Any N/A), click figure links to jump to chart |
 | **Export** | Download filtered results as Excel with check outcomes and remarks |
 | **Settings** | Edit mapping table and polygon vertices in the browser; changes re-evaluate the current session |
@@ -88,9 +88,22 @@ flowchart LR
 
 ### Engagement check
 
+Two modes per constraint graph (Settings → **Scale with Ø** toggle):
+
+#### ap × ae (default — first customer specs)
+
 - **Axes:** X = axial depth of cut `ap` (mm), Y = radial depth of cut `ae` (mm)
-- **Rule:** Pass if the point lies inside (or on the boundary of) the engagement polygon
-- **Note:** Polygon vertices are stored as `(X = ae, Y = ap)` in JSON; charts and evaluation normalize to `(ap, ae)` for display and point-in-polygon tests
+- **Rule:** Pass if `(ap, ae)` lies inside (or on the boundary of) the engagement polygon
+- Fixed envelope in mm — independent of tool diameter
+
+#### Diameter-scaled (second customer specs)
+
+- **Two polygons:** ae vs Ø and ap vs Ø (both axes in mm)
+- **Rule:** Pass only if both `(Ø, ae)` and `(Ø, ap)` lie inside their respective polygons
+- Ratio limits scale with diameter: e.g. max ae = 1D is the line ae = Ø; ap = 0.5D–1D is the band between ap = 0.5·Ø and ap = Ø
+- Requires tool diameter in the import row; missing Ø → N/A for engagement
+
+Polygons are piecewise-linear boundaries (the same inequality-graph representation as cutting checks). Lines through the origin encode D-ratio limits.
 
 ### Status aggregation
 
@@ -213,7 +226,9 @@ Three areas:
 2. **Graph selector** — add, delete, or rename figure identifiers (e.g. `3.2.2.4.1.2`).
 3. **Constraint polygons** — edit vertex lists for:
    - **Cutting (Vc, Fz)** — X = Vc, Y = Fz
-   - **Engagement (ap, ae)** — X = ae, Y = ap in the editor (see note above)
+   - **Engagement** — either:
+     - **ap × ae** (default): single polygon, X = ap, Y = ae
+     - **Scale with Ø** enabled: separate **ae vs Ø** (X = Ø, Y = ae) and **ap vs Ø** (X = Ø, Y = ap) polygons for diameter-dependent ratio limits
 
 Click **Save configuration** to persist to `Data/constraints.json`. The active session re-evaluates immediately. Use **Reload** to discard unsaved edits and read from disk.
 
@@ -301,7 +316,10 @@ Path: `CuttingParameterVerifier/Data/constraints.json`
         { "x": 4.0, "y": 0.5 },
         { "x": 4.0, "y": 3.0 },
         { "x": 0.5, "y": 3.0 }
-      ]
+      ],
+      "engagementMode": 0,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     }
   ]
 }
@@ -312,7 +330,10 @@ Path: `CuttingParameterVerifier/Data/constraints.json`
 | `mappingRules` | Lookup from CAM context to figure number |
 | `graphs` | Polygon definitions per figure |
 | `cuttingPolygon` | Vertices for Vc (X) vs Fz (Y) boundary |
-| `engagementPolygon` | Vertices stored as X = ae, Y = ap |
+| `engagementPolygon` | Vertices for ap (X) vs ae (Y) — used when `engagementMode` is `0` (ap × ae) |
+| `engagementMode` | `0` = ap × ae (default), `1` = diameter-scaled (ae vs Ø + ap vs Ø) |
+| `engagementAeVsDiameterPolygon` | Vertices X = Ø (mm), Y = ae (mm) — used when `engagementMode` is `1` |
+| `engagementApVsDiameterPolygon` | Vertices X = Ø (mm), Y = ap (mm) — used when `engagementMode` is `1` |
 
 On first run, if the file is missing, a bundled default is written to disk. When upgrading, missing graphs or rules from the embedded bundle are merged into an older persisted file automatically.
 

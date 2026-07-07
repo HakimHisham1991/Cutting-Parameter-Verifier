@@ -43,9 +43,21 @@
                         <div class="chart-wrap">
                             <canvas id="@GraphDomIds.Cutting(_activeGraph.GraphNumber)"></canvas>
                         </div>
-                        <div class="chart-wrap">
-                            <canvas id="@GraphDomIds.Engagement(_activeGraph.GraphNumber)"></canvas>
-                        </div>
+                        @if (_activeGraph.EngagementMode == EngagementMode.DiameterScaled)
+                        {
+                            <div class="chart-wrap">
+                                <canvas id="@GraphDomIds.EngagementAeVsDiameter(_activeGraph.GraphNumber)"></canvas>
+                            </div>
+                            <div class="chart-wrap">
+                                <canvas id="@GraphDomIds.EngagementApVsDiameter(_activeGraph.GraphNumber)"></canvas>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="chart-wrap">
+                                <canvas id="@GraphDomIds.Engagement(_activeGraph.GraphNumber)"></canvas>
+                            </div>
+                        }
                     </div>
                 </div>
             }

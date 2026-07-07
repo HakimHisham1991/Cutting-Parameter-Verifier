@@ -100,8 +100,42 @@
                             <PointsEditor @key="@($"{_activeGraph.GraphNumber}|c")" Points="_activeGraph.CuttingPolygon" />
                         </div>
                         <div class="col-md-6">
-                            <h2 class="h6">Engagement (ap, ae)</h2>
-                            <PointsEditor @key="@($"{_activeGraph.GraphNumber}|e")" Points="_activeGraph.EngagementPolygon" />
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h2 class="h6 mb-0">Engagement</h2>
+                                <div class="form-check form-switch mb-0">
+                                    <input class="form-check-input" type="checkbox" role="switch"
+                                           id="eng-diameter-mode"
+                                           checked="@(_activeGraph.EngagementMode == EngagementMode.DiameterScaled)"
+                                           @onchange="OnEngagementModeChanged" />
+                                    <label class="form-check-label small" for="eng-diameter-mode">Scale with Ø</label>
+                                </div>
+                            </div>
+                            @if (_activeGraph.EngagementMode == EngagementMode.DiameterScaled)
+                            {
+                                <p class="text-muted small mb-2">
+                                    Diameter-scaled mode: define separate ae vs Ø and ap vs Ø polygons (mm).
+                                    Ratio limits (e.g. max ae = 1D, ap = 0.5D–1D) appear as lines through the origin — the feasible region scales with tool diameter.
+                                </p>
+                                <div class="mb-3">
+                                    <h3 class="h6">ae vs Ø</h3>
+                                    <PointsEditor @key="@($"{_activeGraph.GraphNumber}|e-ae")"
+                                                    Points="_activeGraph.EngagementAeVsDiameterPolygon"
+                                                    XLabel="Ø (mm)" YLabel="ae (mm)" />
+                                </div>
+                                <div>
+                                    <h3 class="h6">ap vs Ø</h3>
+                                    <PointsEditor @key="@($"{_activeGraph.GraphNumber}|e-ap")"
+                                                    Points="_activeGraph.EngagementApVsDiameterPolygon"
+                                                    XLabel="Ø (mm)" YLabel="ap (mm)" />
+                                </div>
+                            }
+                            else
+                            {
+                                <p class="text-muted small mb-2">ap × ae polygon (mm) — fixed envelope independent of tool diameter.</p>
+                                <PointsEditor @key="@($"{_activeGraph.GraphNumber}|e")"
+                                                Points="_activeGraph.EngagementPolygon"
+                                                XLabel="ap (mm)" YLabel="ae (mm)" />
+                            }
                         </div>
                     </div>
                     <div class="mt-3">
@@ -177,6 +211,13 @@
             string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.Ordinal));
     }
 
+    private void OnEngagementModeChanged(ChangeEventArgs e)
+    {
+        if (_activeGraph is null) return;
+        var enabled = e.Value is bool b && b;
+        _activeGraph.EngagementMode = enabled ? EngagementMode.DiameterScaled : EngagementMode.ApAe;
+    }
+
     private void AddRule() => _model.MappingRules.Add(new MappingRule());
 
     private void RemoveRule(MappingRule r) => _model.MappingRules.Remove(r);
@@ -190,7 +231,10 @@
         {
             GraphNumber = n.ToString(),
             CuttingPolygon = new List<Point2D> { new(0, 0), new(0, 1), new(1, 1), new(1, 0) },
-            EngagementPolygon = new List<Point2D> { new(0, 0), new(0, 1), new(1, 1), new(1, 0) }
+            EngagementPolygon = new List<Point2D> { new(0, 0), new(0, 1), new(1, 1), new(1, 0) },
+            EngagementMode = EngagementMode.ApAe,
+            EngagementAeVsDiameterPolygon = new List<Point2D> { new(0, 0), new(0, 50), new(50, 50), new(50, 0) },
+            EngagementApVsDiameterPolygon = new List<Point2D> { new(1, 0.5), new(50, 25), new(50, 50), new(1, 1) }
         };
         _model.Graphs.Add(g);
         _selectedGraphNumber = g.GraphNumber;
@@ -219,6 +263,8 @@
         {
             g.CuttingPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.CuttingPolygon);
             g.EngagementPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.EngagementPolygon);
+            g.EngagementAeVsDiameterPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.EngagementAeVsDiameterPolygon);
+            g.EngagementApVsDiameterPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.EngagementApVsDiameterPolygon);
         }
 
         var errors = Validate(_model);
@@ -246,8 +292,17 @@
         {
             if (g.CuttingPolygon.Count < 3)
                 errors.Add($"Graph {g.GraphNumber}: cutting polygon needs at least three vertices (after normalization).");
-            if (g.EngagementPolygon.Count < 3)
+            if (g.EngagementMode == EngagementMode.DiameterScaled)
+            {
+                if (g.EngagementAeVsDiameterPolygon.Count < 3)
+                    errors.Add($"Graph {g.GraphNumber}: ae vs Ø polygon needs at least three vertices (after normalization).");
+                if (g.EngagementApVsDiameterPolygon.Count < 3)
+                    errors.Add($"Graph {g.GraphNumber}: ap vs Ø polygon needs at least three vertices (after normalization).");
+            }
+            else if (g.EngagementPolygon.Count < 3)
+            {
                 errors.Add($"Graph {g.GraphNumber}: engagement polygon needs at least three vertices (after normalization).");
+            }
         }
 
         return errors;

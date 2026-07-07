@@ -62,9 +62,8 @@ public sealed class EvaluationService : IEvaluationService
                 }
 
                 var cutPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.CuttingPolygon);
-                var engPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.EngagementPolygon);
                 paramStatuses.Add(ConstraintEval.EvaluateCutting(row, cutPoly));
-                engStatuses.Add(ConstraintEval.EvaluateEngagement(row, engPoly));
+                engStatuses.Add(ConstraintEval.EvaluateEngagementForGraph(row, graph));
             }
 
             results.Add(new ResultRow

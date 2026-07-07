@@ -4,8 +4,8 @@
     <table class="table table-sm align-middle">
         <thead class="table-light">
             <tr>
-                <th>X</th>
-                <th>Y</th>
+                <th>@XLabel</th>
+                <th>@YLabel</th>
                 <th></th>
             </tr>
         </thead>
@@ -29,6 +29,12 @@
 @code {
     [Parameter, EditorRequired]
     public List<Point2D> Points { get; set; } = null!;
+
+    [Parameter]
+    public string XLabel { get; set; } = "X";
+
+    [Parameter]
+    public string YLabel { get; set; } = "Y";
 
     private void Add() => Points.Add(new Point2D());
 
