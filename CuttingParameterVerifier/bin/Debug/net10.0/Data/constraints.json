@@ -7,7 +7,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.1.1_A"
+      "graphNumber": "3.2.2.4.1.1_A",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -16,7 +22,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.1.1_B"
+      "graphNumber": "3.2.2.4.1.1_B",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -25,7 +37,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.1.2"
+      "graphNumber": "3.2.2.4.1.2",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -34,7 +52,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.1.3"
+      "graphNumber": "3.2.2.4.1.3",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -43,7 +67,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.1.4"
+      "graphNumber": "3.2.2.4.1.4",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -52,7 +82,13 @@
       "millingType": "End Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.2.1_1_R"
+      "graphNumber": "3.2.2.4.2.1_1_R",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -61,7 +97,13 @@
       "millingType": "End Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.2.1_2_F"
+      "graphNumber": "3.2.2.4.2.1_2_F",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -70,7 +112,13 @@
       "millingType": "Face Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.2.2_1_R"
+      "graphNumber": "3.2.2.4.2.2_1_R",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -79,7 +127,13 @@
       "millingType": "Face Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.2.2_2_F"
+      "graphNumber": "3.2.2.4.2.2_2_F",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -88,7 +142,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.3.1"
+      "graphNumber": "3.2.2.4.3.1",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -97,7 +157,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.3.2"
+      "graphNumber": "3.2.2.4.3.2",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -106,7 +172,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.3.3"
+      "graphNumber": "3.2.2.4.3.3",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -115,7 +187,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.3.4"
+      "graphNumber": "3.2.2.4.3.4",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -124,7 +202,13 @@
       "millingType": "End Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.4.1"
+      "graphNumber": "3.2.2.4.4.1",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -133,7 +217,13 @@
       "millingType": "End Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.4.2"
+      "graphNumber": "3.2.2.4.4.2",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -142,7 +232,13 @@
       "millingType": "Face Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.4.3"
+      "graphNumber": "3.2.2.4.4.3",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -151,7 +247,13 @@
       "millingType": "Face Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.4.4"
+      "graphNumber": "3.2.2.4.4.4",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -160,7 +262,13 @@
       "millingType": "Drilling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.6.2.1.4_1_Drill"
+      "graphNumber": "3.2.6.2.1.4_1_Drill",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -169,7 +277,118 @@
       "millingType": "Reaming",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.6.2.1.4_2_Ream"
+      "graphNumber": "3.2.6.2.1.4_2_Ream",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
+    },
+    {
+      "processSpecs": "AIPI 03-11-001",
+      "material": "Aluminium",
+      "surfaceType": "Free Roughing",
+      "millingType": "N/A",
+      "toolType": "N/A",
+      "strategyType": "N/A",
+      "graphNumber": "FREE ROUGHING",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": false,
+      "useToolType": false,
+      "useStrategyType": false
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "End Milling",
+      "toolType": "HSS",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.1",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
+      "toolType": "HSS",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.2",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "End Milling",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.3",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.4",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "Face Milling",
+      "toolType": "N/A",
+      "strategyType": "N/A",
+      "graphNumber": "TABLE 1.5",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": false,
+      "useStrategyType": false
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Finish",
+      "millingType": "Face Milling",
+      "toolType": "N/A",
+      "strategyType": "N/A",
+      "graphNumber": "TABLE 1.6",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": false,
+      "useStrategyType": false
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -178,7 +397,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING"
+      "graphNumber": "FREE ROUGHING",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -187,7 +412,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING"
+      "graphNumber": "FREE ROUGHING",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -196,7 +427,13 @@
       "millingType": "Drilling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING"
+      "graphNumber": "FREE ROUGHING",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -205,43 +442,13 @@
       "millingType": "Tapping",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING"
-    },
-    {
-      "processSpecs": "80-T-30-4010",
-      "material": "Aluminium",
-      "surfaceType": "Controlled Roughing",
-      "millingType": "End Milling",
-      "toolType": "HSS",
-      "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.1"
-    },
-    {
-      "processSpecs": "80-T-30-4010",
-      "material": "Aluminium",
-      "surfaceType": "Finish",
-      "millingType": "End Milling",
-      "toolType": "HSS",
-      "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.2"
-    },
-    {
-      "processSpecs": "80-T-30-4010",
-      "material": "Aluminium",
-      "surfaceType": "Controlled Roughing",
-      "millingType": "End Milling",
-      "toolType": "Carbide",
-      "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.3"
-    },
-    {
-      "processSpecs": "80-T-30-4010",
-      "material": "Aluminium",
-      "surfaceType": "Finish",
-      "millingType": "End Milling",
-      "toolType": "Carbide",
-      "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.4"
+      "graphNumber": "FREE ROUGHING",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "80-T-30-4010",
@@ -250,7 +457,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.5"
+      "graphNumber": "TABLE 1.5",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "80-T-30-4010",
@@ -259,7 +472,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.6"
+      "graphNumber": "TABLE 1.6",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     }
   ],
   "graphs": [

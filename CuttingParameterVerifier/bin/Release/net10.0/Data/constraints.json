@@ -7,7 +7,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.1.1_A"
+      "graphNumber": "3.2.2.4.1.1_A",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -16,7 +22,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.1.1_B"
+      "graphNumber": "3.2.2.4.1.1_B",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -25,7 +37,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.1.2"
+      "graphNumber": "3.2.2.4.1.2",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -34,7 +52,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.1.3"
+      "graphNumber": "3.2.2.4.1.3",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -43,7 +67,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.1.4"
+      "graphNumber": "3.2.2.4.1.4",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -52,7 +82,13 @@
       "millingType": "End Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.2.1_1_R"
+      "graphNumber": "3.2.2.4.2.1_1_R",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -61,7 +97,13 @@
       "millingType": "End Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.2.1_2_F"
+      "graphNumber": "3.2.2.4.2.1_2_F",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -70,7 +112,13 @@
       "millingType": "Face Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.2.2_1_R"
+      "graphNumber": "3.2.2.4.2.2_1_R",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -79,7 +127,13 @@
       "millingType": "Face Milling",
       "toolType": "HSS",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.2.4.2.2_2_F"
+      "graphNumber": "3.2.2.4.2.2_2_F",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -88,7 +142,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.3.1"
+      "graphNumber": "3.2.2.4.3.1",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -97,7 +157,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.3.2"
+      "graphNumber": "3.2.2.4.3.2",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -106,7 +172,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.3.3"
+      "graphNumber": "3.2.2.4.3.3",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -115,7 +187,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.3.4"
+      "graphNumber": "3.2.2.4.3.4",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -124,7 +202,13 @@
       "millingType": "End Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.4.1"
+      "graphNumber": "3.2.2.4.4.1",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -133,7 +217,13 @@
       "millingType": "End Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.4.2"
+      "graphNumber": "3.2.2.4.4.2",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -142,7 +232,13 @@
       "millingType": "Face Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.4.3"
+      "graphNumber": "3.2.2.4.4.3",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -151,7 +247,13 @@
       "millingType": "Face Milling",
       "toolType": "PCD",
       "strategyType": "HSM",
-      "graphNumber": "3.2.2.4.4.4"
+      "graphNumber": "3.2.2.4.4.4",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -160,7 +262,13 @@
       "millingType": "Drilling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.6.2.1.4_1_Drill"
+      "graphNumber": "3.2.6.2.1.4_1_Drill",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -169,7 +277,118 @@
       "millingType": "Reaming",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "3.2.6.2.1.4_2_Ream"
+      "graphNumber": "3.2.6.2.1.4_2_Ream",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
+    },
+    {
+      "processSpecs": "AIPI 03-11-001",
+      "material": "Aluminium",
+      "surfaceType": "Free Roughing",
+      "millingType": "N/A",
+      "toolType": "N/A",
+      "strategyType": "N/A",
+      "graphNumber": "FREE ROUGHING",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": false,
+      "useToolType": false,
+      "useStrategyType": false
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "End Milling",
+      "toolType": "HSS",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.1",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
+      "toolType": "HSS",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.2",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "End Milling",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.3",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.4",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "Face Milling",
+      "toolType": "N/A",
+      "strategyType": "N/A",
+      "graphNumber": "TABLE 1.5",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": false,
+      "useStrategyType": false
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Finish",
+      "millingType": "Face Milling",
+      "toolType": "N/A",
+      "strategyType": "N/A",
+      "graphNumber": "TABLE 1.6",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": false,
+      "useStrategyType": false
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -178,7 +397,13 @@
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING"
+      "graphNumber": "FREE ROUGHING",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -187,7 +412,13 @@
       "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING"
+      "graphNumber": "FREE ROUGHING",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -196,7 +427,13 @@
       "millingType": "Drilling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING"
+      "graphNumber": "FREE ROUGHING",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "AIPI 03-11-001",
@@ -205,43 +442,43 @@
       "millingType": "Tapping",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING"
+      "graphNumber": "FREE ROUGHING",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "80-T-30-4010",
       "material": "Aluminium",
       "surfaceType": "Controlled Roughing",
-      "millingType": "End Milling",
-      "toolType": "HSS E",
+      "millingType": "Face Milling",
+      "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.1"
+      "graphNumber": "TABLE 1.5",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     },
     {
       "processSpecs": "80-T-30-4010",
       "material": "Aluminium",
       "surfaceType": "Finish",
-      "millingType": "End Milling",
-      "toolType": "HSS E",
-      "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.2"
-    },
-    {
-      "processSpecs": "80-T-30-4010",
-      "material": "Aluminium",
-      "surfaceType": "Roughing",
-      "millingType": "End Milling",
+      "millingType": "Face Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.1"
-    },
-    {
-      "processSpecs": "80-T-30-4010",
-      "material": "Aluminium",
-      "surfaceType": "Finish",
-      "millingType": "End Milling",
-      "toolType": "Carbide",
-      "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.2"
+      "graphNumber": "TABLE 1.6",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": true,
+      "useStrategyType": true
     }
   ],
   "graphs": [
@@ -302,7 +539,13 @@
           "x": 20,
           "y": 0
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.1.2",
@@ -349,7 +592,13 @@
           "x": 100,
           "y": 0.1
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.1.3",
@@ -404,7 +653,13 @@
           "x": 25,
           "y": 0
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.1.4",
@@ -455,7 +710,13 @@
           "x": 0.1,
           "y": 0.1
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.2.1_1_R",
@@ -494,7 +755,13 @@
           "x": 12,
           "y": 0
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.2.1_2_F",
@@ -533,7 +800,13 @@
           "x": 30,
           "y": 0.1
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.2.2_1_R",
@@ -572,7 +845,13 @@
           "x": 12,
           "y": 0
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.2.2_2_F",
@@ -611,7 +890,13 @@
           "x": 3,
           "y": 0.1
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.3.1",
@@ -670,7 +955,13 @@
           "x": 100,
           "y": 0.1
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.3.2",
@@ -705,7 +996,13 @@
           "x": 100,
           "y": 0.1
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.3.3",
@@ -752,7 +1049,13 @@
           "x": 25,
           "y": 0
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.3.4",
@@ -807,7 +1110,13 @@
           "x": 16.5,
           "y": 0
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.4.1",
@@ -858,7 +1167,13 @@
           "x": 12,
           "y": 0.1
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.4.2",
@@ -905,7 +1220,13 @@
           "x": 8,
           "y": 0.1
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.4.3",
@@ -948,7 +1269,13 @@
           "x": 8,
           "y": 0
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.4.4",
@@ -991,7 +1318,13 @@
           "x": 4,
           "y": 0
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.6.2.1.4_1_Drill",
@@ -1030,7 +1363,13 @@
           "x": 1000,
           "y": 0
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.6.2.1.4_2_Ream",
@@ -1069,7 +1408,13 @@
           "x": 1000,
           "y": 0
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "3.2.2.4.1.1_B",
@@ -1124,7 +1469,13 @@
           "x": 100,
           "y": 0.1
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "FREE ROUGHING",
@@ -1163,7 +1514,13 @@
           "x": 10000,
           "y": 0
         }
-      ]
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [],
+      "apVsDiameterInequalities": [],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     },
     {
       "graphNumber": "TABLE 1.1",
@@ -1201,6 +1558,80 @@
         {
           "x": 999,
           "y": 0
+        }
+      ],
+      "engagementMode": 1,
+      "aeVsDiameterInequalities": [
+        {
+          "expression": "ae \u003E= 0"
+        },
+        {
+          "expression": "ae \u003C= 1*D"
+        }
+      ],
+      "apVsDiameterInequalities": [
+        {
+          "expression": "ap \u003E= 0.5*D"
+        },
+        {
+          "expression": "ap \u003C= 1*D"
+        }
+      ],
+      "aeVsDiameterRange": {
+        "minD": 0,
+        "maxD": 1
+      },
+      "apVsDiameterRange": {
+        "minD": 0.5,
+        "maxD": 1
+      },
+      "diameterPlotMaxMm": 200,
+      "engagementAeVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 200
+        },
+        {
+          "x": 200,
+          "y": 200
+        }
+      ],
+      "engagementApVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 100
+        },
+        {
+          "x": 200,
+          "y": 200
+        },
+        {
+          "x": 200,
+          "y": 200
         }
       ]
     },
@@ -1240,6 +1671,452 @@
         {
           "x": 999,
           "y": 0
+        }
+      ],
+      "engagementMode": 1,
+      "aeVsDiameterInequalities": [
+        {
+          "expression": "ae \u003E= 0.2"
+        },
+        {
+          "expression": "ae \u003C= 1"
+        }
+      ],
+      "apVsDiameterInequalities": [
+        {
+          "expression": "ap \u003E= 0"
+        },
+        {
+          "expression": "ap \u003C= 4*D"
+        }
+      ],
+      "aeVsDiameterRange": {
+        "minD": 0,
+        "maxD": 1
+      },
+      "apVsDiameterRange": {
+        "minD": 0.5,
+        "maxD": 1
+      },
+      "diameterPlotMaxMm": 200,
+      "engagementAeVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 0.1999999999999993
+        },
+        {
+          "x": 200,
+          "y": 0.2
+        },
+        {
+          "x": 200,
+          "y": 1
+        }
+      ],
+      "engagementApVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 800
+        },
+        {
+          "x": 200,
+          "y": 800
+        }
+      ]
+    },
+    {
+      "graphNumber": "TABLE 1.3",
+      "cuttingPolygon": [
+        {
+          "x": 200,
+          "y": 0.2
+        },
+        {
+          "x": 2500,
+          "y": 0.2
+        },
+        {
+          "x": 2500,
+          "y": 0.3
+        },
+        {
+          "x": 200,
+          "y": 0.3
+        }
+      ],
+      "engagementPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 999,
+          "y": 0
+        },
+        {
+          "x": 999,
+          "y": 999
+        },
+        {
+          "x": 0,
+          "y": 999
+        }
+      ],
+      "engagementMode": 1,
+      "aeVsDiameterInequalities": [
+        {
+          "expression": "ae \u003E= 0"
+        },
+        {
+          "expression": "ae \u003C= 1*D"
+        }
+      ],
+      "apVsDiameterInequalities": [
+        {
+          "expression": "ap \u003E= 0"
+        },
+        {
+          "expression": "ap \u003C= 1*D"
+        }
+      ],
+      "aeVsDiameterRange": {
+        "minD": 0,
+        "maxD": 1
+      },
+      "apVsDiameterRange": {
+        "minD": 0.5,
+        "maxD": 1
+      },
+      "diameterPlotMaxMm": 200,
+      "engagementAeVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 200
+        },
+        {
+          "x": 200,
+          "y": 200
+        }
+      ],
+      "engagementApVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 200
+        },
+        {
+          "x": 200,
+          "y": 200
+        }
+      ]
+    },
+    {
+      "graphNumber": "TABLE 1.4",
+      "cuttingPolygon": [
+        {
+          "x": 0,
+          "y": 0.08
+        },
+        {
+          "x": 4000,
+          "y": 0.08
+        },
+        {
+          "x": 4000,
+          "y": 0.15
+        },
+        {
+          "x": 0,
+          "y": 0.15
+        }
+      ],
+      "engagementPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        }
+      ],
+      "engagementMode": 1,
+      "aeVsDiameterInequalities": [
+        {
+          "expression": "ae \u003E= 0.2"
+        },
+        {
+          "expression": "ae \u003C= 1.0"
+        }
+      ],
+      "apVsDiameterInequalities": [
+        {
+          "expression": "ap \u003E= 0"
+        },
+        {
+          "expression": "ap \u003C= 2*D"
+        }
+      ],
+      "diameterPlotMaxMm": 200,
+      "engagementAeVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 0,
+          "y": 0.1999999999999993
+        },
+        {
+          "x": 200,
+          "y": 0.2
+        },
+        {
+          "x": 200,
+          "y": 1
+        }
+      ],
+      "engagementApVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 400
+        },
+        {
+          "x": 200,
+          "y": 400
+        }
+      ]
+    },
+    {
+      "graphNumber": "TABLE 1.5",
+      "cuttingPolygon": [
+        {
+          "x": 0,
+          "y": 0.1
+        },
+        {
+          "x": 4000,
+          "y": 0.1
+        },
+        {
+          "x": 4000,
+          "y": 0.3
+        },
+        {
+          "x": 0,
+          "y": 0.3
+        }
+      ],
+      "engagementPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        }
+      ],
+      "engagementMode": 1,
+      "aeVsDiameterInequalities": [
+        {
+          "expression": "ae \u003E= 0"
+        }
+      ],
+      "apVsDiameterInequalities": [
+        {
+          "expression": "ap \u003E= 0"
+        }
+      ],
+      "diameterPlotMaxMm": 200,
+      "engagementAeVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 10
+        },
+        {
+          "x": 0,
+          "y": 10
+        }
+      ],
+      "engagementApVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 10
+        },
+        {
+          "x": 0,
+          "y": 10
+        }
+      ]
+    },
+    {
+      "graphNumber": "TABLE 1.6",
+      "cuttingPolygon": [
+        {
+          "x": 0,
+          "y": 0.1
+        },
+        {
+          "x": 4000,
+          "y": 0.1
+        },
+        {
+          "x": 4000,
+          "y": 0.3
+        },
+        {
+          "x": 0,
+          "y": 0.3
+        }
+      ],
+      "engagementPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        }
+      ],
+      "engagementMode": 1,
+      "aeVsDiameterInequalities": [
+        {
+          "expression": "ae \u003E= 0"
+        }
+      ],
+      "apVsDiameterInequalities": [
+        {
+          "expression": "ap \u003E= 0"
+        }
+      ],
+      "diameterPlotMaxMm": 200,
+      "engagementAeVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 10
+        },
+        {
+          "x": 0,
+          "y": 10
+        }
+      ],
+      "engagementApVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 10
+        },
+        {
+          "x": 0,
+          "y": 10
         }
       ]
     }
