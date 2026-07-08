@@ -2,19 +2,19 @@
 
 All notable changes to this project are documented in this file.
 
-## [Unreleased]
-
-### Added
-
-- Nothing yet.
-
-### Changed
-
-- Nothing yet.
+## [1.7.2] - 2026-07-08
 
 ### Fixed
 
-- Nothing yet.
+- Renaming a graph no longer leaves the old graph number stuck in `constraints.json` — the bundled merge-on-load no longer resurrects renamed mapping/graph ids after Save.
+
+---
+
+## [1.7.1] - 2026-07-08
+
+### Fixed
+
+- Renaming a graph number no longer resets the Graph number selector to the first graph; the renamed graph stays selected.
 
 ---
 
@@ -180,7 +180,9 @@ All notable changes to this project are documented in this file.
 - Sample Excel generator (`tools/SampleExcelGen`) and downloadable `sample.xlsx`.
 - GitHub Actions CI workflow (restore + Release build).
 
-[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.0...HEAD
+[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.2...HEAD
+[1.7.2]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.1...v1.7.2
+[1.7.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.5.1...v1.6.0

@@ -149,26 +149,47 @@ public sealed class ConstraintService : IConstraintService
 
     private MergeResult MergeMissingMappingsAndGraphs(VerificationConfig disk, VerificationConfig bundled)
     {
-        var addedRules = 0;
-        foreach (var b in bundled.MappingRules)
-        {
-            if (HasEquivalentMapping(disk.MappingRules, b))
-                continue;
-            disk.MappingRules.Add(CloneMappingRule(b));
-            addedRules++;
-        }
-
+        // Graphs first so new upgrade mappings can resolve their targets on disk.
         var addedGraphs = 0;
         foreach (var g in bundled.Graphs)
         {
             if (disk.Graphs.Any(x => SameGraphNumber(x.GraphNumber, g.GraphNumber)))
                 continue;
+            // Superseded by rename: disk maps this key to a figure that is not in the bundled
+            // library (renamed away). Do not re-add the old id next to the user's rename.
+            // Multi-figure keys (several bundled graphs sharing a mapping key) are unaffected
+            // when disk still points at other bundled figure ids.
+            if (IsBundledGraphSupersededByRename(disk, bundled, g.GraphNumber))
+                continue;
             disk.Graphs.Add(CloneGraph(g));
             addedGraphs++;
         }
 
+        var addedRules = 0;
+        foreach (var b in bundled.MappingRules)
+        {
+            if (HasEquivalentMapping(disk.MappingRules, b))
+                continue;
+            // Skip mappings whose target graph was renamed or deleted on disk — otherwise Save→Load
+            // would resurrect the old graph number from the embedded baseline.
+            if (!disk.Graphs.Any(g => SameGraphNumber(g.GraphNumber, b.GraphNumber)))
+                continue;
+            disk.MappingRules.Add(CloneMappingRule(b));
+            addedRules++;
+        }
+
         return new MergeResult(addedRules, addedGraphs);
     }
+
+    private static bool IsBundledGraphSupersededByRename(
+        VerificationConfig disk,
+        VerificationConfig bundled,
+        string bundledGraphNumber) =>
+        bundled.MappingRules.Any(r =>
+            SameGraphNumber(r.GraphNumber, bundledGraphNumber) &&
+            disk.MappingRules.Any(d =>
+                SameMappingKey(d, r) &&
+                !bundled.Graphs.Any(bg => SameGraphNumber(bg.GraphNumber, d.GraphNumber))));
 
     private static bool HasEquivalentMapping(IReadOnlyList<MappingRule> rules, MappingRule candidate) =>
         rules.Any(r => SameMappingKey(r, candidate) && SameGraphNumber(r.GraphNumber, candidate.GraphNumber));

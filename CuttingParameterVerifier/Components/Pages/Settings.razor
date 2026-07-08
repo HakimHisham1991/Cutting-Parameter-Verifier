@@ -104,7 +104,7 @@
                 @if (_activeGraph is not null)
                 {
                     <label class="form-label">Rename graph number</label>
-                    <input class="form-control form-control-sm" @bind="_activeGraph.GraphNumber" @bind:after="OnConstraintEdited" />
+                    <input class="form-control form-control-sm" value="@_activeGraph.GraphNumber" @onchange="OnGraphRenamed" />
                     <div class="form-text">Identifiers may include dotted codes (e.g. 3.2.2.4.1.2).</div>
                 }
             </div>
@@ -228,6 +228,21 @@
     });
 
     private void OnConstraintEdited() => BumpPreviewRefresh();
+
+    private void OnGraphRenamed(ChangeEventArgs e)
+    {
+        if (_activeGraph is null) return;
+        var oldName = _activeGraph.GraphNumber;
+        var newName = e.Value?.ToString() ?? "";
+        _activeGraph.GraphNumber = newName;
+        _selectedGraphNumber = newName;
+        foreach (var rule in _model.MappingRules)
+        {
+            if (string.Equals(rule.GraphNumber, oldName, StringComparison.Ordinal))
+                rule.GraphNumber = newName;
+        }
+        BumpPreviewRefresh();
+    }
 
     private void BumpPreviewRefresh() => _previewRefreshToken++;
 

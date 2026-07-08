@@ -5,7 +5,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Version>1.7.0</Version>
+    <Version>1.7.2</Version>
     <BlazorDisableThrowNavigationException>true</BlazorDisableThrowNavigationException>
     <RootNamespace>CuttingParameterVerifier</RootNamespace>
     <!-- Never treat past publish folders inside the repo as Razor/static sources (breaks BLAZOR106). -->
