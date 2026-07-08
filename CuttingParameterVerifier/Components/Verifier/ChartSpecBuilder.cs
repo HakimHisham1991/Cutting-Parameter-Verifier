@@ -84,14 +84,26 @@ internal static class ChartSpecBuilder
         var blocks = rules
             .Select(r =>
             {
-                var parts = new[] { T(r.ProcessSpecs), T(r.Material), T(r.SurfaceType), T(r.MillingType), T(r.ToolType), T(r.StrategyType) }
-                    .Where(p => p.Length > 0);
+                var parts = new List<string>();
+                if (r.UseProcessSpecs && !IsIgnoredOrEmpty(r.ProcessSpecs)) parts.Add(T(r.ProcessSpecs));
+                if (r.UseMaterial && !IsIgnoredOrEmpty(r.Material)) parts.Add(T(r.Material));
+                if (r.UseSurfaceType && !IsIgnoredOrEmpty(r.SurfaceType)) parts.Add(T(r.SurfaceType));
+                if (r.UseMillingType && !IsIgnoredOrEmpty(r.MillingType)) parts.Add(T(r.MillingType));
+                if (r.UseToolType && !IsIgnoredOrEmpty(r.ToolType)) parts.Add(T(r.ToolType));
+                if (r.UseStrategyType && !IsIgnoredOrEmpty(r.StrategyType)) parts.Add(T(r.StrategyType));
                 return string.Join(" | ", parts);
             })
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
 
         return string.Join("\n", blocks);
+    }
+
+    private static bool IsIgnoredOrEmpty(string? value)
+    {
+        var t = (value ?? "").Trim();
+        return t.Length == 0 ||
+               string.Equals(t, MappingRule.IgnoredFieldPlaceholder, StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool RowMatchesGraph(ResultRow r, string graphNumber) =>

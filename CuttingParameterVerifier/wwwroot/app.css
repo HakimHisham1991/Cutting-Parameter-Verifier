@@ -353,6 +353,20 @@ table.table.cpv-results-table {
     flex: 0 0 auto;
 }
 
+.cpv-mapping-field-off {
+    background-color: #e9ecef;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.cpv-mapping-table .cpv-mapping-switch .form-check-input {
+    margin-top: 0.1rem;
+}
+
+.cpv-mapping-field-cell .input-group-text {
+    background-color: #f8f9fa;
+}
+
 a, .btn-link {
     color: #006bb7;
 }

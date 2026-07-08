@@ -229,18 +229,19 @@ public sealed class ExcelService : IExcelService
         var rules = config.MappingRules;
         return new KnownMappingValues
         {
-            ProcessSpecs = CollectDistinctMappingValues(rules.Select(r => r.ProcessSpecs)),
-            Materials = CollectDistinctMappingValues(rules.Select(r => r.Material)),
-            SurfaceTypes = CollectDistinctMappingValues(rules.Select(r => r.SurfaceType)),
-            MillingTypes = CollectDistinctMappingValues(rules.Select(r => r.MillingType)),
-            ToolTypes = CollectDistinctMappingValues(rules.Select(r => r.ToolType)),
-            StrategyTypes = CollectDistinctMappingValues(rules.Select(r => r.StrategyType)),
+            ProcessSpecs = CollectDistinctMappingValues(rules.Where(r => r.UseProcessSpecs).Select(r => r.ProcessSpecs)),
+            Materials = CollectDistinctMappingValues(rules.Where(r => r.UseMaterial).Select(r => r.Material)),
+            SurfaceTypes = CollectDistinctMappingValues(rules.Where(r => r.UseSurfaceType).Select(r => r.SurfaceType)),
+            MillingTypes = CollectDistinctMappingValues(rules.Where(r => r.UseMillingType).Select(r => r.MillingType)),
+            ToolTypes = CollectDistinctMappingValues(rules.Where(r => r.UseToolType).Select(r => r.ToolType)),
+            StrategyTypes = CollectDistinctMappingValues(rules.Where(r => r.UseStrategyType).Select(r => r.StrategyType)),
         };
     }
 
     private static HashSet<string> CollectDistinctMappingValues(IEnumerable<string> values) =>
         values
             .Where(v => !string.IsNullOrWhiteSpace(v))
+            .Where(v => !string.Equals(v.Trim(), MappingRule.IgnoredFieldPlaceholder, StringComparison.OrdinalIgnoreCase))
             .Select(NormalizeMappingToken)
             .ToHashSet(StringComparer.Ordinal);
 

@@ -30,11 +30,11 @@
             <div class="card-header">Mapping table</div>
             <div class="card-body">
                 <p class="text-muted small mb-2">
-                    Match is case-insensitive on all six fields. Leave <strong>Process Specs</strong> blank to match any imported value. If no rule matches, both evaluations are N/A.
-                    You can add multiple rows with the same process specs / material / surface / milling / tool / strategy but different graph numbers — the operation is matched to every listed figure (results show them comma-separated and each chart plots the point).
+                    Match is case-insensitive on each <strong>ON</strong> field. Toggle a field <strong>OFF</strong> to ignore it (shows N/A, greyed out). Leave <strong>Process Specs</strong> blank when ON to match any imported value.
+                    If no rule matches, both evaluations are N/A. Multiple rows with the same key but different graph numbers match every listed figure.
                 </p>
                 <div class="table-responsive">
-                    <table class="table table-sm align-middle">
+                    <table class="table table-sm align-middle cpv-mapping-table">
                         <thead class="table-light">
                             <tr>
                                 <th>Process Specs</th>
@@ -51,12 +51,30 @@
                             @foreach (var rule in _model.MappingRules)
                             {
                                 <tr>
-                                    <td><input class="form-control form-control-sm" @bind="rule.ProcessSpecs" /></td>
-                                    <td><input class="form-control form-control-sm" @bind="rule.Material" /></td>
-                                    <td><input class="form-control form-control-sm" @bind="rule.SurfaceType" /></td>
-                                    <td><input class="form-control form-control-sm" @bind="rule.MillingType" /></td>
-                                    <td><input class="form-control form-control-sm" @bind="rule.ToolType" /></td>
-                                    <td><input class="form-control form-control-sm" @bind="rule.StrategyType" /></td>
+                                    <td>
+                                        <MappingFieldCell @bind-Enabled="rule.UseProcessSpecs"
+                                                          @bind-Value="rule.ProcessSpecs" />
+                                    </td>
+                                    <td>
+                                        <MappingFieldCell @bind-Enabled="rule.UseMaterial"
+                                                          @bind-Value="rule.Material" />
+                                    </td>
+                                    <td>
+                                        <MappingFieldCell @bind-Enabled="rule.UseSurfaceType"
+                                                          @bind-Value="rule.SurfaceType" />
+                                    </td>
+                                    <td>
+                                        <MappingFieldCell @bind-Enabled="rule.UseMillingType"
+                                                          @bind-Value="rule.MillingType" />
+                                    </td>
+                                    <td>
+                                        <MappingFieldCell @bind-Enabled="rule.UseToolType"
+                                                          @bind-Value="rule.ToolType" />
+                                    </td>
+                                    <td>
+                                        <MappingFieldCell @bind-Enabled="rule.UseStrategyType"
+                                                          @bind-Value="rule.StrategyType" />
+                                    </td>
                                     <td><input class="form-control form-control-sm" @bind="rule.GraphNumber" /></td>
                                     <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => RemoveRule(rule)">Delete</button></td>
                                 </tr>

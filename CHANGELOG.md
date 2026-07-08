@@ -18,6 +18,14 @@ All notable changes to this project are documented in this file.
 
 ---
 
+## [1.7.0] - 2026-07-08
+
+### Added
+
+- Mapping table **per-field ON/OFF toggles** — turn a field OFF to grey it out, set it to N/A, and ignore that condition when matching rows to graphs (Pass/Fail evaluation unchanged).
+
+---
+
 ## [1.6.1] - 2026-07-08
 
 ### Changed
@@ -172,7 +180,8 @@ All notable changes to this project are documented in this file.
 - Sample Excel generator (`tools/SampleExcelGen`) and downloadable `sample.xlsx`.
 - GitHub Actions CI workflow (restore + Release build).
 
-[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.6.1...HEAD
+[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.0...HEAD
+[1.7.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.6.1...v1.7.0
 [1.6.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.6.0...v1.6.1
 [1.6.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.5.1...v1.6.0
 [1.5.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.5.0...v1.5.1

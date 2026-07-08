@@ -51,6 +51,10 @@ build_metadata.AdditionalFiles.CssScope =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTZXR0aW5nc1xJbmVxdWFsaXR5TGlzdEVkaXRvci5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Public/Documents/Cutting-Parameter-Verifier/Cutting-Parameter-Verifier/CuttingParameterVerifier/Components/Settings/MappingFieldCell.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTZXR0aW5nc1xNYXBwaW5nRmllbGRDZWxsLnJhem9y
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Public/Documents/Cutting-Parameter-Verifier/Cutting-Parameter-Verifier/CuttingParameterVerifier/Components/Settings/PointsEditor.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xTZXR0aW5nc1xQb2ludHNFZGl0b3IucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 

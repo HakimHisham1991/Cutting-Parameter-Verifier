@@ -174,6 +174,12 @@ public sealed class ConstraintService : IConstraintService
         rules.Any(r => SameMappingKey(r, candidate) && SameGraphNumber(r.GraphNumber, candidate.GraphNumber));
 
     private static bool SameMappingKey(MappingRule a, MappingRule b) =>
+        a.UseProcessSpecs == b.UseProcessSpecs &&
+        a.UseMaterial == b.UseMaterial &&
+        a.UseSurfaceType == b.UseSurfaceType &&
+        a.UseMillingType == b.UseMillingType &&
+        a.UseToolType == b.UseToolType &&
+        a.UseStrategyType == b.UseStrategyType &&
         string.Equals(Norm(a.ProcessSpecs), Norm(b.ProcessSpecs), StringComparison.Ordinal) &&
         string.Equals(Norm(a.Material), Norm(b.Material), StringComparison.Ordinal) &&
         string.Equals(Norm(a.SurfaceType), Norm(b.SurfaceType), StringComparison.Ordinal) &&
@@ -194,7 +200,13 @@ public sealed class ConstraintService : IConstraintService
         MillingType = r.MillingType,
         ToolType = r.ToolType,
         StrategyType = r.StrategyType,
-        GraphNumber = r.GraphNumber
+        GraphNumber = r.GraphNumber,
+        UseProcessSpecs = r.UseProcessSpecs,
+        UseMaterial = r.UseMaterial,
+        UseSurfaceType = r.UseSurfaceType,
+        UseMillingType = r.UseMillingType,
+        UseToolType = r.UseToolType,
+        UseStrategyType = r.UseStrategyType
     };
 
     private static ConstraintGraph CloneGraph(ConstraintGraph g) => new()
