@@ -15,18 +15,24 @@ public sealed class ConstraintGraph
     /// <summary>When <see cref="EngagementMode.DiameterScaled"/>, engagement uses separate ae vs Ø and ap vs Ø polygons.</summary>
     public EngagementMode EngagementMode { get; set; } = EngagementMode.ApAe;
 
-    /// <summary>ae vs Ø range in D-multiples (e.g. 0D ≤ ae ≤ 1D). Primary authoring source when diameter-scaled.</summary>
+    /// <summary>ae vs Ø inequalities (e.g. ae &gt;= 0, ae &lt;= 1*D).</summary>
+    public List<DiameterInequality> AeVsDiameterInequalities { get; set; } = new();
+
+    /// <summary>ap vs Ø inequalities (e.g. ap &gt;= 0.5*D, ap &lt;= 1*D).</summary>
+    public List<DiameterInequality> ApVsDiameterInequalities { get; set; } = new();
+
+    /// <summary>Legacy min/max D range — migrated to inequalities on load.</summary>
     public DiameterRatioRange? AeVsDiameterRange { get; set; }
 
-    /// <summary>ap vs Ø range in D-multiples (e.g. 0.5D ≤ ap ≤ 1D). Primary authoring source when diameter-scaled.</summary>
+    /// <summary>Legacy min/max D range — migrated to inequalities on load.</summary>
     public DiameterRatioRange? ApVsDiameterRange { get; set; }
 
     /// <summary>Ø axis extent (mm) for chart boundary lines when diameter-scaled.</summary>
-    public double DiameterPlotMaxMm { get; set; } = DiameterRangeService.DefaultPlotMaxMm;
+    public double DiameterPlotMaxMm { get; set; } = DiameterInequalityService.DefaultPlotMaxMm;
 
-    /// <summary>Compiled band polygon X = Ø (mm), Y = ae (mm). Synced from <see cref="AeVsDiameterRange"/> on save.</summary>
+    /// <summary>Compiled pass-region polygon X = Ø (mm), Y = ae (mm). Synced from inequalities on save.</summary>
     public List<Point2D> EngagementAeVsDiameterPolygon { get; set; } = new();
 
-    /// <summary>Compiled band polygon X = Ø (mm), Y = ap (mm). Synced from <see cref="ApVsDiameterRange"/> on save.</summary>
+    /// <summary>Compiled pass-region polygon X = Ø (mm), Y = ap (mm). Synced from inequalities on save.</summary>
     public List<Point2D> EngagementApVsDiameterPolygon { get; set; } = new();
 }

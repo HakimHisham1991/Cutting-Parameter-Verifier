@@ -1,0 +1,134 @@
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using CuttingParameterVerifier.Models
+@using CuttingParameterVerifier.Components.Verifier
+@inject IJSRuntime Js
+@implements IDisposable
+
+<div class="settings-chart-preview h-100">
+    @if (Graph is null)
+    {
+        <p class="text-muted small mb-0">Select a graph to preview charts.</p>
+    }
+    else
+    {
+        <div id="@GraphDomIds.FigureAnchor(Graph.GraphNumber, GraphDomIds.SettingsPreviewPrefix)" class="graph-pair">
+            <div class="cpv-chart-stack">
+                <div class="chart-wrap">
+                    <canvas id="@GraphDomIds.Cutting(Graph.GraphNumber, GraphDomIds.SettingsPreviewPrefix)"></canvas>
+                </div>
+                @if (Graph.EngagementMode == EngagementMode.DiameterScaled)
+                {
+                    <div class="chart-wrap">
+                        <canvas id="@GraphDomIds.EngagementAeVsDiameter(Graph.GraphNumber, GraphDomIds.SettingsPreviewPrefix)"></canvas>
+                    </div>
+                    <div class="chart-wrap">
+                        <canvas id="@GraphDomIds.EngagementApVsDiameter(Graph.GraphNumber, GraphDomIds.SettingsPreviewPrefix)"></canvas>
+                    </div>
+                }
+                else
+                {
+                    <div class="chart-wrap">
+                        <canvas id="@GraphDomIds.Engagement(Graph.GraphNumber, GraphDomIds.SettingsPreviewPrefix)"></canvas>
+                    </div>
+                }
+            </div>
+        </div>
+        @if (Results.Count == 0)
+        {
+            <p class="text-muted small mt-2 mb-0">No imported data — boundaries only. Import Excel on the Verifier page to plot points.</p>
+        }
+    }
+</div>
+
+@code {
+    [Parameter] public VerificationConfig? Config { get; set; }
+    [Parameter] public ConstraintGraph? Graph { get; set; }
+    [Parameter] public IReadOnlyList<ResultRow> Results { get; set; } = Array.Empty<ResultRow>();
+    [Parameter] public int RefreshToken { get; set; }
+
+    private bool _pendingRender;
+    private int _lastRenderedToken = -1;
+    private CancellationTokenSource? _debounceCts;
+
+    protected override void OnParametersSet()
+    {
+        if (RefreshToken != _lastRenderedToken)
+            ScheduleRender();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_pendingRender)
+        {
+            _pendingRender = false;
+            await RenderChartsAsync();
+        }
+    }
+
+    private void ScheduleRender()
+    {
+        _debounceCts?.Cancel();
+        _debounceCts = new CancellationTokenSource();
+        var token = _debounceCts.Token;
+        _ = DebouncedRenderAsync(token);
+    }
+
+    private async Task DebouncedRenderAsync(CancellationToken token)
+    {
+        try
+        {
+            await Task.Delay(200, token);
+            _pendingRender = true;
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (TaskCanceledException)
+        {
+            // superseded
+        }
+    }
+
+    private async Task RenderChartsAsync()
+    {
+        if (Config is null || Graph is null) return;
+
+        try
+        {
+            PrepareGraph(Graph);
+            var spec = ChartSpecBuilder.Build(
+                Config,
+                Results,
+                GraphDomIds.SettingsPreviewPrefix,
+                Graph.GraphNumber);
+            var json = JsonSerializer.Serialize(spec, new JsonSerializerOptions
+            {
+                PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            });
+            await Js.InvokeVoidAsync("cpvCharts.renderPreview", json);
+            _lastRenderedToken = RefreshToken;
+        }
+        catch (JSException)
+        {
+            // Chart.js may not be ready on first paint.
+        }
+    }
+
+    private static void PrepareGraph(ConstraintGraph graph)
+    {
+        if (graph.EngagementMode == EngagementMode.DiameterScaled)
+            DiameterInequalityService.SyncPolygonsFromInequalities(graph);
+    }
+
+    public void Dispose()
+    {
+        _debounceCts?.Cancel();
+        _debounceCts?.Dispose();
+        try
+        {
+            _ = Js.InvokeVoidAsync("cpvCharts.destroyPreview");
+        }
+        catch (JSDisconnectedException) { }
+        catch (TaskCanceledException) { }
+    }
+}

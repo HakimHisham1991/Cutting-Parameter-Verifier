@@ -334,6 +334,25 @@ table.table.cpv-results-table {
     height: 100% !important;
 }
 
+/* Settings page — live chart preview column */
+.settings-chart-preview-card .settings-chart-preview-body {
+    max-height: calc(100vh - 14rem);
+    overflow-y: auto;
+    min-height: 18rem;
+}
+
+.settings-chart-preview .cpv-chart-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.settings-chart-preview .chart-wrap {
+    height: 10.5rem;
+    min-height: 9rem;
+    flex: 0 0 auto;
+}
+
 a, .btn-link {
     color: #006bb7;
 }

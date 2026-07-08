@@ -18,6 +18,47 @@ All notable changes to this project are documented in this file.
 
 ---
 
+## [1.6.1] - 2026-07-08
+
+### Changed
+
+- Cutting (Vc vs Fz) and ap × ae engagement charts now shade the polygon Pass region in very light green, matching diameter-scaled charts.
+
+---
+
+## [1.6.0] - 2026-07-08
+
+### Added
+
+- **Live chart preview** on Settings — third column beside Cutting and Engagement shows the same constraint charts as the Verifier page, updating as you edit polygons or inequalities.
+
+### Changed
+
+- Settings constraint editor reorganized into four cards: Graph selector, Cutting, Engagement, and Chart preview.
+
+---
+
+## [1.5.1] - 2026-07-08
+
+### Fixed
+
+- Diameter-scaled engagement charts now correctly shade the full Pass region in very light green (canvas polygon fill instead of Chart.js baseline fill).
+
+---
+
+## [1.5.0] - 2026-07-08
+
+### Added
+
+- **Free-form inequality editor** for diameter-scaled ae vs Ø and ap vs Ø — add any number of bounds such as `ae >= 0`, `ae <= 1*D`, `ap >= 0.5*D`, or constant limits like `ae <= 0.2`.
+
+### Changed
+
+- Diameter-scaled charts draw each inequality as a boundary line and shade the combined Pass region in very light green.
+- Legacy min/max D-range settings are migrated to inequalities on load.
+
+---
+
 ## [1.4.1] - 2026-07-08
 
 ### Added
@@ -131,7 +172,11 @@ All notable changes to this project are documented in this file.
 - Sample Excel generator (`tools/SampleExcelGen`) and downloadable `sample.xlsx`.
 - GitHub Actions CI workflow (restore + Release build).
 
-[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.4.1...HEAD
+[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.6.1...HEAD
+[1.6.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.6.0...v1.6.1
+[1.6.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.5.1...v1.6.0
+[1.5.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.5.0...v1.5.1
+[1.5.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.4.1...v1.5.0
 [1.4.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.4.0...v1.4.1
 [1.4.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.2.0...v1.3.0

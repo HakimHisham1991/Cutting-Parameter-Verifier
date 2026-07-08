@@ -7,10 +7,26 @@ namespace CuttingParameterVerifier.Components.Verifier;
 
 internal static class ChartSpecBuilder
 {
-    public static object Build(VerificationConfig cfg, IReadOnlyList<ResultRow> results)
+    public static object Build(VerificationConfig cfg, IReadOnlyList<ResultRow> results) =>
+        Build(cfg, results, canvasIdPrefix: null, graphNumberFilter: null);
+
+    /// <param name="canvasIdPrefix">Optional DOM id prefix (e.g. settings preview).</param>
+    /// <param name="graphNumberFilter">When set, only build the panel for this graph number.</param>
+    public static object Build(
+        VerificationConfig cfg,
+        IReadOnlyList<ResultRow> results,
+        string? canvasIdPrefix,
+        string? graphNumberFilter)
     {
         var panels = new List<object>();
-        foreach (var graph in cfg.Graphs.OrderBy(g => g.GraphNumber, StringComparer.OrdinalIgnoreCase))
+        IEnumerable<ConstraintGraph> graphs = cfg.Graphs.OrderBy(g => g.GraphNumber, StringComparer.OrdinalIgnoreCase);
+        if (!string.IsNullOrWhiteSpace(graphNumberFilter))
+        {
+            var key = graphNumberFilter.Trim();
+            graphs = graphs.Where(g => string.Equals(g.GraphNumber.Trim(), key, StringComparison.OrdinalIgnoreCase));
+        }
+
+        foreach (var graph in graphs)
         {
             var subset = results.Where(r => RowMatchesGraph(r, graph.GraphNumber.Trim())).ToList();
             var cutPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.CuttingPolygon);
@@ -18,22 +34,20 @@ internal static class ChartSpecBuilder
 
             if (graph.EngagementMode == EngagementMode.DiameterScaled)
             {
-                DiameterRangeService.EnsureRanges(graph);
+                DiameterInequalityService.EnsureInequalities(graph);
                 var diameters = subset.Select(r => r.Source.DiameterMm ?? 0).ToList();
-                var plotMax = DiameterRangeService.ResolvePlotMaxMm(graph, diameters);
-                var aePoly = DiameterRangeService.BuildBandPolygon(graph.AeVsDiameterRange!, plotMax);
-                var apPoly = DiameterRangeService.BuildBandPolygon(graph.ApVsDiameterRange!, plotMax);
+                var plotMaxX = DiameterInequalityService.ResolvePlotMaxMm(graph, diameters);
                 panels.Add(new
                 {
                     graphNumber = graph.GraphNumber,
                     engagementMode = "diameterScaled",
-                    cutCanvasId = GraphDomIds.Cutting(graph.GraphNumber),
-                    engAeCanvasId = GraphDomIds.EngagementAeVsDiameter(graph.GraphNumber),
-                    engApCanvasId = GraphDomIds.EngagementApVsDiameter(graph.GraphNumber),
+                    cutCanvasId = GraphDomIds.Cutting(graph.GraphNumber, canvasIdPrefix),
+                    engAeCanvasId = GraphDomIds.EngagementAeVsDiameter(graph.GraphNumber, canvasIdPrefix),
+                    engApCanvasId = GraphDomIds.EngagementApVsDiameter(graph.GraphNumber, canvasIdPrefix),
                     mappingContext,
                     cutting = BuildCuttingSide(cutPoly, subset),
-                    engagementAeVsDiameter = BuildEngagementAeVsDiameterSide(graph, aePoly, subset),
-                    engagementApVsDiameter = BuildEngagementApVsDiameterSide(graph, apPoly, subset)
+                    engagementAeVsDiameter = BuildEngagementAeVsDiameterSide(graph, plotMaxX, subset),
+                    engagementApVsDiameter = BuildEngagementApVsDiameterSide(graph, plotMaxX, subset)
                 });
             }
             else
@@ -43,8 +57,8 @@ internal static class ChartSpecBuilder
                 {
                     graphNumber = graph.GraphNumber,
                     engagementMode = "apAe",
-                    cutCanvasId = GraphDomIds.Cutting(graph.GraphNumber),
-                    engCanvasId = GraphDomIds.Engagement(graph.GraphNumber),
+                    cutCanvasId = GraphDomIds.Cutting(graph.GraphNumber, canvasIdPrefix),
+                    engCanvasId = GraphDomIds.Engagement(graph.GraphNumber, canvasIdPrefix),
                     mappingContext,
                     cutting = BuildCuttingSide(cutPoly, subset),
                     engagement = BuildEngagementSide(engPoly, subset)
@@ -137,7 +151,7 @@ internal static class ChartSpecBuilder
         };
     }
 
-    private static object BuildEngagementAeVsDiameterSide(ConstraintGraph graph, IReadOnlyList<Point2D> polygon, IReadOnlyList<ResultRow> subset)
+    private static object BuildEngagementAeVsDiameterSide(ConstraintGraph graph, double plotMaxX, IReadOnlyList<ResultRow> subset)
     {
         var pass = new List<object>();
         var fail = new List<object>();
@@ -154,10 +168,12 @@ internal static class ChartSpecBuilder
             Bucket(status, ScatterPoint(x, y, status, r.Source.No), pass, fail, na);
         }
 
-        return BuildDiameterScaledSide(polygon, graph.AeVsDiameterRange!, pass, fail, na);
+        var parsed = DiameterInequalityService.ParseAe(graph);
+        var dataY = subset.Where(r => r.Source.RadialDocAeMm is not null).Select(r => r.Source.RadialDocAeMm!.Value);
+        return BuildDiameterScaledSide(parsed, plotMaxX, dataY, pass, fail, na);
     }
 
-    private static object BuildEngagementApVsDiameterSide(ConstraintGraph graph, IReadOnlyList<Point2D> polygon, IReadOnlyList<ResultRow> subset)
+    private static object BuildEngagementApVsDiameterSide(ConstraintGraph graph, double plotMaxX, IReadOnlyList<ResultRow> subset)
     {
         var pass = new List<object>();
         var fail = new List<object>();
@@ -174,22 +190,36 @@ internal static class ChartSpecBuilder
             Bucket(status, ScatterPoint(x, y, status, r.Source.No), pass, fail, na);
         }
 
-        return BuildDiameterScaledSide(polygon, graph.ApVsDiameterRange!, pass, fail, na);
+        var parsed = DiameterInequalityService.ParseAp(graph);
+        var dataY = subset.Where(r => r.Source.AxialDocApMm is not null).Select(r => r.Source.AxialDocApMm!.Value);
+        return BuildDiameterScaledSide(parsed, plotMaxX, dataY, pass, fail, na);
     }
 
     private static object BuildDiameterScaledSide(
-        IReadOnlyList<Point2D> polygon,
-        DiameterRatioRange range,
+        IReadOnlyList<DiameterInequalityParser.ParsedConstraint> parsed,
+        double plotMaxX,
+        IEnumerable<double> dataValuesMm,
         List<object> pass,
         List<object> fail,
-        List<object> na) => new
+        List<object> na)
     {
-        polygon = polygon.Select(p => new { x = p.X, y = p.Y }).ToList(),
-        ratioBounds = new { minD = range.MinD, maxD = range.MaxD },
-        pass,
-        fail,
-        na
-    };
+        var plotMaxY = DiameterInequalityService.ResolvePlotMaxYMm(parsed, plotMaxX, dataValuesMm);
+        var polygon = DiameterInequalityService.BuildPassRegionPolygon(parsed, plotMaxX, plotMaxY);
+        var lines = DiameterInequalityService.BuildBoundaryLines(parsed, plotMaxX);
+
+        return new
+        {
+            polygon = polygon.Select(p => new { x = p.X, y = p.Y }).ToList(),
+            inequalityLines = lines.Select(l => new
+            {
+                label = l.Label,
+                points = l.Points.Select(p => new { x = p.X, y = p.Y }).ToList()
+            }).ToList(),
+            pass,
+            fail,
+            na
+        };
+    }
 
     private static object ScatterPoint(double x, double y, PassFailNa status, int? rowNo)
     {

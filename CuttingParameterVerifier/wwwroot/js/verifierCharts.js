@@ -3,15 +3,127 @@
     /** Match ~75% UI scale (see wwwroot/app.css html { font-size: 75% }). */
     const CPV_UI_SCALE = 0.75;
 
+    const PASS_REGION_FILL = "rgba(34,170,68,0.12)";
+    const PASS_REGION_STROKE = "rgba(34,120,50,0.30)";
+
     const charts = {};
+    const previewCharts = {};
+
+    function destroyRegistry(registry) {
+        Object.keys(registry).forEach((id) => {
+            try {
+                registry[id].destroy();
+            } catch { /* ignore */ }
+            delete registry[id];
+        });
+    }
 
     function destroyAll() {
-        Object.keys(charts).forEach((id) => {
-            try {
-                charts[id].destroy();
-            } catch { /* ignore */ }
-            delete charts[id];
+        destroyRegistry(charts);
+    }
+
+    function destroyPreview() {
+        destroyRegistry(previewCharts);
+    }
+
+    function renderPanels(spec, registry) {
+        const obj = typeof spec === "string" ? JSON.parse(spec) : spec;
+        if (!obj || !obj.panels) return;
+        obj.panels.forEach((p) => {
+            const g = p.graphNumber;
+            buildScatterChart(
+                p.cutCanvasId,
+                `Cutting: ${g}`,
+                "Vc (m/min)",
+                "Fz (mm)",
+                p.cutting.polygon,
+                p.cutting.pass,
+                p.cutting.fail,
+                p.cutting.na,
+                p.mappingContext,
+                { fillPassRegion: true, registry }
+            );
+            if (p.engagementMode === "diameterScaled") {
+                buildScatterChart(
+                    p.engAeCanvasId,
+                    `Engagement ae vs Ø: ${g}`,
+                    "Ø (mm)",
+                    "ae (mm)",
+                    p.engagementAeVsDiameter.polygon,
+                    p.engagementAeVsDiameter.pass,
+                    p.engagementAeVsDiameter.fail,
+                    p.engagementAeVsDiameter.na,
+                    p.mappingContext,
+                    {
+                        inequalityLines: p.engagementAeVsDiameter.inequalityLines,
+                        fillPassRegion: true,
+                        registry
+                    }
+                );
+                buildScatterChart(
+                    p.engApCanvasId,
+                    `Engagement ap vs Ø: ${g}`,
+                    "Ø (mm)",
+                    "ap (mm)",
+                    p.engagementApVsDiameter.polygon,
+                    p.engagementApVsDiameter.pass,
+                    p.engagementApVsDiameter.fail,
+                    p.engagementApVsDiameter.na,
+                    p.mappingContext,
+                    {
+                        inequalityLines: p.engagementApVsDiameter.inequalityLines,
+                        fillPassRegion: true,
+                        registry
+                    }
+                );
+            } else {
+                buildScatterChart(
+                    p.engCanvasId,
+                    `Engagement: ${g}`,
+                    "ap (mm)",
+                    "ae (mm)",
+                    p.engagement.polygon,
+                    p.engagement.pass,
+                    p.engagement.fail,
+                    p.engagement.na,
+                    p.mappingContext,
+                    { fillPassRegion: true, registry }
+                );
+            }
         });
+    }
+    const passRegionFillPlugin = {
+        id: "cpvPassRegionFill",
+        beforeDatasetsDraw(chart, _args, options) {
+            const poly = options && options.polygon;
+            if (!poly || poly.length < 3) return;
+            const xS = chart.scales.x;
+            const yS = chart.scales.y;
+            if (!xS || !yS) return;
+
+            const ctx = chart.ctx;
+            ctx.save();
+            ctx.beginPath();
+            poly.forEach((p, i) => {
+                const px = xS.getPixelForValue(p.x);
+                const py = yS.getPixelForValue(p.y);
+                if (i === 0) ctx.moveTo(px, py);
+                else ctx.lineTo(px, py);
+            });
+            ctx.closePath();
+            ctx.fillStyle = options.color || PASS_REGION_FILL;
+            ctx.fill();
+            if (options.stroke !== false) {
+                ctx.strokeStyle = options.strokeColor || PASS_REGION_STROKE;
+                ctx.lineWidth = Math.max(1, 1 * CPV_UI_SCALE);
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+    };
+
+    if (typeof Chart !== "undefined" && Chart.register && !Chart.registry.plugins.get("cpvPassRegionFill")) {
+        Chart.register(passRegionFillPlugin);
     }
 
     function galleryScrollPanel() {
@@ -90,37 +202,49 @@
         return out;
     }
 
+    function uniquePolygonRing(points) {
+        if (!points || points.length === 0) return [];
+        const ring = closeRing(points);
+        if (ring.length > 1) {
+            const a = ring[0];
+            const b = ring[ring.length - 1];
+            if (a.x === b.x && a.y === b.y) ring.pop();
+        }
+        return ring;
+    }
+
     function buildScatterChart(canvasId, title, xLabel, yLabel, polygon, passPoints, failPoints, naPoints, mappingContext, chartOptions) {
         const el = document.getElementById(canvasId);
         if (!el) return;
-        if (charts[canvasId]) {
-            charts[canvasId].destroy();
-            delete charts[canvasId];
+        const opts = chartOptions || {};
+        const registry = opts.registry || charts;
+        if (registry[canvasId]) {
+            registry[canvasId].destroy();
+            delete registry[canvasId];
         }
 
-        const opts = chartOptions || {};
-        const ratioBounds = opts.ratioBounds;
+        const inequalityLines = opts.inequalityLines || [];
         const fillPassRegion = !!opts.fillPassRegion;
-        const ring = closeRing(polygon || []);
-        const boundary = ring.map((p) => ({ x: p.x, y: p.y }));
-        const diameterMax = boundary.reduce((m, p) => Math.max(m, p.x || 0), 0);
+        const passRegionPoly = uniquePolygonRing(polygon || []);
+        const boundary = closeRing(polygon || []).map((p) => ({ x: p.x, y: p.y }));
 
         const datasets = [];
 
-        if (fillPassRegion && boundary.length > 0) {
+        if (fillPassRegion && passRegionPoly.length >= 3) {
             datasets.push({
                 type: "line",
                 label: "Pass region",
-                data: boundary,
-                borderColor: "rgba(34,120,50,0.85)",
-                backgroundColor: "rgba(34,170,68,0.18)",
-                borderWidth: Math.max(1, 2 * CPV_UI_SCALE),
-                fill: true,
+                data: [],
+                borderColor: PASS_REGION_STROKE,
+                backgroundColor: PASS_REGION_FILL,
+                borderWidth: 0,
+                fill: false,
                 pointRadius: 0,
-                tension: 0,
-                order: 3
+                order: 4
             });
-        } else {
+        }
+
+        if (boundary.length > 0 && inequalityLines.length === 0) {
             datasets.push({
                 type: "line",
                 label: "Boundary",
@@ -134,35 +258,22 @@
             });
         }
 
-        if (ratioBounds && diameterMax > 0) {
-            const minD = typeof ratioBounds.minD === "number" ? ratioBounds.minD : 0;
-            const maxD = typeof ratioBounds.maxD === "number" ? ratioBounds.maxD : 1;
-            const minLine = [{ x: 0, y: 0 }, { x: diameterMax, y: minD * diameterMax }];
-            const maxLine = [{ x: 0, y: 0 }, { x: diameterMax, y: maxD * diameterMax }];
+        inequalityLines.forEach((line, idx) => {
+            const pts = (line.points || []).map((p) => ({ x: p.x, y: p.y }));
+            if (pts.length < 2) return;
             datasets.push({
                 type: "line",
-                label: `${formatCoeff(minD)}D (min)`,
-                data: minLine,
-                borderColor: "rgba(60,60,60,0.7)",
+                label: line.label || `Bound ${idx + 1}`,
+                data: pts,
+                borderColor: "rgba(60,60,60,0.75)",
                 borderWidth: Math.max(1, 1.5 * CPV_UI_SCALE),
-                borderDash: [6 * CPV_UI_SCALE, 4 * CPV_UI_SCALE],
+                borderDash: idx % 2 === 0 ? [5 * CPV_UI_SCALE, 4 * CPV_UI_SCALE] : [],
                 fill: false,
                 pointRadius: 0,
                 tension: 0,
                 order: 2
             });
-            datasets.push({
-                type: "line",
-                label: `${formatCoeff(maxD)}D (max)`,
-                data: maxLine,
-                borderColor: "rgba(60,60,60,0.95)",
-                borderWidth: Math.max(1, 2 * CPV_UI_SCALE),
-                fill: false,
-                pointRadius: 0,
-                tension: 0,
-                order: 1
-            });
-        }
+        });
 
         datasets.push(
             {
@@ -193,7 +304,7 @@
 
         const sub = typeof mappingContext === "string" && mappingContext.trim().length > 0 ? mappingContext.trim() : "";
 
-        charts[canvasId] = new Chart(el, {
+        registry[canvasId] = new Chart(el, {
             data: { datasets },
             type: "scatter",
             options: {
@@ -201,10 +312,32 @@
                 maintainAspectRatio: false,
                 interaction: { mode: "nearest", intersect: true },
                 plugins: {
+                    cpvPassRegionFill: fillPassRegion && passRegionPoly.length >= 3
+                        ? {
+                            polygon: passRegionPoly,
+                            color: PASS_REGION_FILL,
+                            strokeColor: PASS_REGION_STROKE,
+                            stroke: inequalityLines.length > 0
+                        }
+                        : { polygon: [] },
                     legend: {
                         display: true,
                         position: "bottom",
-                        labels: { font: { size: 12 * CPV_UI_SCALE } }
+                        labels: {
+                            font: { size: 12 * CPV_UI_SCALE },
+                            generateLabels(chart) {
+                                const items = Chart.defaults.plugins.legend.labels.generateLabels(chart);
+                                return items.map((item) => {
+                                    const ds = chart.data.datasets[item.datasetIndex];
+                                    if (ds && ds.label === "Pass region") {
+                                        item.fillStyle = PASS_REGION_FILL;
+                                        item.strokeStyle = PASS_REGION_FILL;
+                                        item.lineWidth = 0;
+                                    }
+                                    return item;
+                                });
+                            }
+                        }
                     },
                     title: {
                         display: true,
@@ -229,7 +362,7 @@
                             },
                             label: function (ctx) {
                                 const lbl = ctx.dataset.label || "";
-                                if (lbl === "Pass region" || lbl.endsWith("(min)") || lbl.endsWith("(max)") || lbl === "Boundary") return "";
+                                if (lbl === "Pass region" || lbl === "Boundary") return "";
                                 const raw = ctx.raw;
                                 if (raw && typeof raw.tooltip === "string") return raw.tooltip;
                                 const lx = ctx.dataset.label || "";
@@ -256,78 +389,17 @@
         });
     }
 
-    function formatCoeff(v) {
-        if (typeof v !== "number" || !isFinite(v)) return "?";
-        return Math.abs(v - Math.floor(v)) < 1e-9 ? String(Math.floor(v)) : v.toFixed(2).replace(/\.?0+$/, "");
-    }
-
     window.cpvCharts = {
         renderAll: function (spec) {
             destroyAll();
-            const obj = typeof spec === "string" ? JSON.parse(spec) : spec;
-            if (!obj || !obj.panels) return;
-            obj.panels.forEach((p) => {
-                const g = p.graphNumber;
-                buildScatterChart(
-                    p.cutCanvasId,
-                    `Cutting: ${g}`,
-                    "Vc (m/min)",
-                    "Fz (mm)",
-                    p.cutting.polygon,
-                    p.cutting.pass,
-                    p.cutting.fail,
-                    p.cutting.na,
-                    p.mappingContext
-                );
-                if (p.engagementMode === "diameterScaled") {
-                    const aeOpts = {
-                        ratioBounds: p.engagementAeVsDiameter.ratioBounds,
-                        fillPassRegion: true
-                    };
-                    const apOpts = {
-                        ratioBounds: p.engagementApVsDiameter.ratioBounds,
-                        fillPassRegion: true
-                    };
-                    buildScatterChart(
-                        p.engAeCanvasId,
-                        `Engagement ae vs Ø: ${g}`,
-                        "Ø (mm)",
-                        "ae (mm)",
-                        p.engagementAeVsDiameter.polygon,
-                        p.engagementAeVsDiameter.pass,
-                        p.engagementAeVsDiameter.fail,
-                        p.engagementAeVsDiameter.na,
-                        p.mappingContext,
-                        aeOpts
-                    );
-                    buildScatterChart(
-                        p.engApCanvasId,
-                        `Engagement ap vs Ø: ${g}`,
-                        "Ø (mm)",
-                        "ap (mm)",
-                        p.engagementApVsDiameter.polygon,
-                        p.engagementApVsDiameter.pass,
-                        p.engagementApVsDiameter.fail,
-                        p.engagementApVsDiameter.na,
-                        p.mappingContext,
-                        apOpts
-                    );
-                } else {
-                    buildScatterChart(
-                        p.engCanvasId,
-                        `Engagement: ${g}`,
-                        "ap (mm)",
-                        "ae (mm)",
-                        p.engagement.polygon,
-                        p.engagement.pass,
-                        p.engagement.fail,
-                        p.engagement.na,
-                        p.mappingContext
-                    );
-                }
-            });
+            renderPanels(spec, charts);
+        },
+        renderPreview: function (spec) {
+            destroyPreview();
+            renderPanels(spec, previewCharts);
         },
         destroyAll: destroyAll,
+        destroyPreview: destroyPreview,
         scrollToFigure: scrollToFigure,
         scrollTabIntoView: scrollTabIntoView
     };

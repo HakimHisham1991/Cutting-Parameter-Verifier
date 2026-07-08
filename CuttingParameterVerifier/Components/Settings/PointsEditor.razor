@@ -14,8 +14,8 @@
             {
                 var idx = i;
                 <tr>
-                    <td><input type="number" step="any" class="form-control form-control-sm" @bind="Points[idx].X" /></td>
-                    <td><input type="number" step="any" class="form-control form-control-sm" @bind="Points[idx].Y" /></td>
+                    <td><input type="number" step="any" class="form-control form-control-sm" @bind="Points[idx].X" @bind:after="NotifyChanged" /></td>
+                    <td><input type="number" step="any" class="form-control form-control-sm" @bind="Points[idx].Y" @bind:after="NotifyChanged" /></td>
                     <td>
                         <button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => RemoveAt(idx)" disabled="@(Points.Count <= 1)">Remove</button>
                     </td>
@@ -36,11 +36,21 @@
     [Parameter]
     public string YLabel { get; set; } = "Y";
 
-    private void Add() => Points.Add(new Point2D());
+    [Parameter]
+    public EventCallback OnChanged { get; set; }
+
+    private void Add()
+    {
+        Points.Add(new Point2D());
+        _ = NotifyChanged();
+    }
 
     private void RemoveAt(int index)
     {
         if (Points.Count <= 1) return;
         Points.RemoveAt(index);
+        _ = NotifyChanged();
     }
+
+    private Task NotifyChanged() => OnChanged.InvokeAsync();
 }

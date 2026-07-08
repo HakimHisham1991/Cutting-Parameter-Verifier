@@ -25,8 +25,10 @@ public static class ConstraintEval
     public static PassFailNa EvaluateEngagementAeVsDiameter(CuttingDataRow row, ConstraintGraph graph)
     {
         if (row.DiameterMm is null or <= 0 || row.RadialDocAeMm is null) return PassFailNa.Na;
-        if (graph.AeVsDiameterRange is not null)
-            return DiameterRangeService.Evaluate(row.RadialDocAeMm.Value, row.DiameterMm.Value, graph.AeVsDiameterRange);
+        DiameterInequalityService.EnsureInequalities(graph);
+        var parsed = DiameterInequalityService.ParseAe(graph);
+        if (parsed.Count > 0)
+            return DiameterInequalityService.Evaluate(row.RadialDocAeMm.Value, row.DiameterMm.Value, parsed);
         return EvaluateEngagementAeVsDiameter(row, graph.EngagementAeVsDiameterPolygon);
     }
 
@@ -41,8 +43,10 @@ public static class ConstraintEval
     public static PassFailNa EvaluateEngagementApVsDiameter(CuttingDataRow row, ConstraintGraph graph)
     {
         if (row.DiameterMm is null or <= 0 || row.AxialDocApMm is null) return PassFailNa.Na;
-        if (graph.ApVsDiameterRange is not null)
-            return DiameterRangeService.Evaluate(row.AxialDocApMm.Value, row.DiameterMm.Value, graph.ApVsDiameterRange);
+        DiameterInequalityService.EnsureInequalities(graph);
+        var parsed = DiameterInequalityService.ParseAp(graph);
+        if (parsed.Count > 0)
+            return DiameterInequalityService.Evaluate(row.AxialDocApMm.Value, row.DiameterMm.Value, parsed);
         return EvaluateEngagementApVsDiameter(row, graph.EngagementApVsDiameterPolygon);
     }
 
@@ -58,7 +62,7 @@ public static class ConstraintEval
     public static PassFailNa EvaluateAeCheckForGraph(CuttingDataRow row, ConstraintGraph graph)
     {
         if (graph.EngagementMode != EngagementMode.DiameterScaled) return PassFailNa.Na;
-        DiameterRangeService.EnsureRanges(graph);
+        DiameterInequalityService.EnsureInequalities(graph);
         return EvaluateEngagementAeVsDiameter(row, graph);
     }
 
@@ -66,7 +70,7 @@ public static class ConstraintEval
     public static PassFailNa EvaluateApCheckForGraph(CuttingDataRow row, ConstraintGraph graph)
     {
         if (graph.EngagementMode != EngagementMode.DiameterScaled) return PassFailNa.Na;
-        DiameterRangeService.EnsureRanges(graph);
+        DiameterInequalityService.EnsureInequalities(graph);
         return EvaluateEngagementApVsDiameter(row, graph);
     }
 

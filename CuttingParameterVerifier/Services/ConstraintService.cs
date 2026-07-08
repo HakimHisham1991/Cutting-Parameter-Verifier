@@ -91,7 +91,7 @@ public sealed class ConstraintService : IConstraintService
         foreach (var g in cfg.Graphs)
         {
             if (g.EngagementMode == EngagementMode.DiameterScaled)
-                DiameterRangeService.EnsureRanges(g);
+                DiameterInequalityService.EnsureInequalities(g);
         }
 
         return cfg;
@@ -203,6 +203,8 @@ public sealed class ConstraintService : IConstraintService
         CuttingPolygon = g.CuttingPolygon.Select(p => new Point2D(p.X, p.Y)).ToList(),
         EngagementPolygon = g.EngagementPolygon.Select(p => new Point2D(p.X, p.Y)).ToList(),
         EngagementMode = g.EngagementMode,
+        AeVsDiameterInequalities = g.AeVsDiameterInequalities.Select(i => new DiameterInequality { Expression = i.Expression }).ToList(),
+        ApVsDiameterInequalities = g.ApVsDiameterInequalities.Select(i => new DiameterInequality { Expression = i.Expression }).ToList(),
         AeVsDiameterRange = g.AeVsDiameterRange is null ? null : new DiameterRatioRange { MinD = g.AeVsDiameterRange.MinD, MaxD = g.AeVsDiameterRange.MaxD },
         ApVsDiameterRange = g.ApVsDiameterRange is null ? null : new DiameterRatioRange { MinD = g.ApVsDiameterRange.MinD, MaxD = g.ApVsDiameterRange.MaxD },
         DiameterPlotMaxMm = g.DiameterPlotMaxMm,

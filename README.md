@@ -1,6 +1,6 @@
 # Cutting Parameter Verifier
 
-**Current version:** 1.4.1
+**Current version:** 1.6.1
 
 A Blazor web application for verifying CNC milling cutting parameters against configurable constraint graphs. Upload a CAM Excel export, and the app maps each operation to the correct figure(s), checks whether cutting and engagement parameters fall inside approved polygons, and visualizes results in interactive charts.
 
@@ -98,10 +98,10 @@ Two modes per constraint graph (Settings → **Scale with Ø** toggle):
 
 #### Diameter-scaled (second customer specs)
 
-- **Two ranges:** ae vs Ø and ap vs Ø, each defined as D-multiples (e.g. `0D ≤ ae ≤ 1D`, `0.5D ≤ ap ≤ 1D`)
-- **Rule:** Pass only if both `minD × Ø ≤ ae ≤ maxD × Ø` and `minD × Ø ≤ ap ≤ maxD × Ø` (inclusive — points on the boundary lines also Pass)
-- Ratio limits scale with diameter: e.g. max ae = 1D is the line ae = Ø; ap = 0.5D–1D is the band between ap = 0.5·Ø and ap = Ø
-- Charts draw the min/max boundary lines and shade the Pass region between them
+- **Two inequality lists:** ae vs Ø and ap vs Ø — add any number of bounds (e.g. `ae >= 0`, `ae <= 1*D`, `ap >= 0.5*D`, `ap <= 0.2`)
+- **Rule:** Pass only if every inequality is satisfied for that chart (inclusive — points on boundary lines also Pass)
+- Use `D` for tool diameter (Ø). Right-hand side can be a constant (horizontal line) or a D-multiple (sloped line through origin)
+- Charts draw each boundary line and shade the Pass region in light green
 - Requires tool diameter in the import row; missing Ø → N/A for engagement
 
 ### Status aggregation
@@ -227,7 +227,7 @@ Three areas:
    - **Cutting (Vc, Fz)** — X = Vc, Y = Fz
    - **Engagement** — either:
      - **ap × ae** (default): single polygon, X = ap, Y = ae
-     - **Scale with Ø** enabled: set **ae vs Ø** and **ap vs Ø** ranges as D-multiples (e.g. `0D ≤ ae ≤ 1D`, `0.5D ≤ ap ≤ 1D`); charts plot boundary lines and shade the Pass region
+     - **Scale with Ø** enabled: add inequalities for **ae vs Ø** and **ap vs Ø** (e.g. `ae >= 0`, `ae <= 1*D`); charts plot boundary lines and shade the Pass region
 
 Click **Save configuration** to persist to `Data/constraints.json`. The active session re-evaluates immediately. Use **Reload** to discard unsaved edits and read from disk.
 
@@ -331,11 +331,11 @@ Path: `CuttingParameterVerifier/Data/constraints.json`
 | `cuttingPolygon` | Vertices for Vc (X) vs Fz (Y) boundary |
 | `engagementPolygon` | Vertices for ap (X) vs ae (Y) — used when `engagementMode` is `0` (ap × ae) |
 | `engagementMode` | `0` = ap × ae (default), `1` = diameter-scaled (ae vs Ø + ap vs Ø) |
-| `aeVsDiameterRange` | `{ "minD": 0, "maxD": 1 }` — ae limits as multiples of Ø (used when `engagementMode` is `1`) |
-| `apVsDiameterRange` | `{ "minD": 0.5, "maxD": 1 }` — ap limits as multiples of Ø (used when `engagementMode` is `1`) |
+| `aeVsDiameterInequalities` | `[{ "expression": "ae >= 0" }, { "expression": "ae <= 1*D" }]` |
+| `apVsDiameterInequalities` | `[{ "expression": "ap >= 0.5*D" }, { "expression": "ap <= 1*D" }]` |
 | `diameterPlotMaxMm` | Ø axis extent for chart boundary lines (default `50`) |
-| `engagementAeVsDiameterPolygon` | Compiled band polygon (synced from `aeVsDiameterRange` on save) |
-| `engagementApVsDiameterPolygon` | Compiled band polygon (synced from `apVsDiameterRange` on save) |
+| `engagementAeVsDiameterPolygon` | Compiled pass-region polygon (synced from inequalities on save) |
+| `engagementApVsDiameterPolygon` | Compiled pass-region polygon (synced from inequalities on save) |
 
 On first run, if the file is missing, a bundled default is written to disk. When upgrading, missing graphs or rules from the embedded bundle are merged into an older persisted file automatically.
 

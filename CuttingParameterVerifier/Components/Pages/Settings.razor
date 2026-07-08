@@ -1,10 +1,13 @@
 @page "/settings"
 @rendermode InteractiveServer
+@implements IDisposable
 @using System.Text.Json
 @using System.Text.Json.Serialization
 @using CuttingParameterVerifier.Models
 @using CuttingParameterVerifier.Services
+@using CuttingParameterVerifier.Components.Settings
 @inject IConstraintService Constraints
+@inject CuttingSessionState Session
 
 <PageTitle>Verifier settings</PageTitle>
 
@@ -66,7 +69,7 @@
         </div>
     </div>
 
-    <div class="col-lg-4">
+    <div class="col-lg-3 col-xl-2">
         <div class="card shadow-sm h-100">
             <div class="card-header">Graph selector</div>
             <div class="card-body">
@@ -79,82 +82,103 @@
                 </select>
                 <hr />
                 <button type="button" class="btn btn-sm btn-outline-primary w-100 mb-2" @onclick="AddGraph">Add graph</button>
-                <button type="button" class="btn btn-sm btn-outline-danger w-100" @onclick="RemoveSelectedGraph" disabled="@(_activeGraph is null)">Delete selected graph</button>
+                <button type="button" class="btn btn-sm btn-outline-danger w-100 mb-3" @onclick="RemoveSelectedGraph" disabled="@(_activeGraph is null)">Delete selected graph</button>
+                @if (_activeGraph is not null)
+                {
+                    <label class="form-label">Rename graph number</label>
+                    <input class="form-control form-control-sm" @bind="_activeGraph.GraphNumber" @bind:after="OnConstraintEdited" />
+                    <div class="form-text">Identifiers may include dotted codes (e.g. 3.2.2.4.1.2).</div>
+                }
             </div>
         </div>
     </div>
 
-    <div class="col-lg-8">
-        <div class="card shadow-sm">
-            <div class="card-header">Constraint polygons</div>
-            <div class="card-body">
-                @if (_activeGraph is null)
-                {
+    <div class="col-lg-9 col-xl-10">
+        @if (_activeGraph is null)
+        {
+            <div class="card shadow-sm">
+                <div class="card-header">Constraint polygons</div>
+                <div class="card-body">
                     <p class="text-muted mb-0">No graphs defined.</p>
-                }
-                else
-                {
-                    <div class="row g-3">
-                        <div class="col-md-6">
-                            <h2 class="h6">Cutting (Vc, Fz)</h2>
-                            <PointsEditor @key="@($"{_activeGraph.GraphNumber}|c")" Points="_activeGraph.CuttingPolygon" />
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="row g-3">
+                <div class="col-xl-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header">Cutting (Vc, Fz)</div>
+                        <div class="card-body">
+                            <PointsEditor @key="@($"{_activeGraph.GraphNumber}|c")"
+                                          Points="_activeGraph.CuttingPolygon"
+                                          OnChanged="OnConstraintEdited" />
                         </div>
-                        <div class="col-md-6">
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h2 class="h6 mb-0">Engagement</h2>
-                                <div class="form-check form-switch mb-0">
-                                    <input class="form-check-input" type="checkbox" role="switch"
-                                           id="eng-diameter-mode"
-                                           checked="@(_activeGraph.EngagementMode == EngagementMode.DiameterScaled)"
-                                           @onchange="OnEngagementModeChanged" />
-                                    <label class="form-check-label small" for="eng-diameter-mode">Scale with Ø</label>
-                                </div>
+                    </div>
+                </div>
+                <div class="col-xl-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span>Engagement</span>
+                            <div class="form-check form-switch mb-0">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="eng-diameter-mode"
+                                       checked="@(_activeGraph.EngagementMode == EngagementMode.DiameterScaled)"
+                                       @onchange="OnEngagementModeChanged" />
+                                <label class="form-check-label small" for="eng-diameter-mode">Scale with Ø</label>
                             </div>
+                        </div>
+                        <div class="card-body">
                             @if (_activeGraph.EngagementMode == EngagementMode.DiameterScaled)
                             {
                                 <p class="text-muted small mb-2">
-                                    Diameter-scaled mode: set ae and ap limits as multiples of tool Ø (D).
-                                    The chart draws the boundary lines and shades the Pass region between them.
-                                    Points on the lines also Pass.
+                                    Add inequalities for ae and ap vs tool Ø (D). Charts update live in the preview.
                                 </p>
                                 <div class="mb-3">
                                     <h3 class="h6">ae vs Ø</h3>
-                                    <DiameterRangeEditor @key="@($"{_activeGraph.GraphNumber}|e-ae")"
-                                                         Range="_activeGraph.AeVsDiameterRange!"
-                                                         Variable="ae" />
+                                    <InequalityListEditor @key="@($"{_activeGraph.GraphNumber}|e-ae")"
+                                                          Inequalities="_activeGraph.AeVsDiameterInequalities"
+                                                          Variable="ae"
+                                                          OnChanged="OnConstraintEdited" />
                                 </div>
                                 <div class="mb-3">
                                     <h3 class="h6">ap vs Ø</h3>
-                                    <DiameterRangeEditor @key="@($"{_activeGraph.GraphNumber}|e-ap")"
-                                                         Range="_activeGraph.ApVsDiameterRange!"
-                                                         Variable="ap" />
+                                    <InequalityListEditor @key="@($"{_activeGraph.GraphNumber}|e-ap")"
+                                                          Inequalities="_activeGraph.ApVsDiameterInequalities"
+                                                          Variable="ap"
+                                                          OnChanged="OnConstraintEdited" />
                                 </div>
                                 <div>
                                     <label class="form-label small mb-1">Chart Ø axis max (mm)</label>
-                                    <input type="number" step="any" min="0.1" class="form-control form-control-sm" style="max-width:8rem"
-                                           @bind="_activeGraph.DiameterPlotMaxMm" />
-                                    <div class="form-text">Boundary lines are drawn from Ø = 0 to this value.</div>
+                                    <input type="number" step="any" min="0.1" class="form-control form-control-sm"
+                                           @bind="_activeGraph.DiameterPlotMaxMm"
+                                           @bind:after="OnConstraintEdited" />
                                 </div>
                             }
                             else
                             {
                                 <p class="text-muted small mb-2">ap × ae polygon (mm) — fixed envelope independent of tool diameter.</p>
                                 <PointsEditor @key="@($"{_activeGraph.GraphNumber}|e")"
-                                                Points="_activeGraph.EngagementPolygon"
-                                                XLabel="ap (mm)" YLabel="ae (mm)" />
+                                              Points="_activeGraph.EngagementPolygon"
+                                              XLabel="ap (mm)" YLabel="ae (mm)"
+                                              OnChanged="OnConstraintEdited" />
                             }
                         </div>
                     </div>
-                    <div class="mt-3">
-                        <label class="form-label">Rename graph number</label>
-                        <div class="input-group">
-                            <input class="form-control" @bind="_activeGraph.GraphNumber" />
+                </div>
+                <div class="col-xl-4">
+                    <div class="card shadow-sm h-100 settings-chart-preview-card">
+                        <div class="card-header">Chart preview</div>
+                        <div class="card-body settings-chart-preview-body">
+                            <SettingsChartPreview Config="_model"
+                                                  Graph="_activeGraph"
+                                                  Results="Session.Results"
+                                                  RefreshToken="_previewRefreshToken" />
                         </div>
-                        <div class="form-text">Identifiers may include dotted codes (for example 3.2.2.4.1.2).</div>
                     </div>
-                }
+                </div>
             </div>
-        </div>
+        }
     </div>
 </div>
 
@@ -171,8 +195,23 @@
     private ConstraintGraph? _activeGraph;
     private string? _message;
     private bool _isError;
+    private int _previewRefreshToken;
 
-    protected override void OnInitialized() => Reload();
+    protected override void OnInitialized()
+    {
+        Session.Changed += OnSessionChanged;
+        Reload();
+    }
+
+    private void OnSessionChanged() => InvokeAsync(() =>
+    {
+        BumpPreviewRefresh();
+        StateHasChanged();
+    });
+
+    private void OnConstraintEdited() => BumpPreviewRefresh();
+
+    private void BumpPreviewRefresh() => _previewRefreshToken++;
 
     private Task ReloadAsync()
     {
@@ -201,7 +240,8 @@
 
         _activeGraph = _model.Graphs.First(g => string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.Ordinal));
         if (_activeGraph.EngagementMode == EngagementMode.DiameterScaled)
-            EnsureDiameterRanges(_activeGraph);
+            EnsureDiameterInequalities(_activeGraph);
+        BumpPreviewRefresh();
     }
 
     protected override void OnParametersSet()
@@ -211,7 +251,7 @@
             _activeGraph = _model.Graphs.FirstOrDefault(g =>
                 string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.Ordinal));
             if (_activeGraph?.EngagementMode == EngagementMode.DiameterScaled)
-                EnsureDiameterRanges(_activeGraph);
+                EnsureDiameterInequalities(_activeGraph);
         }
     }
 
@@ -221,7 +261,8 @@
         _activeGraph = _model.Graphs.FirstOrDefault(g =>
             string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.Ordinal));
         if (_activeGraph?.EngagementMode == EngagementMode.DiameterScaled)
-            EnsureDiameterRanges(_activeGraph);
+            EnsureDiameterInequalities(_activeGraph);
+        BumpPreviewRefresh();
     }
 
     private void OnEngagementModeChanged(ChangeEventArgs e)
@@ -230,10 +271,11 @@
         var enabled = e.Value is bool b && b;
         _activeGraph.EngagementMode = enabled ? EngagementMode.DiameterScaled : EngagementMode.ApAe;
         if (enabled)
-            EnsureDiameterRanges(_activeGraph);
+            EnsureDiameterInequalities(_activeGraph);
+        BumpPreviewRefresh();
     }
 
-    private static void EnsureDiameterRanges(ConstraintGraph g) => DiameterRangeService.EnsureRanges(g);
+    private static void EnsureDiameterInequalities(ConstraintGraph g) => DiameterInequalityService.EnsureInequalities(g);
 
     private void AddRule() => _model.MappingRules.Add(new MappingRule());
 
@@ -250,14 +292,23 @@
             CuttingPolygon = new List<Point2D> { new(0, 0), new(0, 1), new(1, 1), new(1, 0) },
             EngagementPolygon = new List<Point2D> { new(0, 0), new(0, 1), new(1, 1), new(1, 0) },
             EngagementMode = EngagementMode.ApAe,
-            AeVsDiameterRange = new DiameterRatioRange { MinD = 0, MaxD = 1 },
-            ApVsDiameterRange = new DiameterRatioRange { MinD = 0.5, MaxD = 1 },
-            DiameterPlotMaxMm = DiameterRangeService.DefaultPlotMaxMm
+            AeVsDiameterInequalities = new List<DiameterInequality>
+            {
+                new() { Expression = "ae >= 0" },
+                new() { Expression = "ae <= 1*D" }
+            },
+            ApVsDiameterInequalities = new List<DiameterInequality>
+            {
+                new() { Expression = "ap >= 0.5*D" },
+                new() { Expression = "ap <= 1*D" }
+            },
+            DiameterPlotMaxMm = DiameterInequalityService.DefaultPlotMaxMm
         };
-        DiameterRangeService.SyncPolygonsFromRanges(g);
+        DiameterInequalityService.SyncPolygonsFromInequalities(g);
         _model.Graphs.Add(g);
         _selectedGraphNumber = g.GraphNumber;
         _activeGraph = g;
+        BumpPreviewRefresh();
     }
 
     private void RemoveSelectedGraph()
@@ -273,6 +324,12 @@
 
         _selectedGraphNumber = _model.Graphs[0].GraphNumber;
         _activeGraph = _model.Graphs[0];
+        BumpPreviewRefresh();
+    }
+
+    public void Dispose()
+    {
+        Session.Changed -= OnSessionChanged;
     }
 
     private async Task SaveAsync()
@@ -284,8 +341,8 @@
             g.EngagementPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.EngagementPolygon);
             if (g.EngagementMode == EngagementMode.DiameterScaled)
             {
-                DiameterRangeService.EnsureRanges(g);
-                DiameterRangeService.SyncPolygonsFromRanges(g);
+                DiameterInequalityService.EnsureInequalities(g);
+                DiameterInequalityService.SyncPolygonsFromInequalities(g);
             }
             else
             {
@@ -320,7 +377,7 @@
             if (g.CuttingPolygon.Count < 3)
                 errors.Add($"Graph {g.GraphNumber}: cutting polygon needs at least three vertices (after normalization).");
             if (g.EngagementMode == EngagementMode.DiameterScaled)
-                errors.AddRange(DiameterRangeService.Validate(g));
+                errors.AddRange(DiameterInequalityService.Validate(g));
             else if (g.EngagementPolygon.Count < 3)
             {
                 errors.Add($"Graph {g.GraphNumber}: engagement polygon needs at least three vertices (after normalization).");

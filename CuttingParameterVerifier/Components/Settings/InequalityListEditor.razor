@@ -1,0 +1,65 @@
+@using CuttingParameterVerifier.Models
+
+<div class="inequality-list-editor border rounded p-2 bg-light">
+    <p class="small text-muted mb-2">
+        Add inequalities for <strong>@Variable</strong> vs Ø. Use <code>D</code> for tool diameter.
+        Examples: <code>@Variable &gt;= 0</code>, <code>@Variable &lt;= 1*D</code>, <code>@Variable &gt;= 0.5*D</code>, <code>@Variable &lt;= 0.2</code>
+    </p>
+    <div class="table-responsive">
+        <table class="table table-sm align-middle mb-2">
+            <thead class="table-light">
+                <tr>
+                    <th>Inequality</th>
+                    <th style="width:5rem"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (var i = 0; i < Inequalities.Count; i++)
+                {
+                    var idx = i;
+                    <tr>
+                        <td>
+                            <input type="text" class="form-control form-control-sm font-monospace"
+                                   placeholder="@($"{Variable} >= 0")"
+                                   @bind="Inequalities[idx].Expression"
+                                   @bind:event="oninput"
+                                   @bind:after="NotifyChanged" />
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm btn-outline-danger"
+                                    @onclick="() => RemoveAt(idx)"
+                                    disabled="@(Inequalities.Count <= 1)">Remove</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <button type="button" class="btn btn-sm btn-outline-primary" @onclick="Add">Add inequality</button>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public List<DiameterInequality> Inequalities { get; set; } = null!;
+
+    [Parameter, EditorRequired]
+    public string Variable { get; set; } = null!;
+
+    [Parameter]
+    public EventCallback OnChanged { get; set; }
+
+    private void Add()
+    {
+        Inequalities.Add(new DiameterInequality());
+        _ = NotifyChanged();
+    }
+
+    private void RemoveAt(int index)
+    {
+        if (Inequalities.Count <= 1) return;
+        Inequalities.RemoveAt(index);
+        _ = NotifyChanged();
+    }
+
+    private Task NotifyChanged() => OnChanged.InvokeAsync();
+}
