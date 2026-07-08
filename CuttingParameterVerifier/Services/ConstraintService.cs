@@ -88,6 +88,12 @@ public sealed class ConstraintService : IConstraintService
             }
         }
 
+        foreach (var g in cfg.Graphs)
+        {
+            if (g.EngagementMode == EngagementMode.DiameterScaled)
+                DiameterRangeService.EnsureRanges(g);
+        }
+
         return cfg;
     }
 
@@ -197,6 +203,9 @@ public sealed class ConstraintService : IConstraintService
         CuttingPolygon = g.CuttingPolygon.Select(p => new Point2D(p.X, p.Y)).ToList(),
         EngagementPolygon = g.EngagementPolygon.Select(p => new Point2D(p.X, p.Y)).ToList(),
         EngagementMode = g.EngagementMode,
+        AeVsDiameterRange = g.AeVsDiameterRange is null ? null : new DiameterRatioRange { MinD = g.AeVsDiameterRange.MinD, MaxD = g.AeVsDiameterRange.MaxD },
+        ApVsDiameterRange = g.ApVsDiameterRange is null ? null : new DiameterRatioRange { MinD = g.ApVsDiameterRange.MinD, MaxD = g.ApVsDiameterRange.MaxD },
+        DiameterPlotMaxMm = g.DiameterPlotMaxMm,
         EngagementAeVsDiameterPolygon = g.EngagementAeVsDiameterPolygon.Select(p => new Point2D(p.X, p.Y)).ToList(),
         EngagementApVsDiameterPolygon = g.EngagementApVsDiameterPolygon.Select(p => new Point2D(p.X, p.Y)).ToList()
     };

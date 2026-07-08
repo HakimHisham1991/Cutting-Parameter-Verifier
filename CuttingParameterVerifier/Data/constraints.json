@@ -212,7 +212,7 @@
       "material": "Aluminium",
       "surfaceType": "Controlled Roughing",
       "millingType": "End Milling",
-      "toolType": "HSS E",
+      "toolType": "HSS",
       "strategyType": "Conventional",
       "graphNumber": "TABLE 1.1"
     },
@@ -221,14 +221,14 @@
       "material": "Aluminium",
       "surfaceType": "Finish",
       "millingType": "End Milling",
-      "toolType": "HSS E",
+      "toolType": "HSS",
       "strategyType": "Conventional",
       "graphNumber": "TABLE 1.2"
     },
     {
       "processSpecs": "80-T-30-4010",
       "material": "Aluminium",
-      "surfaceType": "Roughing",
+      "surfaceType": "Controlled Roughing",
       "millingType": "End Milling",
       "toolType": "Carbide",
       "strategyType": "Conventional",
@@ -242,6 +242,24 @@
       "toolType": "Carbide",
       "strategyType": "Conventional",
       "graphNumber": "TABLE 1.2"
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "Face Milling",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.3"
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Aluminium",
+      "surfaceType": "Finish",
+      "millingType": "Face Milling",
+      "toolType": "Carbide",
+      "strategyType": "Conventional",
+      "graphNumber": "TABLE 1.3"
     }
   ],
   "graphs": [
@@ -304,6 +322,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -354,6 +373,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -412,6 +432,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -466,6 +487,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -508,6 +530,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -550,6 +573,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -592,6 +616,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -634,6 +659,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -696,6 +722,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -734,6 +761,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -784,6 +812,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -842,6 +871,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -896,6 +926,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -946,6 +977,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -992,6 +1024,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -1038,6 +1071,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -1080,6 +1114,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -1122,6 +1157,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -1180,6 +1216,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -1222,6 +1259,7 @@
         }
       ],
       "engagementMode": 0,
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
     },
@@ -1264,40 +1302,49 @@
         }
       ],
       "engagementMode": 1,
+      "aeVsDiameterRange": {
+        "minD": 0,
+        "maxD": 1
+      },
+      "apVsDiameterRange": {
+        "minD": 0.5,
+        "maxD": 1
+      },
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [
         {
-          "x": 1,
-          "y": 1
+          "x": 0,
+          "y": 0
         },
         {
-          "x": 1.003,
-          "y": 1
+          "x": 50,
+          "y": 0
         },
         {
-          "x": 1.003,
-          "y": 1.003
+          "x": 50,
+          "y": 50
         },
         {
-          "x": 1,
-          "y": 1.003
+          "x": 0,
+          "y": 0
         }
       ],
       "engagementApVsDiameterPolygon": [
         {
-          "x": 0.5,
-          "y": 1
+          "x": 0,
+          "y": 0
         },
         {
-          "x": 1,
-          "y": 1
+          "x": 50,
+          "y": 25
         },
         {
-          "x": 1,
-          "y": 1.00045
+          "x": 50,
+          "y": 50
         },
         {
-          "x": 0.5,
-          "y": 1.00045
+          "x": 0,
+          "y": 0
         }
       ]
     },
@@ -1340,42 +1387,102 @@
         }
       ],
       "engagementMode": 1,
+      "aeVsDiameterRange": {
+        "minD": 0,
+        "maxD": 1
+      },
+      "apVsDiameterRange": {
+        "minD": 0.5,
+        "maxD": 1
+      },
+      "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [
         {
-          "x": 1,
-          "y": 1
+          "x": 0,
+          "y": 0
         },
         {
-          "x": 1.003,
-          "y": 1
+          "x": 50,
+          "y": 0
         },
         {
-          "x": 1.003,
-          "y": 1.003
+          "x": 50,
+          "y": 50
         },
         {
-          "x": 1,
-          "y": 1.003
+          "x": 0,
+          "y": 0
         }
       ],
       "engagementApVsDiameterPolygon": [
         {
-          "x": 4,
-          "y": 1
+          "x": 0,
+          "y": 0
         },
         {
-          "x": 4.006,
-          "y": 1
+          "x": 50,
+          "y": 25
         },
         {
-          "x": 4.006,
-          "y": 1.006
+          "x": 50,
+          "y": 50
         },
         {
-          "x": 4,
-          "y": 1.006
+          "x": 0,
+          "y": 0
         }
       ]
+    },
+    {
+      "graphNumber": "TABLE 1.3",
+      "cuttingPolygon": [
+        {
+          "x": 0,
+          "y": 0.1
+        },
+        {
+          "x": 4000,
+          "y": 0.1
+        },
+        {
+          "x": 4000,
+          "y": 0.3
+        },
+        {
+          "x": 0,
+          "y": 0.3
+        }
+      ],
+      "engagementPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 999,
+          "y": 0
+        },
+        {
+          "x": 999,
+          "y": 999
+        },
+        {
+          "x": 0,
+          "y": 999
+        }
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterRange": {
+        "minD": 0,
+        "maxD": 1
+      },
+      "apVsDiameterRange": {
+        "minD": 0.5,
+        "maxD": 1
+      },
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
     }
   ]
 }

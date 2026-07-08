@@ -157,6 +157,12 @@
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.EngagementStatus))">Engage Check @SortIndicator(TableSortColumn.EngagementStatus)</button>
                                 </th>
                                 <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.AeCheckStatus))">ae check @SortIndicator(TableSortColumn.AeCheckStatus)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
+                                    <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.ApCheckStatus))">ap check @SortIndicator(TableSortColumn.ApCheckStatus)</button>
+                                </th>
+                                <th class="cpv-sortable" scope="col">
                                     <button type="button" class="cpv-th-btn" @onclick="@(() => ToggleSort(TableSortColumn.Remarks))">Remarks @SortIndicator(TableSortColumn.Remarks)</button>
                                 </th>
                             </tr>
@@ -245,6 +251,40 @@
                                             <span class="@BadgeClass(r.EngagementStatus)">@BadgeText(r.EngagementStatus)</span>
                                         }
                                     </td>
+                                    <td>
+                                        @if (r.AeCheckStatusesPerGraph is not null && r.AeCheckStatusesPerGraph.Count > 0)
+                                        {
+                                            @for (var i = 0; i < r.AeCheckStatusesPerGraph.Count; i++)
+                                            {
+                                                if (i > 0)
+                                                {
+                                                    <text>, </text>
+                                                }
+                                                <span class="@BadgeClass(r.AeCheckStatusesPerGraph[i])">@BadgeText(r.AeCheckStatusesPerGraph[i])</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="@BadgeClass(r.AeCheckStatus)">@BadgeText(r.AeCheckStatus)</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (r.ApCheckStatusesPerGraph is not null && r.ApCheckStatusesPerGraph.Count > 0)
+                                        {
+                                            @for (var i = 0; i < r.ApCheckStatusesPerGraph.Count; i++)
+                                            {
+                                                if (i > 0)
+                                                {
+                                                    <text>, </text>
+                                                }
+                                                <span class="@BadgeClass(r.ApCheckStatusesPerGraph[i])">@BadgeText(r.ApCheckStatusesPerGraph[i])</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <span class="@BadgeClass(r.ApCheckStatus)">@BadgeText(r.ApCheckStatus)</span>
+                                        }
+                                    </td>
                                     <td class="small text-break cpv-remarks">@r.Source.Remarks</td>
                                 </tr>
                             }
@@ -289,6 +329,8 @@
         GraphNumber,
         ParameterStatus,
         EngagementStatus,
+        AeCheckStatus,
+        ApCheckStatus,
         Remarks
     }
 
@@ -404,6 +446,12 @@
             TableSortColumn.EngagementStatus => _sortDescending
                 ? list.OrderByDescending(r => r.EngagementStatus)
                 : list.OrderBy(r => r.EngagementStatus),
+            TableSortColumn.AeCheckStatus => _sortDescending
+                ? list.OrderByDescending(r => r.AeCheckStatus)
+                : list.OrderBy(r => r.AeCheckStatus),
+            TableSortColumn.ApCheckStatus => _sortDescending
+                ? list.OrderByDescending(r => r.ApCheckStatus)
+                : list.OrderBy(r => r.ApCheckStatus),
             TableSortColumn.Remarks => _sortDescending
                 ? list.OrderByDescending(r => r.Source.Remarks, SortText)
                 : list.OrderBy(r => r.Source.Remarks, SortText),

@@ -22,12 +22,28 @@ public static class ConstraintEval
         return PolygonGeometry.IsInsideInclusive(poly, p) ? PassFailNa.Pass : PassFailNa.Fail;
     }
 
+    public static PassFailNa EvaluateEngagementAeVsDiameter(CuttingDataRow row, ConstraintGraph graph)
+    {
+        if (row.DiameterMm is null or <= 0 || row.RadialDocAeMm is null) return PassFailNa.Na;
+        if (graph.AeVsDiameterRange is not null)
+            return DiameterRangeService.Evaluate(row.RadialDocAeMm.Value, row.DiameterMm.Value, graph.AeVsDiameterRange);
+        return EvaluateEngagementAeVsDiameter(row, graph.EngagementAeVsDiameterPolygon);
+    }
+
     public static PassFailNa EvaluateEngagementAeVsDiameter(CuttingDataRow row, IReadOnlyList<Point2D> poly)
     {
         if (poly.Count < 3) return PassFailNa.Na;
         if (row.DiameterMm is null or <= 0 || row.RadialDocAeMm is null) return PassFailNa.Na;
         var p = new Point2D(row.DiameterMm.Value, row.RadialDocAeMm.Value);
         return PolygonGeometry.IsInsideInclusive(poly, p) ? PassFailNa.Pass : PassFailNa.Fail;
+    }
+
+    public static PassFailNa EvaluateEngagementApVsDiameter(CuttingDataRow row, ConstraintGraph graph)
+    {
+        if (row.DiameterMm is null or <= 0 || row.AxialDocApMm is null) return PassFailNa.Na;
+        if (graph.ApVsDiameterRange is not null)
+            return DiameterRangeService.Evaluate(row.AxialDocApMm.Value, row.DiameterMm.Value, graph.ApVsDiameterRange);
+        return EvaluateEngagementApVsDiameter(row, graph.EngagementApVsDiameterPolygon);
     }
 
     public static PassFailNa EvaluateEngagementApVsDiameter(CuttingDataRow row, IReadOnlyList<Point2D> poly)
@@ -38,17 +54,31 @@ public static class ConstraintEval
         return PolygonGeometry.IsInsideInclusive(poly, p) ? PassFailNa.Pass : PassFailNa.Fail;
     }
 
+    /// <summary>ae vs Ø check — Pass/Fail in diameter-scaled mode; N/A in ap × ae mode.</summary>
+    public static PassFailNa EvaluateAeCheckForGraph(CuttingDataRow row, ConstraintGraph graph)
+    {
+        if (graph.EngagementMode != EngagementMode.DiameterScaled) return PassFailNa.Na;
+        DiameterRangeService.EnsureRanges(graph);
+        return EvaluateEngagementAeVsDiameter(row, graph);
+    }
+
+    /// <summary>ap vs Ø check — Pass/Fail in diameter-scaled mode; N/A in ap × ae mode.</summary>
+    public static PassFailNa EvaluateApCheckForGraph(CuttingDataRow row, ConstraintGraph graph)
+    {
+        if (graph.EngagementMode != EngagementMode.DiameterScaled) return PassFailNa.Na;
+        DiameterRangeService.EnsureRanges(graph);
+        return EvaluateEngagementApVsDiameter(row, graph);
+    }
+
     /// <summary>Evaluates engagement for a graph using its configured mode.</summary>
     public static PassFailNa EvaluateEngagementForGraph(CuttingDataRow row, ConstraintGraph graph)
     {
         if (graph.EngagementMode == EngagementMode.DiameterScaled)
         {
-            var aePoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.EngagementAeVsDiameterPolygon);
-            var apPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.EngagementApVsDiameterPolygon);
             return AggregateAcrossGraphs(new[]
             {
-                EvaluateEngagementAeVsDiameter(row, aePoly),
-                EvaluateEngagementApVsDiameter(row, apPoly)
+                EvaluateAeCheckForGraph(row, graph),
+                EvaluateApCheckForGraph(row, graph)
             });
         }
 

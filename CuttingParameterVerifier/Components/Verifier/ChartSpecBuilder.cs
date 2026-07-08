@@ -18,8 +18,11 @@ internal static class ChartSpecBuilder
 
             if (graph.EngagementMode == EngagementMode.DiameterScaled)
             {
-                var aePoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.EngagementAeVsDiameterPolygon);
-                var apPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.EngagementApVsDiameterPolygon);
+                DiameterRangeService.EnsureRanges(graph);
+                var diameters = subset.Select(r => r.Source.DiameterMm ?? 0).ToList();
+                var plotMax = DiameterRangeService.ResolvePlotMaxMm(graph, diameters);
+                var aePoly = DiameterRangeService.BuildBandPolygon(graph.AeVsDiameterRange!, plotMax);
+                var apPoly = DiameterRangeService.BuildBandPolygon(graph.ApVsDiameterRange!, plotMax);
                 panels.Add(new
                 {
                     graphNumber = graph.GraphNumber,
@@ -29,8 +32,8 @@ internal static class ChartSpecBuilder
                     engApCanvasId = GraphDomIds.EngagementApVsDiameter(graph.GraphNumber),
                     mappingContext,
                     cutting = BuildCuttingSide(cutPoly, subset),
-                    engagementAeVsDiameter = BuildEngagementAeVsDiameterSide(aePoly, subset),
-                    engagementApVsDiameter = BuildEngagementApVsDiameterSide(apPoly, subset)
+                    engagementAeVsDiameter = BuildEngagementAeVsDiameterSide(graph, aePoly, subset),
+                    engagementApVsDiameter = BuildEngagementApVsDiameterSide(graph, apPoly, subset)
                 });
             }
             else
@@ -134,7 +137,7 @@ internal static class ChartSpecBuilder
         };
     }
 
-    private static object BuildEngagementAeVsDiameterSide(IReadOnlyList<Point2D> polygon, IReadOnlyList<ResultRow> subset)
+    private static object BuildEngagementAeVsDiameterSide(ConstraintGraph graph, IReadOnlyList<Point2D> polygon, IReadOnlyList<ResultRow> subset)
     {
         var pass = new List<object>();
         var fail = new List<object>();
@@ -142,7 +145,7 @@ internal static class ChartSpecBuilder
 
         foreach (var r in subset)
         {
-            var status = ConstraintEval.EvaluateEngagementAeVsDiameter(r.Source, polygon);
+            var status = ConstraintEval.EvaluateEngagementAeVsDiameter(r.Source, graph);
             if (r.Source.DiameterMm is null or <= 0 || r.Source.RadialDocAeMm is null)
                 continue;
 
@@ -151,16 +154,10 @@ internal static class ChartSpecBuilder
             Bucket(status, ScatterPoint(x, y, status, r.Source.No), pass, fail, na);
         }
 
-        return new
-        {
-            polygon = polygon.Select(p => new { x = p.X, y = p.Y }).ToList(),
-            pass,
-            fail,
-            na
-        };
+        return BuildDiameterScaledSide(polygon, graph.AeVsDiameterRange!, pass, fail, na);
     }
 
-    private static object BuildEngagementApVsDiameterSide(IReadOnlyList<Point2D> polygon, IReadOnlyList<ResultRow> subset)
+    private static object BuildEngagementApVsDiameterSide(ConstraintGraph graph, IReadOnlyList<Point2D> polygon, IReadOnlyList<ResultRow> subset)
     {
         var pass = new List<object>();
         var fail = new List<object>();
@@ -168,7 +165,7 @@ internal static class ChartSpecBuilder
 
         foreach (var r in subset)
         {
-            var status = ConstraintEval.EvaluateEngagementApVsDiameter(r.Source, polygon);
+            var status = ConstraintEval.EvaluateEngagementApVsDiameter(r.Source, graph);
             if (r.Source.DiameterMm is null or <= 0 || r.Source.AxialDocApMm is null)
                 continue;
 
@@ -177,14 +174,22 @@ internal static class ChartSpecBuilder
             Bucket(status, ScatterPoint(x, y, status, r.Source.No), pass, fail, na);
         }
 
-        return new
-        {
-            polygon = polygon.Select(p => new { x = p.X, y = p.Y }).ToList(),
-            pass,
-            fail,
-            na
-        };
+        return BuildDiameterScaledSide(polygon, graph.ApVsDiameterRange!, pass, fail, na);
     }
+
+    private static object BuildDiameterScaledSide(
+        IReadOnlyList<Point2D> polygon,
+        DiameterRatioRange range,
+        List<object> pass,
+        List<object> fail,
+        List<object> na) => new
+    {
+        polygon = polygon.Select(p => new { x = p.X, y = p.Y }).ToList(),
+        ratioBounds = new { minD = range.MinD, maxD = range.MaxD },
+        pass,
+        fail,
+        na
+    };
 
     private static object ScatterPoint(double x, double y, PassFailNa status, int? rowNo)
     {

@@ -90,7 +90,7 @@
         return out;
     }
 
-    function buildScatterChart(canvasId, title, xLabel, yLabel, polygon, passPoints, failPoints, naPoints, mappingContext) {
+    function buildScatterChart(canvasId, title, xLabel, yLabel, polygon, passPoints, failPoints, naPoints, mappingContext, chartOptions) {
         const el = document.getElementById(canvasId);
         if (!el) return;
         if (charts[canvasId]) {
@@ -98,11 +98,30 @@
             delete charts[canvasId];
         }
 
+        const opts = chartOptions || {};
+        const ratioBounds = opts.ratioBounds;
+        const fillPassRegion = !!opts.fillPassRegion;
         const ring = closeRing(polygon || []);
         const boundary = ring.map((p) => ({ x: p.x, y: p.y }));
+        const diameterMax = boundary.reduce((m, p) => Math.max(m, p.x || 0), 0);
 
-        const datasets = [
-            {
+        const datasets = [];
+
+        if (fillPassRegion && boundary.length > 0) {
+            datasets.push({
+                type: "line",
+                label: "Pass region",
+                data: boundary,
+                borderColor: "rgba(34,120,50,0.85)",
+                backgroundColor: "rgba(34,170,68,0.18)",
+                borderWidth: Math.max(1, 2 * CPV_UI_SCALE),
+                fill: true,
+                pointRadius: 0,
+                tension: 0,
+                order: 3
+            });
+        } else {
+            datasets.push({
                 type: "line",
                 label: "Boundary",
                 data: boundary,
@@ -110,30 +129,67 @@
                 borderWidth: Math.max(1, 2 * CPV_UI_SCALE),
                 fill: false,
                 pointRadius: 0,
-                tension: 0
-            },
+                tension: 0,
+                order: 3
+            });
+        }
+
+        if (ratioBounds && diameterMax > 0) {
+            const minD = typeof ratioBounds.minD === "number" ? ratioBounds.minD : 0;
+            const maxD = typeof ratioBounds.maxD === "number" ? ratioBounds.maxD : 1;
+            const minLine = [{ x: 0, y: 0 }, { x: diameterMax, y: minD * diameterMax }];
+            const maxLine = [{ x: 0, y: 0 }, { x: diameterMax, y: maxD * diameterMax }];
+            datasets.push({
+                type: "line",
+                label: `${formatCoeff(minD)}D (min)`,
+                data: minLine,
+                borderColor: "rgba(60,60,60,0.7)",
+                borderWidth: Math.max(1, 1.5 * CPV_UI_SCALE),
+                borderDash: [6 * CPV_UI_SCALE, 4 * CPV_UI_SCALE],
+                fill: false,
+                pointRadius: 0,
+                tension: 0,
+                order: 2
+            });
+            datasets.push({
+                type: "line",
+                label: `${formatCoeff(maxD)}D (max)`,
+                data: maxLine,
+                borderColor: "rgba(60,60,60,0.95)",
+                borderWidth: Math.max(1, 2 * CPV_UI_SCALE),
+                fill: false,
+                pointRadius: 0,
+                tension: 0,
+                order: 1
+            });
+        }
+
+        datasets.push(
             {
                 type: "scatter",
                 label: "Pass",
                 data: passPoints || [],
                 backgroundColor: "rgba(34,170,68,0.9)",
-                pointRadius: Math.max(2, 4 * CPV_UI_SCALE)
+                pointRadius: Math.max(2, 4 * CPV_UI_SCALE),
+                order: 0
             },
             {
                 type: "scatter",
                 label: "Fail",
                 data: failPoints || [],
                 backgroundColor: "rgba(204,34,34,0.9)",
-                pointRadius: Math.max(2, 4 * CPV_UI_SCALE)
+                pointRadius: Math.max(2, 4 * CPV_UI_SCALE),
+                order: 0
             },
             {
                 type: "scatter",
                 label: "N/A",
                 data: naPoints || [],
                 backgroundColor: "rgba(120,120,120,0.75)",
-                pointRadius: Math.max(2, 3 * CPV_UI_SCALE)
+                pointRadius: Math.max(2, 3 * CPV_UI_SCALE),
+                order: 0
             }
-        ];
+        );
 
         const sub = typeof mappingContext === "string" && mappingContext.trim().length > 0 ? mappingContext.trim() : "";
 
@@ -172,7 +228,8 @@
                                 return null;
                             },
                             label: function (ctx) {
-                                if (ctx.dataset.label === "Boundary") return "";
+                                const lbl = ctx.dataset.label || "";
+                                if (lbl === "Pass region" || lbl.endsWith("(min)") || lbl.endsWith("(max)") || lbl === "Boundary") return "";
                                 const raw = ctx.raw;
                                 if (raw && typeof raw.tooltip === "string") return raw.tooltip;
                                 const lx = ctx.dataset.label || "";
@@ -199,6 +256,11 @@
         });
     }
 
+    function formatCoeff(v) {
+        if (typeof v !== "number" || !isFinite(v)) return "?";
+        return Math.abs(v - Math.floor(v)) < 1e-9 ? String(Math.floor(v)) : v.toFixed(2).replace(/\.?0+$/, "");
+    }
+
     window.cpvCharts = {
         renderAll: function (spec) {
             destroyAll();
@@ -218,6 +280,14 @@
                     p.mappingContext
                 );
                 if (p.engagementMode === "diameterScaled") {
+                    const aeOpts = {
+                        ratioBounds: p.engagementAeVsDiameter.ratioBounds,
+                        fillPassRegion: true
+                    };
+                    const apOpts = {
+                        ratioBounds: p.engagementApVsDiameter.ratioBounds,
+                        fillPassRegion: true
+                    };
                     buildScatterChart(
                         p.engAeCanvasId,
                         `Engagement ae vs Ø: ${g}`,
@@ -227,7 +297,8 @@
                         p.engagementAeVsDiameter.pass,
                         p.engagementAeVsDiameter.fail,
                         p.engagementAeVsDiameter.na,
-                        p.mappingContext
+                        p.mappingContext,
+                        aeOpts
                     );
                     buildScatterChart(
                         p.engApCanvasId,
@@ -238,7 +309,8 @@
                         p.engagementApVsDiameter.pass,
                         p.engagementApVsDiameter.fail,
                         p.engagementApVsDiameter.na,
-                        p.mappingContext
+                        p.mappingContext,
+                        apOpts
                     );
                 } else {
                     buildScatterChart(

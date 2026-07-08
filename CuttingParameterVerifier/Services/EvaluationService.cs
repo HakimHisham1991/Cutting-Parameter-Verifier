@@ -26,8 +26,12 @@ public sealed class EvaluationService : IEvaluationService
                     MatchedGraphNumbers = null,
                     ParameterStatusesPerGraph = null,
                     EngagementStatusesPerGraph = null,
+                    AeCheckStatusesPerGraph = null,
+                    ApCheckStatusesPerGraph = null,
                     ParameterStatus = PassFailNa.Na,
-                    EngagementStatus = PassFailNa.Na
+                    EngagementStatus = PassFailNa.Na,
+                    AeCheckStatus = PassFailNa.Na,
+                    ApCheckStatus = PassFailNa.Na
                 });
                 continue;
             }
@@ -41,8 +45,12 @@ public sealed class EvaluationService : IEvaluationService
                     MatchedGraphNumbers = null,
                     ParameterStatusesPerGraph = null,
                     EngagementStatusesPerGraph = null,
+                    AeCheckStatusesPerGraph = null,
+                    ApCheckStatusesPerGraph = null,
                     ParameterStatus = PassFailNa.Na,
-                    EngagementStatus = PassFailNa.Na
+                    EngagementStatus = PassFailNa.Na,
+                    AeCheckStatus = PassFailNa.Na,
+                    ApCheckStatus = PassFailNa.Na
                 });
                 continue;
             }
@@ -50,6 +58,8 @@ public sealed class EvaluationService : IEvaluationService
             var matched = graphIds;
             var paramStatuses = new List<PassFailNa>(graphIds.Count);
             var engStatuses = new List<PassFailNa>(graphIds.Count);
+            var aeStatuses = new List<PassFailNa>(graphIds.Count);
+            var apStatuses = new List<PassFailNa>(graphIds.Count);
 
             foreach (var gid in graphIds)
             {
@@ -58,11 +68,15 @@ public sealed class EvaluationService : IEvaluationService
                 {
                     paramStatuses.Add(PassFailNa.Na);
                     engStatuses.Add(PassFailNa.Na);
+                    aeStatuses.Add(PassFailNa.Na);
+                    apStatuses.Add(PassFailNa.Na);
                     continue;
                 }
 
                 var cutPoly = PolygonNormalizer.EnsureEvaluablePolygon(graph.CuttingPolygon);
                 paramStatuses.Add(ConstraintEval.EvaluateCutting(row, cutPoly));
+                aeStatuses.Add(ConstraintEval.EvaluateAeCheckForGraph(row, graph));
+                apStatuses.Add(ConstraintEval.EvaluateApCheckForGraph(row, graph));
                 engStatuses.Add(ConstraintEval.EvaluateEngagementForGraph(row, graph));
             }
 
@@ -72,8 +86,12 @@ public sealed class EvaluationService : IEvaluationService
                 MatchedGraphNumbers = matched,
                 ParameterStatusesPerGraph = paramStatuses,
                 EngagementStatusesPerGraph = engStatuses,
+                AeCheckStatusesPerGraph = aeStatuses,
+                ApCheckStatusesPerGraph = apStatuses,
                 ParameterStatus = ConstraintEval.AggregateAcrossGraphs(paramStatuses),
-                EngagementStatus = ConstraintEval.AggregateAcrossGraphs(engStatuses)
+                EngagementStatus = ConstraintEval.AggregateAcrossGraphs(engStatuses),
+                AeCheckStatus = ConstraintEval.AggregateAcrossGraphs(aeStatuses),
+                ApCheckStatus = ConstraintEval.AggregateAcrossGraphs(apStatuses)
             });
         }
 

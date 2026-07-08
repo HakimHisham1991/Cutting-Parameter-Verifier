@@ -17,11 +17,23 @@ public sealed class ResultRow
     public PassFailNa ParameterStatus { get; init; }
     public PassFailNa EngagementStatus { get; init; }
 
+    /// <summary>ae vs Ø check (Pass/Fail in diameter-scaled mode; N/A in ap × ae mode).</summary>
+    public PassFailNa AeCheckStatus { get; init; }
+
+    /// <summary>ap vs Ø check (Pass/Fail in diameter-scaled mode; N/A in ap × ae mode).</summary>
+    public PassFailNa ApCheckStatus { get; init; }
+
     /// <summary>Per matched figure: cutting (Vc–Fz) check, same order as <see cref="MatchedGraphNumbers"/>.</summary>
     public IReadOnlyList<PassFailNa>? ParameterStatusesPerGraph { get; init; }
 
-    /// <summary>Per matched figure: engagement (ap–ae) check, same order as <see cref="MatchedGraphNumbers"/>.</summary>
+    /// <summary>Per matched figure: engagement check, same order as <see cref="MatchedGraphNumbers"/>.</summary>
     public IReadOnlyList<PassFailNa>? EngagementStatusesPerGraph { get; init; }
+
+    /// <summary>Per matched figure: ae vs Ø check, same order as <see cref="MatchedGraphNumbers"/>.</summary>
+    public IReadOnlyList<PassFailNa>? AeCheckStatusesPerGraph { get; init; }
+
+    /// <summary>Per matched figure: ap vs Ø check, same order as <see cref="MatchedGraphNumbers"/>.</summary>
+    public IReadOnlyList<PassFailNa>? ApCheckStatusesPerGraph { get; init; }
 
     /// <summary>Primary graph tab target (first matched figure).</summary>
     public string? PrimaryGraphNumber =>

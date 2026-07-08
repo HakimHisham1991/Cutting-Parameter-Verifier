@@ -75,7 +75,7 @@ public sealed class ExcelService : IExcelService
             "n (RPM)", "Vf (mm/min)", "Vc (m/min)",
             "Fz (mm)", "ae (mm)", "ap (mm)",
             "Operation Name",
-            "Figure No.", "Parameter In Spec", "Engagement In Spec", "Remarks"
+            "Figure No.", "Parameter In Spec", "Engagement In Spec", "ae check", "ap check", "Remarks"
         };
 
         for (var c = 0; c < headers.Length; c++)
@@ -109,7 +109,9 @@ public sealed class ExcelService : IExcelService
             ws.Cell(r, 21).Value = res.FigureNumbersDisplay ?? "N/A";
             ws.Cell(r, 22).Value = PassFailListToExcel(res.ParameterStatusesPerGraph, res.ParameterStatus);
             ws.Cell(r, 23).Value = PassFailListToExcel(res.EngagementStatusesPerGraph, res.EngagementStatus);
-            ws.Cell(r, 24).Value = s.Remarks;
+            ws.Cell(r, 24).Value = PassFailListToExcel(res.AeCheckStatusesPerGraph, res.AeCheckStatus);
+            ws.Cell(r, 25).Value = PassFailListToExcel(res.ApCheckStatusesPerGraph, res.ApCheckStatus);
+            ws.Cell(r, 26).Value = s.Remarks;
             r++;
         }
 

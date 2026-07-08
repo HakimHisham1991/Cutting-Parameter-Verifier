@@ -113,20 +113,27 @@
                             @if (_activeGraph.EngagementMode == EngagementMode.DiameterScaled)
                             {
                                 <p class="text-muted small mb-2">
-                                    Diameter-scaled mode: define separate ae vs Ø and ap vs Ø polygons (mm).
-                                    Ratio limits (e.g. max ae = 1D, ap = 0.5D–1D) appear as lines through the origin — the feasible region scales with tool diameter.
+                                    Diameter-scaled mode: set ae and ap limits as multiples of tool Ø (D).
+                                    The chart draws the boundary lines and shades the Pass region between them.
+                                    Points on the lines also Pass.
                                 </p>
                                 <div class="mb-3">
                                     <h3 class="h6">ae vs Ø</h3>
-                                    <PointsEditor @key="@($"{_activeGraph.GraphNumber}|e-ae")"
-                                                    Points="_activeGraph.EngagementAeVsDiameterPolygon"
-                                                    XLabel="Ø (mm)" YLabel="ae (mm)" />
+                                    <DiameterRangeEditor @key="@($"{_activeGraph.GraphNumber}|e-ae")"
+                                                         Range="_activeGraph.AeVsDiameterRange!"
+                                                         Variable="ae" />
+                                </div>
+                                <div class="mb-3">
+                                    <h3 class="h6">ap vs Ø</h3>
+                                    <DiameterRangeEditor @key="@($"{_activeGraph.GraphNumber}|e-ap")"
+                                                         Range="_activeGraph.ApVsDiameterRange!"
+                                                         Variable="ap" />
                                 </div>
                                 <div>
-                                    <h3 class="h6">ap vs Ø</h3>
-                                    <PointsEditor @key="@($"{_activeGraph.GraphNumber}|e-ap")"
-                                                    Points="_activeGraph.EngagementApVsDiameterPolygon"
-                                                    XLabel="Ø (mm)" YLabel="ap (mm)" />
+                                    <label class="form-label small mb-1">Chart Ø axis max (mm)</label>
+                                    <input type="number" step="any" min="0.1" class="form-control form-control-sm" style="max-width:8rem"
+                                           @bind="_activeGraph.DiameterPlotMaxMm" />
+                                    <div class="form-text">Boundary lines are drawn from Ø = 0 to this value.</div>
                                 </div>
                             }
                             else
@@ -193,6 +200,8 @@
         }
 
         _activeGraph = _model.Graphs.First(g => string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.Ordinal));
+        if (_activeGraph.EngagementMode == EngagementMode.DiameterScaled)
+            EnsureDiameterRanges(_activeGraph);
     }
 
     protected override void OnParametersSet()
@@ -201,6 +210,8 @@
         {
             _activeGraph = _model.Graphs.FirstOrDefault(g =>
                 string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.Ordinal));
+            if (_activeGraph?.EngagementMode == EngagementMode.DiameterScaled)
+                EnsureDiameterRanges(_activeGraph);
         }
     }
 
@@ -209,6 +220,8 @@
         _selectedGraphNumber = e.Value?.ToString() ?? "";
         _activeGraph = _model.Graphs.FirstOrDefault(g =>
             string.Equals(g.GraphNumber, _selectedGraphNumber, StringComparison.Ordinal));
+        if (_activeGraph?.EngagementMode == EngagementMode.DiameterScaled)
+            EnsureDiameterRanges(_activeGraph);
     }
 
     private void OnEngagementModeChanged(ChangeEventArgs e)
@@ -216,7 +229,11 @@
         if (_activeGraph is null) return;
         var enabled = e.Value is bool b && b;
         _activeGraph.EngagementMode = enabled ? EngagementMode.DiameterScaled : EngagementMode.ApAe;
+        if (enabled)
+            EnsureDiameterRanges(_activeGraph);
     }
+
+    private static void EnsureDiameterRanges(ConstraintGraph g) => DiameterRangeService.EnsureRanges(g);
 
     private void AddRule() => _model.MappingRules.Add(new MappingRule());
 
@@ -233,9 +250,11 @@
             CuttingPolygon = new List<Point2D> { new(0, 0), new(0, 1), new(1, 1), new(1, 0) },
             EngagementPolygon = new List<Point2D> { new(0, 0), new(0, 1), new(1, 1), new(1, 0) },
             EngagementMode = EngagementMode.ApAe,
-            EngagementAeVsDiameterPolygon = new List<Point2D> { new(0, 0), new(0, 50), new(50, 50), new(50, 0) },
-            EngagementApVsDiameterPolygon = new List<Point2D> { new(1, 0.5), new(50, 25), new(50, 50), new(1, 1) }
+            AeVsDiameterRange = new DiameterRatioRange { MinD = 0, MaxD = 1 },
+            ApVsDiameterRange = new DiameterRatioRange { MinD = 0.5, MaxD = 1 },
+            DiameterPlotMaxMm = DiameterRangeService.DefaultPlotMaxMm
         };
+        DiameterRangeService.SyncPolygonsFromRanges(g);
         _model.Graphs.Add(g);
         _selectedGraphNumber = g.GraphNumber;
         _activeGraph = g;
@@ -263,8 +282,16 @@
         {
             g.CuttingPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.CuttingPolygon);
             g.EngagementPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.EngagementPolygon);
-            g.EngagementAeVsDiameterPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.EngagementAeVsDiameterPolygon);
-            g.EngagementApVsDiameterPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.EngagementApVsDiameterPolygon);
+            if (g.EngagementMode == EngagementMode.DiameterScaled)
+            {
+                DiameterRangeService.EnsureRanges(g);
+                DiameterRangeService.SyncPolygonsFromRanges(g);
+            }
+            else
+            {
+                g.EngagementAeVsDiameterPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.EngagementAeVsDiameterPolygon);
+                g.EngagementApVsDiameterPolygon = PolygonNormalizer.EnsureEvaluablePolygon(g.EngagementApVsDiameterPolygon);
+            }
         }
 
         var errors = Validate(_model);
@@ -293,12 +320,7 @@
             if (g.CuttingPolygon.Count < 3)
                 errors.Add($"Graph {g.GraphNumber}: cutting polygon needs at least three vertices (after normalization).");
             if (g.EngagementMode == EngagementMode.DiameterScaled)
-            {
-                if (g.EngagementAeVsDiameterPolygon.Count < 3)
-                    errors.Add($"Graph {g.GraphNumber}: ae vs Ø polygon needs at least three vertices (after normalization).");
-                if (g.EngagementApVsDiameterPolygon.Count < 3)
-                    errors.Add($"Graph {g.GraphNumber}: ap vs Ø polygon needs at least three vertices (after normalization).");
-            }
+                errors.AddRange(DiameterRangeService.Validate(g));
             else if (g.EngagementPolygon.Count < 3)
             {
                 errors.Add($"Graph {g.GraphNumber}: engagement polygon needs at least three vertices (after normalization).");

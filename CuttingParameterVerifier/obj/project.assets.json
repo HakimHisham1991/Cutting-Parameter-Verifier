@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "targets": {
     "net10.0": {
       "ClosedXML/0.104.2": {
@@ -80,7 +80,7 @@
           }
         }
       },
-      "Microsoft.AspNetCore.App.Internal.Assets/10.0.7": {
+      "Microsoft.AspNetCore.App.Internal.Assets/10.0.9": {
         "type": "package",
         "build": {
           "build/Microsoft.AspNetCore.App.Internal.Assets.props": {},
@@ -235,10 +235,10 @@
         "lib/netstandard2.0/ExcelNumberFormat.xml"
       ]
     },
-    "Microsoft.AspNetCore.App.Internal.Assets/10.0.7": {
-      "sha512": "ao3i+ks0uOQ7FWacI1hqHkUczebmXrGkUB63Xhkc34QbSzG9nYBlDv9v5l6rtCrHMsDW+13kZlpJrSj1HXddqg==",
+    "Microsoft.AspNetCore.App.Internal.Assets/10.0.9": {
+      "sha512": "E9Wp/LPKAYkGOVBv4lt5U5TnUA/7pov7QZAwF3eI64kK8AAXqkPDwuadEOwpL1WXEfgecYm0fccluvABp32D8g==",
       "type": "package",
-      "path": "microsoft.aspnetcore.app.internal.assets/10.0.7",
+      "path": "microsoft.aspnetcore.app.internal.assets/10.0.9",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -254,7 +254,7 @@
         "build/Microsoft.AspNetCore.App.Internal.Assets.targets",
         "buildMultiTargeting/Microsoft.AspNetCore.App.Internal.Assets.targets",
         "buildTransitive/Microsoft.AspNetCore.App.Internal.Assets.targets",
-        "microsoft.aspnetcore.app.internal.assets.10.0.7.nupkg.sha512",
+        "microsoft.aspnetcore.app.internal.assets.10.0.9.nupkg.sha512",
         "microsoft.aspnetcore.app.internal.assets.nuspec"
       ]
     },
@@ -327,27 +327,27 @@
   "projectFileDependencyGroups": {
     "net10.0": [
       "ClosedXML >= 0.104.2",
-      "Microsoft.AspNetCore.App.Internal.Assets >= 10.0.7"
+      "Microsoft.AspNetCore.App.Internal.Assets >= 10.0.9"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\User\\.nuget\\packages\\": {},
+    "C:\\Users\\hakim.hisham\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
-    "version": "1.2.0",
+    "version": "1.4.1",
     "restore": {
       "projectUniqueName": "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj",
       "projectName": "CuttingParameterVerifier",
       "projectPath": "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\CuttingParameterVerifier.csproj",
-      "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
+      "packagesPath": "C:\\Users\\hakim.hisham\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\Public\\Documents\\Cutting-Parameter-Verifier\\Cutting-Parameter-Verifier\\CuttingParameterVerifier\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\hakim.hisham\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -356,10 +356,12 @@
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "C:\\Program Files\\dotnet\\library-packs": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
         "net10.0": {
+          "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {}
         }
@@ -374,10 +376,11 @@
         "auditLevel": "low",
         "auditMode": "all"
       },
-      "SdkAnalysisLevel": "10.0.200"
+      "SdkAnalysisLevel": "10.0.300"
     },
     "frameworks": {
       "net10.0": {
+        "framework": "net10.0",
         "targetAlias": "net10.0",
         "dependencies": {
           "ClosedXML": {
@@ -387,7 +390,7 @@
           "Microsoft.AspNetCore.App.Internal.Assets": {
             "suppressParent": "All",
             "target": "Package",
-            "version": "[10.0.7, )",
+            "version": "[10.0.9, )",
             "autoReferenced": true
           }
         },
@@ -410,7 +413,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.203/PortableRuntimeIdentifierGraph.json",
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.301/PortableRuntimeIdentifierGraph.json",
         "packagesToPrune": {
           "Microsoft.AspNetCore": "(,10.0.32767]",
           "Microsoft.AspNetCore.Antiforgery": "(,10.0.32767]",

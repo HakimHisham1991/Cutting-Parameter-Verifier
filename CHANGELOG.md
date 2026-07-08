@@ -18,6 +18,36 @@ All notable changes to this project are documented in this file.
 
 ---
 
+## [1.4.1] - 2026-07-08
+
+### Added
+
+- Results table and Excel export columns **ae check** and **ap check** after **Engage Check** — show Pass/Fail for diameter-scaled graphs and N/A for ap × ae mode.
+
+### Changed
+
+- **Engage Check** in diameter-scaled mode is derived from both ae check and ap check (Pass only when both Pass; Fail if either Fail).
+
+---
+
+## [1.4.0] - 2026-07-08
+
+### Added
+
+- **Diameter range editor** for diameter-scaled engagement: set ae and ap limits as simple D-multiples (e.g. `0D ≤ ae ≤ 1D`, `0.5D ≤ ap ≤ 1D`) instead of manually entering polygon vertices.
+- Engagement charts in diameter-scaled mode draw min/max boundary lines and shade the Pass region; boundary points Pass.
+
+### Changed
+
+- Diameter-scaled evaluation uses direct ratio checks (`minD × Ø ≤ value ≤ maxD × Ø`) with inclusive boundaries.
+- Settings shows a live preview of each range formula and a chart Ø-axis max control.
+
+### Fixed
+
+- Replaced confusing mm-vertex polygon editor for ae vs Ø and ap vs Ø with intuitive range inputs.
+
+---
+
 ## [1.3.0] - 2026-07-07
 
 ### Added
@@ -101,7 +131,9 @@ All notable changes to this project are documented in this file.
 - Sample Excel generator (`tools/SampleExcelGen`) and downloadable `sample.xlsx`.
 - GitHub Actions CI workflow (restore + Release build).
 
-[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.3.0...HEAD
+[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.4.1...HEAD
+[1.4.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.4.0...v1.4.1
+[1.4.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.3.0...v1.4.0
 [1.3.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.2.0...v1.3.0
 [1.2.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.1.2...v1.2.0
 [1.1.2]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.1.1...v1.1.2
