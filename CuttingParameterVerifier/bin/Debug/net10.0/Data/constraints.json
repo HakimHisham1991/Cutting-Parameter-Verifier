@@ -404,6 +404,21 @@
       "useMillingType": true,
       "useToolType": false,
       "useStrategyType": false
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Titanium",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
+      "toolType": "N/A",
+      "strategyType": "N/A",
+      "graphNumber": "TEST-333",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": false,
+      "useStrategyType": false
     }
   ],
   "graphs": [
@@ -2081,6 +2096,65 @@
         {
           "x": 0,
           "y": 5
+        }
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [
+        {
+          "expression": "ae \u003E= 0"
+        },
+        {
+          "expression": "ae \u003C= 1*D"
+        }
+      ],
+      "apVsDiameterInequalities": [
+        {
+          "expression": "ap \u003E= 0.5*D"
+        },
+        {
+          "expression": "ap \u003C= 1*D"
+        }
+      ],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [],
+      "engagementApVsDiameterPolygon": []
+    },
+    {
+      "graphNumber": "TEST-333",
+      "cuttingPolygon": [
+        {
+          "x": 0,
+          "y": 10
+        },
+        {
+          "x": 10,
+          "y": 30
+        },
+        {
+          "x": 35,
+          "y": 40
+        },
+        {
+          "x": 40,
+          "y": 0
+        }
+      ],
+      "engagementPolygon": [
+        {
+          "x": 0,
+          "y": 0.5
+        },
+        {
+          "x": 0.77,
+          "y": 0.99
+        },
+        {
+          "x": 0.1,
+          "y": 0.22
+        },
+        {
+          "x": 0,
+          "y": 0.22
         }
       ],
       "engagementMode": 0,

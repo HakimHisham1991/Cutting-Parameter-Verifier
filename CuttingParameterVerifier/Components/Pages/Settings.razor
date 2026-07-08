@@ -100,7 +100,8 @@
                 </select>
                 <hr />
                 <button type="button" class="btn btn-sm btn-outline-primary w-100 mb-2" @onclick="AddGraph">Add graph</button>
-                <button type="button" class="btn btn-sm btn-outline-danger w-100 mb-3" @onclick="RemoveSelectedGraph" disabled="@(_activeGraph is null)">Delete selected graph</button>
+                <button type="button" class="btn btn-sm btn-outline-danger w-100 mb-2" @onclick="RemoveSelectedGraph" disabled="@(_activeGraph is null)">Delete selected graph</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary w-100 mb-3" @onclick="DuplicateSelectedGraph" disabled="@(_activeGraph is null)">Duplicate selected graph</button>
                 @if (_activeGraph is not null)
                 {
                     <label class="form-label">Rename graph number</label>
@@ -358,6 +359,32 @@
         _selectedGraphNumber = _model.Graphs[0].GraphNumber;
         _activeGraph = _model.Graphs[0];
         BumpPreviewRefresh();
+    }
+
+    private void DuplicateSelectedGraph()
+    {
+        if (_activeGraph is null) return;
+        var json = JsonSerializer.Serialize(_activeGraph, CloneOpts);
+        var copy = JsonSerializer.Deserialize<ConstraintGraph>(json, CloneOpts);
+        if (copy is null) return;
+
+        copy.GraphNumber = NextCopyGraphNumber(_activeGraph.GraphNumber);
+        _model.Graphs.Add(copy);
+        _selectedGraphNumber = copy.GraphNumber;
+        _activeGraph = copy;
+        BumpPreviewRefresh();
+    }
+
+    private string NextCopyGraphNumber(string baseName)
+    {
+        var candidate = $"{baseName}_copy";
+        if (!_model.Graphs.Any(g => string.Equals(g.GraphNumber, candidate, StringComparison.OrdinalIgnoreCase)))
+            return candidate;
+
+        var n = 2;
+        while (_model.Graphs.Any(g => string.Equals(g.GraphNumber, $"{baseName}_copy{n}", StringComparison.OrdinalIgnoreCase)))
+            n++;
+        return $"{baseName}_copy{n}";
     }
 
     public void Dispose()

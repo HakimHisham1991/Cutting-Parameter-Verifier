@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented in this file.
 
+## [1.7.3] - 2026-07-08
+
+### Added
+
+- **Duplicate selected graph** button on Settings — clones the current graph (polygons, engagement mode, inequalities) as `{name}_copy` and selects the new copy.
+
+---
+
 ## [1.7.2] - 2026-07-08
 
 ### Fixed
@@ -180,7 +188,8 @@ All notable changes to this project are documented in this file.
 - Sample Excel generator (`tools/SampleExcelGen`) and downloadable `sample.xlsx`.
 - GitHub Actions CI workflow (restore + Release build).
 
-[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.2...HEAD
+[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.3...HEAD
+[1.7.3]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.2...v1.7.3
 [1.7.2]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.1...v1.7.2
 [1.7.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.0...v1.7.1
 [1.7.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.6.1...v1.7.0
