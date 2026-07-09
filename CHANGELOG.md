@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented in this file.
 
+## [1.8.0] - 2026-07-09
+
+### Added
+
+- **Login page** (`/login`) — cookie-based sign-in matching the Tool-Master-Control theme (Zenix logo, blue primary `#2563EB`, card layout). Hardcoded accounts: `admin` / `abc12345`, `pdc` / `abc12345`. Verifier and Settings require authentication; **Sign out** in the header.
+
+---
+
 ## [1.7.12] - 2026-07-09
 
 ### Fixed
@@ -261,7 +269,8 @@ All notable changes to this project are documented in this file.
 - Sample Excel generator (`tools/SampleExcelGen`) and downloadable `sample.xlsx`.
 - GitHub Actions CI workflow (restore + Release build).
 
-[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.12...HEAD
+[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.8.0...HEAD
+[1.8.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.12...v1.8.0
 [1.7.12]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.11...v1.7.12
 [1.7.11]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.10...v1.7.11
 [1.7.10]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.9...v1.7.10

@@ -26,8 +26,16 @@ build_property.EnableCodeStyleSeverity =
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xBcHAucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/Public/Documents/Cutting-Parameter-Verifier/Cutting-Parameter-Verifier/CuttingParameterVerifier/Components/Layout/LoginLayout.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xMYXlvdXRcTG9naW5MYXlvdXQucmF6b3I=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/Public/Documents/Cutting-Parameter-Verifier/Cutting-Parameter-Verifier/CuttingParameterVerifier/Components/Pages/Error.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xFcnJvci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Public/Documents/Cutting-Parameter-Verifier/Cutting-Parameter-Verifier/CuttingParameterVerifier/Components/Pages/Login.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xMb2dpbi5yYXpvcg==
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Public/Documents/Cutting-Parameter-Verifier/Cutting-Parameter-Verifier/CuttingParameterVerifier/Components/Pages/NotFound.razor]
@@ -40,6 +48,10 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/Public/Documents/Cutting-Parameter-Verifier/Cutting-Parameter-Verifier/CuttingParameterVerifier/Components/Pages/Verifier.razor]
 build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xQYWdlc1xWZXJpZmllci5yYXpvcg==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Public/Documents/Cutting-Parameter-Verifier/Cutting-Parameter-Verifier/CuttingParameterVerifier/Components/RedirectToLogin.razor]
+build_metadata.AdditionalFiles.TargetPath = Q29tcG9uZW50c1xSZWRpcmVjdFRvTG9naW4ucmF6b3I=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/Public/Documents/Cutting-Parameter-Verifier/Cutting-Parameter-Verifier/CuttingParameterVerifier/Components/Routes.razor]

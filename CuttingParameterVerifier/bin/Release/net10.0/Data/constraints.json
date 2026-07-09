@@ -389,96 +389,6 @@
       "useMillingType": true,
       "useToolType": false,
       "useStrategyType": false
-    },
-    {
-      "processSpecs": "AIPI 03-11-001",
-      "material": "Aluminium",
-      "surfaceType": "Free Roughing",
-      "millingType": "End Milling",
-      "toolType": "Carbide",
-      "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING",
-      "useProcessSpecs": true,
-      "useMaterial": true,
-      "useSurfaceType": true,
-      "useMillingType": true,
-      "useToolType": true,
-      "useStrategyType": true
-    },
-    {
-      "processSpecs": "AIPI 03-11-001",
-      "material": "Aluminium",
-      "surfaceType": "Free Roughing",
-      "millingType": "Face Milling",
-      "toolType": "Carbide",
-      "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING",
-      "useProcessSpecs": true,
-      "useMaterial": true,
-      "useSurfaceType": true,
-      "useMillingType": true,
-      "useToolType": true,
-      "useStrategyType": true
-    },
-    {
-      "processSpecs": "AIPI 03-11-001",
-      "material": "Aluminium",
-      "surfaceType": "Free Roughing",
-      "millingType": "Drilling",
-      "toolType": "Carbide",
-      "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING",
-      "useProcessSpecs": true,
-      "useMaterial": true,
-      "useSurfaceType": true,
-      "useMillingType": true,
-      "useToolType": true,
-      "useStrategyType": true
-    },
-    {
-      "processSpecs": "AIPI 03-11-001",
-      "material": "Aluminium",
-      "surfaceType": "Free Roughing",
-      "millingType": "Tapping",
-      "toolType": "Carbide",
-      "strategyType": "Conventional",
-      "graphNumber": "FREE ROUGHING",
-      "useProcessSpecs": true,
-      "useMaterial": true,
-      "useSurfaceType": true,
-      "useMillingType": true,
-      "useToolType": true,
-      "useStrategyType": true
-    },
-    {
-      "processSpecs": "80-T-30-4010",
-      "material": "Aluminium",
-      "surfaceType": "Controlled Roughing",
-      "millingType": "Face Milling",
-      "toolType": "Carbide",
-      "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.5",
-      "useProcessSpecs": true,
-      "useMaterial": true,
-      "useSurfaceType": true,
-      "useMillingType": true,
-      "useToolType": true,
-      "useStrategyType": true
-    },
-    {
-      "processSpecs": "80-T-30-4010",
-      "material": "Aluminium",
-      "surfaceType": "Finish",
-      "millingType": "Face Milling",
-      "toolType": "Carbide",
-      "strategyType": "Conventional",
-      "graphNumber": "TABLE 1.6",
-      "useProcessSpecs": true,
-      "useMaterial": true,
-      "useSurfaceType": true,
-      "useMillingType": true,
-      "useToolType": true,
-      "useStrategyType": true
     }
   ],
   "graphs": [
@@ -2120,5 +2030,15 @@
         }
       ]
     }
+  ],
+  "removedBundledGraphNumbers": [
+    "TEST",
+    "TEST-333",
+    "TEST-333_copy"
+  ],
+  "removedBundledMappingFingerprints": [
+    "True\u001FTrue\u001FTrue\u001FTrue\u001FFalse\u001FFalse\u001F80-t-30-4010\u001Fsteel\u001Ffinish\u001Fend milling\u001Fn/a\u001Fn/a\u001Ftest",
+    "True\u001FTrue\u001FTrue\u001FTrue\u001FFalse\u001FFalse\u001F80-t-30-4010\u001Ftitanium\u001Ffinish\u001Fend milling\u001Fn/a\u001Fn/a\u001Ftest-333",
+    "True\u001FTrue\u001FTrue\u001FTrue\u001FFalse\u001FFalse\u001F80-t-30-4010\u001Ftitanium\u001Fcontrolled roughing\u001Fend milling\u001Fn/a\u001Fn/a\u001Ftest-333"
   ]
 }
