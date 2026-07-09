@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v10.0": {
-      "CuttingParameterVerifier/1.7.3": {
+      "CuttingParameterVerifier/1.7.8": {
         "dependencies": {
           "ClosedXML": "0.104.2"
         },
@@ -94,7 +94,7 @@
     }
   },
   "libraries": {
-    "CuttingParameterVerifier/1.7.3": {
+    "CuttingParameterVerifier/1.7.8": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

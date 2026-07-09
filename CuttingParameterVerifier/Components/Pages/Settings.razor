@@ -24,7 +24,7 @@
     <div class="alert @(_isError ? "alert-danger" : "alert-success")">@_message</div>
 }
 
-<div class="row g-3">
+<div class="row g-3 align-items-start">
     <div class="col-12">
         <div class="card shadow-sm">
             <div class="card-header">Mapping table</div>
@@ -32,6 +32,9 @@
                 <p class="text-muted small mb-2">
                     Match is case-insensitive on each <strong>ON</strong> field. Toggle a field <strong>OFF</strong> to ignore it (shows N/A, greyed out). Leave <strong>Process Specs</strong> blank when ON to match any imported value.
                     If no rule matches, both evaluations are N/A. Multiple rows with the same key but different graph numbers match every listed figure.
+                    <strong>Status</strong>: <span class="cpv-mapping-status cpv-mapping-status-ok">OK</span> when the row is unique and its graph exists;
+                    <span class="cpv-mapping-status cpv-mapping-status-duplicate">Duplicate</span> when another row has the same match fields;
+                    <span class="cpv-mapping-status cpv-mapping-status-notused">Not Used</span> when the graph number is missing or not defined in Graph selector.
                 </p>
                 <div class="table-responsive">
                     <table class="table table-sm align-middle cpv-mapping-table">
@@ -44,12 +47,18 @@
                                 <th>Tool type</th>
                                 <th>Strategy type</th>
                                 <th>Graph number</th>
+                                <th>Status</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var rule in _model.MappingRules)
+                            @{
+                                var mappingStatuses = MappingRuleStatusAnalyzer.Analyze(_model.MappingRules, _model.Graphs);
+                            }
+                            @for (var mappingIndex = 0; mappingIndex < _model.MappingRules.Count; mappingIndex++)
                             {
+                                var rule = _model.MappingRules[mappingIndex];
+                                var mappingStatus = mappingStatuses[mappingIndex];
                                 <tr>
                                     <td>
                                         <MappingFieldCell @bind-Enabled="rule.UseProcessSpecs"
@@ -76,6 +85,9 @@
                                                           @bind-Value="rule.StrategyType" />
                                     </td>
                                     <td><input class="form-control form-control-sm" @bind="rule.GraphNumber" /></td>
+                                    <td>
+                                        <span class="@MappingStatusClass(mappingStatus)" title="@MappingStatusTitle(mappingStatus)">@MappingStatusLabel(mappingStatus)</span>
+                                    </td>
                                     <td><button type="button" class="btn btn-sm btn-outline-danger" @onclick="() => RemoveRule(rule)">Delete</button></td>
                                 </tr>
                             }
@@ -88,7 +100,7 @@
     </div>
 
     <div class="col-lg-3 col-xl-2">
-        <div class="card shadow-sm h-100">
+        <div class="card shadow-sm">
             <div class="card-header">Graph selector</div>
             <div class="card-body">
                 <label class="form-label">Graph number</label>
@@ -124,19 +136,20 @@
         }
         else
         {
-            <div class="row g-3">
+            <div class="row g-3 align-items-start">
                 <div class="col-xl-4">
-                    <div class="card shadow-sm h-100">
+                    <div class="card shadow-sm">
                         <div class="card-header">Cutting (Vc, Fz)</div>
                         <div class="card-body">
                             <PointsEditor @key="@($"{_activeGraph.GraphNumber}|c")"
                                           Points="_activeGraph.CuttingPolygon"
+                                          ValidateClosedEnvelope="true"
                                           OnChanged="OnConstraintEdited" />
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-4">
-                    <div class="card shadow-sm h-100">
+                    <div class="card shadow-sm">
                         <div class="card-header d-flex justify-content-between align-items-center">
                             <span>Engagement</span>
                             <div class="form-check form-switch mb-0">
@@ -180,13 +193,14 @@
                                 <PointsEditor @key="@($"{_activeGraph.GraphNumber}|e")"
                                               Points="_activeGraph.EngagementPolygon"
                                               XLabel="ap (mm)" YLabel="ae (mm)"
+                                              ValidateClosedEnvelope="true"
                                               OnChanged="OnConstraintEdited" />
                             }
                         </div>
                     </div>
                 </div>
                 <div class="col-xl-4">
-                    <div class="card shadow-sm h-100 settings-chart-preview-card">
+                    <div class="card shadow-sm settings-chart-preview-card">
                         <div class="card-header">Chart preview</div>
                         <div class="card-body settings-chart-preview-body">
                             <SettingsChartPreview Config="_model"
@@ -314,6 +328,27 @@
     private void AddRule() => _model.MappingRules.Add(new MappingRule());
 
     private void RemoveRule(MappingRule r) => _model.MappingRules.Remove(r);
+
+    private static string MappingStatusLabel(MappingRuleStatus status) => status switch
+    {
+        MappingRuleStatus.Duplicate => "Duplicate",
+        MappingRuleStatus.NotUsed => "Not Used",
+        _ => "OK"
+    };
+
+    private static string MappingStatusClass(MappingRuleStatus status) => status switch
+    {
+        MappingRuleStatus.Duplicate => "cpv-mapping-status cpv-mapping-status-duplicate",
+        MappingRuleStatus.NotUsed => "cpv-mapping-status cpv-mapping-status-notused",
+        _ => "cpv-mapping-status cpv-mapping-status-ok"
+    };
+
+    private static string MappingStatusTitle(MappingRuleStatus status) => status switch
+    {
+        MappingRuleStatus.Duplicate => "Another row has the same match fields (ON/OFF toggles and values).",
+        MappingRuleStatus.NotUsed => "Graph number is blank or does not match any graph in Graph selector.",
+        _ => "Unique row mapped to an existing graph."
+    };
 
     private void AddGraph()
     {

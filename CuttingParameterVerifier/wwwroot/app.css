@@ -219,6 +219,14 @@ table.table.cpv-results-table {
     background-color: rgba(255, 193, 7, 0.06);
 }
 
+.cpv-results-table .cpv-test-edit {
+    min-width: 4.5rem;
+    max-width: 100%;
+    padding: 0.15rem 0.35rem;
+    font-size: 0.8125rem;
+    text-align: center;
+}
+
 .cpv-remarks {
     max-width: none;
 }
@@ -336,9 +344,9 @@ table.table.cpv-results-table {
 
 /* Settings page — live chart preview column */
 .settings-chart-preview-card .settings-chart-preview-body {
-    max-height: calc(100vh - 14rem);
+    max-height: calc(100vh - 8rem);
     overflow-y: auto;
-    min-height: 18rem;
+    min-height: 36rem;
 }
 
 .settings-chart-preview .cpv-chart-stack {
@@ -348,8 +356,8 @@ table.table.cpv-results-table {
 }
 
 .settings-chart-preview .chart-wrap {
-    height: 10.5rem;
-    min-height: 9rem;
+    height: 21rem;
+    min-height: 18rem;
     flex: 0 0 auto;
 }
 
@@ -365,6 +373,35 @@ table.table.cpv-results-table {
 
 .cpv-mapping-field-cell .input-group-text {
     background-color: #f8f9fa;
+}
+
+.cpv-mapping-status {
+    display: inline-block;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    line-height: 1.2;
+    padding: 0.2rem 0.5rem;
+    border-radius: 0.25rem;
+    white-space: nowrap;
+}
+
+.cpv-mapping-status-ok {
+    color: #0f5132;
+    background-color: #d1e7dd;
+}
+
+.cpv-mapping-status-duplicate {
+    color: #664d03;
+    background-color: #fff3cd;
+}
+
+.cpv-mapping-status-notused {
+    color: #41464b;
+    background-color: #e9ecef;
+}
+
+.cpv-points-editor-error {
+    color: #842029;
 }
 
 a, .btn-link {

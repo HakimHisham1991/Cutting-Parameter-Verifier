@@ -43,7 +43,7 @@ public sealed class ExcelService : IExcelService
 
         var colMap = BuildColumnMap(headerRow);
         var headerRowNumber = headerRow.RowNumber();
-        var knownMapping = GetKnownMappingValues(_constraints.Load());
+        var knownMapping = CuttingDataRowValidator.GetKnownMappingValues(_constraints.Load());
         var rows = new List<CuttingDataRow>();
         foreach (var row in ws.RowsUsed().Where(r => r.RowNumber() > headerRowNumber))
         {
@@ -214,40 +214,7 @@ public sealed class ExcelService : IExcelService
     private static string NormalizeHeader(string raw) =>
         raw.Trim().ToLowerInvariant().Replace("  ", " ");
 
-    private sealed class KnownMappingValues
-    {
-        public HashSet<string> ProcessSpecs { get; init; } = [];
-        public HashSet<string> Materials { get; init; } = [];
-        public HashSet<string> SurfaceTypes { get; init; } = [];
-        public HashSet<string> MillingTypes { get; init; } = [];
-        public HashSet<string> ToolTypes { get; init; } = [];
-        public HashSet<string> StrategyTypes { get; init; } = [];
-    }
-
-    private static KnownMappingValues GetKnownMappingValues(VerificationConfig config)
-    {
-        var rules = config.MappingRules;
-        return new KnownMappingValues
-        {
-            ProcessSpecs = CollectDistinctMappingValues(rules.Where(r => r.UseProcessSpecs).Select(r => r.ProcessSpecs)),
-            Materials = CollectDistinctMappingValues(rules.Where(r => r.UseMaterial).Select(r => r.Material)),
-            SurfaceTypes = CollectDistinctMappingValues(rules.Where(r => r.UseSurfaceType).Select(r => r.SurfaceType)),
-            MillingTypes = CollectDistinctMappingValues(rules.Where(r => r.UseMillingType).Select(r => r.MillingType)),
-            ToolTypes = CollectDistinctMappingValues(rules.Where(r => r.UseToolType).Select(r => r.ToolType)),
-            StrategyTypes = CollectDistinctMappingValues(rules.Where(r => r.UseStrategyType).Select(r => r.StrategyType)),
-        };
-    }
-
-    private static HashSet<string> CollectDistinctMappingValues(IEnumerable<string> values) =>
-        values
-            .Where(v => !string.IsNullOrWhiteSpace(v))
-            .Where(v => !string.Equals(v.Trim(), MappingRule.IgnoredFieldPlaceholder, StringComparison.OrdinalIgnoreCase))
-            .Select(NormalizeMappingToken)
-            .ToHashSet(StringComparer.Ordinal);
-
-    private static string NormalizeMappingToken(string value) => value.Trim().ToLowerInvariant();
-
-    private static CuttingDataRow MapRow(IXLRow row, Dictionary<string, int> colMap, KnownMappingValues knownMapping)
+    private static CuttingDataRow MapRow(IXLRow row, Dictionary<string, int> colMap, CuttingDataRowValidator.KnownMappingValues knownMapping)
     {
         var e = new CuttingDataRow();
 
@@ -343,55 +310,8 @@ public sealed class ExcelService : IExcelService
 
         e.OperationName = ReadString(row, colMap, "operation name");
 
-        Validate(e, knownMapping);
+        CuttingDataRowValidator.Revalidate(e, knownMapping);
         return e;
-    }
-
-    private static void Validate(CuttingDataRow e, KnownMappingValues knownMapping)
-    {
-        void Req(string name, bool ok)
-        {
-            if (!ok) e.ValidationErrors.Add($"{name} is missing or invalid.");
-        }
-
-        Req("Vc (surface speed)", e.SurfaceSpeedVcMMin is > 0);
-        Req("Fz (feed per tooth)", e.FeedPerToothFzMm is > 0);
-        Req("ae (radial DOC)", e.RadialDocAeMm is > 0);
-        Req("ap (axial DOC)", e.AxialDocApMm is > 0);
-        ValidateMappingField(e, knownMapping.ProcessSpecs, e.ProcessSpecs, "Process Specs", requiredWhenKnown: false);
-        ValidateMappingField(e, knownMapping.Materials, e.Material, "Material Type");
-        ValidateMappingField(e, knownMapping.MillingTypes, e.MillingType, "Cutter Type");
-        ValidateMappingField(e, knownMapping.ToolTypes, e.ToolType, "Tool Type (Carbide/HSS/PCD)");
-        ValidateMappingField(e, knownMapping.StrategyTypes, e.StrategyType, "Machining Type (Conventional/HSM)");
-        ValidateMappingField(
-            e,
-            knownMapping.SurfaceTypes,
-            e.SurfaceType,
-            "Finish Type (Finish / Controlled Roughing / Free Roughing)");
-
-        e.IsValid = e.ValidationErrors.Count == 0;
-        e.Remarks = e.IsValid ? "" : string.Join("; ", e.ValidationErrors);
-    }
-
-    private static void ValidateMappingField(
-        CuttingDataRow e,
-        IReadOnlySet<string> knownValues,
-        string actual,
-        string columnLabel,
-        bool requiredWhenKnown = true)
-    {
-        if (string.IsNullOrWhiteSpace(actual))
-        {
-            if (requiredWhenKnown || knownValues.Count > 0)
-                e.ValidationErrors.Add($"{columnLabel} is missing or invalid.");
-            return;
-        }
-
-        if (knownValues.Count == 0)
-            return;
-
-        if (!knownValues.Contains(NormalizeMappingToken(actual)))
-            e.ValidationErrors.Add($"{columnLabel} is missing or invalid.");
     }
 
     private static int? FindColumn(Dictionary<string, int> map, params string[] keys)

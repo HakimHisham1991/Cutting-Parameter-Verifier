@@ -32,6 +32,23 @@ public static class PolygonGeometry
         return result;
     }
 
+    /// <summary>True when vertices form a closed envelope (≥3 distinct vertices, non-zero area).</summary>
+    public static bool IsClosedEnvelope(IReadOnlyList<Point2D> vertices)
+    {
+        var pts = DeduplicateConsecutive(vertices);
+        if (pts.Count < 3)
+            return false;
+
+        var area2 = 0.0;
+        for (var i = 0; i < pts.Count; i++)
+        {
+            var j = (i + 1) % pts.Count;
+            area2 += pts[i].X * pts[j].Y - pts[j].X * pts[i].Y;
+        }
+
+        return Math.Abs(area2) > 1e-12;
+    }
+
     /// <summary>Ray-casting point-in-polygon; boundary treated as inside using inclusive edge test.</summary>
     public static bool IsInsideInclusive(IReadOnlyList<Point2D> polygon, Point2D p)
     {

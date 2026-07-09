@@ -32,6 +32,12 @@ public sealed class CuttingSessionState : IDisposable
         Recompute();
     }
 
+    public void ApplyTestRowEdit(CuttingDataRow row)
+    {
+        CuttingDataRowValidator.Revalidate(row, _constraints.Load());
+        Recompute();
+    }
+
     public void Recompute()
     {
         var cfg = _constraints.Load();

@@ -1,6 +1,8 @@
 @page "/"
 @rendermode InteractiveServer
 @implements IDisposable
+@using System.Globalization
+@using CuttingParameterVerifier.Models
 @inject CuttingSessionState Session
 @inject IExcelService Excel
 @inject IJSRuntime Js
@@ -33,6 +35,7 @@
             <select class="form-select form-select-sm cpv-filter" @bind="_filterValue" @bind:after="OnFilterChanged" disabled="@_importBusy">
                 <option value="All">All rows</option>
                 <option value="PassBoth">Pass on both</option>
+                <option value="FailBoth">Fail on both</option>
                 <option value="AnyFail">Any fail</option>
                 <option value="AnyNa">Any N/A</option>
             </select>
@@ -78,8 +81,14 @@
 <div class="row g-3 cpv-main-row cpv-verifier-main">
     <div class="col-xxl-9 col-xl-9 col-12 cpv-verifier-table-col cpv-fill-col">
         <div class="card shadow-sm cpv-fill-card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <span>Imported operations</span>
+            <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
+                <div>
+                    <span>Imported operations</span>
+                    @if (Session.Results.Any())
+                    {
+                        <span class="text-muted small ms-1">— test edits are session-only; re-import Excel to restore.</span>
+                    }
+                </div>
                 <span class="badge text-bg-secondary">@OrderedFilteredResults.Count() / @Session.Results.Count</span>
             </div>
             <div class="card-body p-0">
@@ -173,23 +182,23 @@
                                 <tr class="@RowClass(r)">
                                     <td>@r.Source.No</td>
                                     <td>@r.Source.AcType</td>
-                                    <td>@r.Source.ProcessSpecs</td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.ProcessSpecs" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
                                     <td>@r.Source.PartNumber</td>
-                                    <td>@r.Source.Material</td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.Material" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
                                     <td>@r.Source.ToolRefNumber</td>
                                     <td>@r.Source.ToolName</td>
-                                    <td>@r.Source.MillingType</td>
-                                    <td>@r.Source.ToolType</td>
-                                    <td>@r.Source.StrategyType</td>
-                                    <td>@r.Source.SurfaceType</td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.MillingType" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.ToolType" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.StrategyType" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.SurfaceType" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
                                     <td>@Format(r.Source.DiameterMm, "0.###")</td>
                                     <td>@FormatInt(r.Source.NumberOfTeethZ)</td>
                                     <td>@Format(r.Source.FeedRateVfMmMin, "0.###")</td>
                                     <td>@Format(r.Source.ToolSpeedNRpm, "0.###")</td>
-                                    <td>@Format(r.Source.AxialDocApMm, "0.###")</td>
-                                    <td>@Format(r.Source.RadialDocAeMm, "0.###")</td>
-                                    <td>@Format(r.Source.FeedPerToothFzMm, "0.####")</td>
-                                    <td>@Format(r.Source.SurfaceSpeedVcMMin, "0.###")</td>
+                                    <td><input type="number" step="any" class="form-control form-control-sm cpv-test-edit" value="@BindFormat(r.Source.AxialDocApMm)" @oninput="@(e => OnTestDoubleEdited(r.Source, e, v => r.Source.AxialDocApMm = v))" disabled="@_importBusy" /></td>
+                                    <td><input type="number" step="any" class="form-control form-control-sm cpv-test-edit" value="@BindFormat(r.Source.RadialDocAeMm)" @oninput="@(e => OnTestDoubleEdited(r.Source, e, v => r.Source.RadialDocAeMm = v))" disabled="@_importBusy" /></td>
+                                    <td><input type="number" step="any" class="form-control form-control-sm cpv-test-edit" value="@BindFormat(r.Source.FeedPerToothFzMm)" @oninput="@(e => OnTestDoubleEdited(r.Source, e, v => r.Source.FeedPerToothFzMm = v))" disabled="@_importBusy" /></td>
+                                    <td><input type="number" step="any" class="form-control form-control-sm cpv-test-edit" value="@BindFormat(r.Source.SurfaceSpeedVcMMin)" @oninput="@(e => OnTestDoubleEdited(r.Source, e, v => r.Source.SurfaceSpeedVcMMin = v))" disabled="@_importBusy" /></td>
                                     <td>@r.Source.OperationName</td>
                                     <td class="text-break">
                                         @{
@@ -345,6 +354,8 @@
     private string _importPhase = "";
     private string _importDetail = "";
     private int _importPercent;
+    private CancellationTokenSource? _testEditDebounceCts;
+    private CuttingDataRow? _pendingTestEditRow;
 
     protected override void OnInitialized()
     {
@@ -358,6 +369,7 @@
     private IEnumerable<ResultRow> FilteredResults => _filterValue switch
     {
         "PassBoth" => Session.Results.Where(r => r.ParameterStatus == PassFailNa.Pass && r.EngagementStatus == PassFailNa.Pass),
+        "FailBoth" => Session.Results.Where(r => r.ParameterStatus == PassFailNa.Fail && r.EngagementStatus == PassFailNa.Fail),
         "AnyFail" => Session.Results.Where(r => r.ParameterStatus == PassFailNa.Fail || r.EngagementStatus == PassFailNa.Fail),
         "AnyNa" => Session.Results.Where(r => r.ParameterStatus == PassFailNa.Na || r.EngagementStatus == PassFailNa.Na),
         _ => Session.Results
@@ -526,6 +538,52 @@
 
     private static string FormatInt(int? v) => v is null ? "" : v.Value.ToString();
 
+    private static string BindFormat(double? v) =>
+        v is null ? "" : v.Value.ToString(CultureInfo.InvariantCulture);
+
+    private void OnTestDoubleEdited(CuttingDataRow row, ChangeEventArgs e, Action<double?> assign)
+    {
+        var text = e.Value?.ToString();
+        if (string.IsNullOrWhiteSpace(text))
+            assign(null);
+        else if (double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
+            assign(value);
+        else
+            return;
+
+        ScheduleTestRowEdit(row);
+    }
+
+    private void ScheduleTestRowEdit(CuttingDataRow row)
+    {
+        if (_importBusy)
+            return;
+
+        _pendingTestEditRow = row;
+        _testEditDebounceCts?.Cancel();
+        _testEditDebounceCts = new CancellationTokenSource();
+        var token = _testEditDebounceCts.Token;
+        _ = DebouncedTestRowEditAsync(token);
+    }
+
+    private async Task DebouncedTestRowEditAsync(CancellationToken token)
+    {
+        try
+        {
+            await Task.Delay(250, token);
+            var row = _pendingTestEditRow;
+            if (row is null)
+                return;
+
+            Session.ApplyTestRowEdit(row);
+            await InvokeAsync(StateHasChanged);
+        }
+        catch (TaskCanceledException)
+        {
+            // superseded
+        }
+    }
+
     private async Task OnExcelSelectedAsync(InputFileChangeEventArgs e)
     {
         var file = e.File;
@@ -674,5 +732,7 @@
     public void Dispose()
     {
         Session.Changed -= OnSessionChanged;
+        _testEditDebounceCts?.Cancel();
+        _testEditDebounceCts?.Dispose();
     }
 }

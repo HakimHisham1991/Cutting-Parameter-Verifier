@@ -2,6 +2,47 @@
 
 All notable changes to this project are documented in this file.
 
+## [1.7.8] - 2026-07-09
+
+### Changed
+
+- Verifier test editing — **Cutter Type** is now editable; **Tool Diameter** and **Number of Flutes** are read-only again.
+
+---
+
+## [1.7.7] - 2026-07-09
+
+### Added
+
+- **Test editing** on the Verifier imported operations table — Process Specs, Material Type, Tool Type, Machining Type, Finish Type, Tool Diameter, Number of Flutes, ap, ae, Fz, and Vc can be edited in-session; checks and charts update live. Re-import Excel to restore source values.
+
+---
+
+## [1.7.6] - 2026-07-09
+
+### Added
+
+- Settings polygon editors (**Cutting (Vc, Fz)** and **Engagement ap × ae**) show **Error: Invalid points.** below Add point when the envelope is not closed (fewer than three distinct vertices or zero area).
+
+---
+
+## [1.7.5] - 2026-07-09
+
+### Changed
+
+- Mapping table **Status** column — removed **Error**; added **Not Used** (grey) when the graph number is missing or not defined in Graph selector. **OK** and **Duplicate** remain.
+
+---
+
+## [1.7.4] - 2026-07-09
+
+### Added
+
+- Mapping table **Status** column on Settings — **OK** (green), **Error** (red) when another row could match the same operation but maps to a different graph, **Duplicate** (yellow) when another row has the same match fields.
+- Verifier filter **Fail on both** — shows rows where both Cutting (Vc, Fz) and Engagement are Fail.
+
+---
+
 ## [1.7.3] - 2026-07-08
 
 ### Added
@@ -188,7 +229,12 @@ All notable changes to this project are documented in this file.
 - Sample Excel generator (`tools/SampleExcelGen`) and downloadable `sample.xlsx`.
 - GitHub Actions CI workflow (restore + Release build).
 
-[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.3...HEAD
+[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.8...HEAD
+[1.7.8]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.7...v1.7.8
+[1.7.7]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.6...v1.7.7
+[1.7.6]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.5...v1.7.6
+[1.7.5]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.4...v1.7.5
+[1.7.4]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.3...v1.7.4
 [1.7.3]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.2...v1.7.3
 [1.7.2]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.1...v1.7.2
 [1.7.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.0...v1.7.1

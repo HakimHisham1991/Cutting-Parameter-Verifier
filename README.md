@@ -1,6 +1,6 @@
 # Cutting Parameter Verifier
 
-**Current version:** 1.7.3
+**Current version:** 1.7.8
 
 A Blazor web application for verifying CNC milling cutting parameters against configurable constraint graphs. Upload a CAM Excel export, and the app maps each operation to the correct figure(s), checks whether cutting and engagement parameters fall inside approved polygons, and visualizes results in interactive charts.
 

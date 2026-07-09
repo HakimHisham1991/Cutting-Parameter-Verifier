@@ -1,4 +1,5 @@
 @using CuttingParameterVerifier.Models
+@using CuttingParameterVerifier.Services
 
 <div class="table-responsive">
     <table class="table table-sm align-middle">
@@ -25,6 +26,10 @@
     </table>
 </div>
 <button type="button" class="btn btn-sm btn-outline-primary" @onclick="Add">Add point</button>
+@if (ValidateClosedEnvelope && !PolygonGeometry.IsClosedEnvelope(Points))
+{
+    <p class="cpv-points-editor-error small mb-0 mt-2">Error: Invalid points.</p>
+}
 
 @code {
     [Parameter, EditorRequired]
@@ -35,6 +40,9 @@
 
     [Parameter]
     public string YLabel { get; set; } = "Y";
+
+    [Parameter]
+    public bool ValidateClosedEnvelope { get; set; }
 
     [Parameter]
     public EventCallback OnChanged { get; set; }

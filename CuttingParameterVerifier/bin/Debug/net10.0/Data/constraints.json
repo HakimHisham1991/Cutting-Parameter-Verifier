@@ -419,6 +419,36 @@
       "useMillingType": true,
       "useToolType": false,
       "useStrategyType": false
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Inconel",
+      "surfaceType": "Finish",
+      "millingType": "End Milling",
+      "toolType": "N/A",
+      "strategyType": "N/A",
+      "graphNumber": "TEST-444",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": false,
+      "useStrategyType": false
+    },
+    {
+      "processSpecs": "80-T-30-4010",
+      "material": "Titanium",
+      "surfaceType": "Controlled Roughing",
+      "millingType": "End Milling",
+      "toolType": "N/A",
+      "strategyType": "N/A",
+      "graphNumber": "TEST-333",
+      "useProcessSpecs": true,
+      "useMaterial": true,
+      "useSurfaceType": true,
+      "useMillingType": true,
+      "useToolType": false,
+      "useStrategyType": false
     }
   ],
   "graphs": [
@@ -2177,6 +2207,91 @@
       "diameterPlotMaxMm": 50,
       "engagementAeVsDiameterPolygon": [],
       "engagementApVsDiameterPolygon": []
+    },
+    {
+      "graphNumber": "TEST-333_copy",
+      "cuttingPolygon": [
+        {
+          "x": 0,
+          "y": 10
+        },
+        {
+          "x": 10,
+          "y": 30
+        },
+        {
+          "x": 9.9954384213259,
+          "y": 30.00228078933705
+        },
+        {
+          "x": -0.0045615786740995715,
+          "y": 10.00228078933705
+        }
+      ],
+      "engagementPolygon": [
+        {
+          "x": 0,
+          "y": 0.5
+        },
+        {
+          "x": 0.77,
+          "y": 0.99
+        },
+        {
+          "x": 0.769824978589545,
+          "y": 0.9902750336450007
+        },
+        {
+          "x": -0.00017502141045496996,
+          "y": 0.5002750336450007
+        }
+      ],
+      "engagementMode": 0,
+      "aeVsDiameterInequalities": [
+        {
+          "expression": "ae \u003E= 0"
+        },
+        {
+          "expression": "ae \u003C= 1*D"
+        }
+      ],
+      "apVsDiameterInequalities": [
+        {
+          "expression": "ap \u003E= 0.5*D"
+        },
+        {
+          "expression": "ap \u003C= 1*D"
+        }
+      ],
+      "diameterPlotMaxMm": 50,
+      "engagementAeVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 50,
+          "y": 0
+        },
+        {
+          "x": 50,
+          "y": 50
+        }
+      ],
+      "engagementApVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 50,
+          "y": 25
+        },
+        {
+          "x": 50,
+          "y": 50
+        }
+      ]
     }
   ]
 }
