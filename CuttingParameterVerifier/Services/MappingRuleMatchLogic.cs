@@ -25,5 +25,12 @@ public static class MappingRuleMatchLogic
     public static bool AreEquivalent(MappingRule a, MappingRule b) =>
         SameMappingKey(a, b) && SameGraphNumber(a.GraphNumber, b.GraphNumber);
 
+    /// <summary>Stable id for a bundled mapping rule — used to remember intentional deletions.</summary>
+    public static string BundledMappingFingerprint(MappingRule r) =>
+        string.Join('\u001f',
+            r.UseProcessSpecs, r.UseMaterial, r.UseSurfaceType, r.UseMillingType, r.UseToolType, r.UseStrategyType,
+            Norm(r.ProcessSpecs), Norm(r.Material), Norm(r.SurfaceType), Norm(r.MillingType), Norm(r.ToolType),
+            Norm(r.StrategyType), Norm(r.GraphNumber));
+
     private static string Norm(string s) => s.Trim().ToLowerInvariant();
 }

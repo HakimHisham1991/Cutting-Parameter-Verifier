@@ -2,6 +2,38 @@
 
 All notable changes to this project are documented in this file.
 
+## [1.7.12] - 2026-07-09
+
+### Fixed
+
+- Verifier numeric test fields accept partial decimals while typing (e.g. `.2`); values normalize to `0.2` on Enter or click away.
+
+---
+
+## [1.7.11] - 2026-07-09
+
+### Changed
+
+- Verifier test editing — checks and charts now update only when you press **Enter** or click away from the field, instead of on every keystroke.
+
+---
+
+## [1.7.10] - 2026-07-09
+
+### Changed
+
+- Verifier test editing — **Feed Rate 100% (mm/min)** and **Speed Rate 100% (rpm)** are now editable; **Feed per Tooth [Fz]** and **Speed Vc (m/min)** are read-only and update from the program feed/speed inputs.
+
+---
+
+## [1.7.9] - 2026-07-09
+
+### Fixed
+
+- Settings mapping table and graph selector — deleting bundled mapping rows or graphs and saving no longer resurrects them on Reload; intentional removals are persisted as tombstones in `constraints.json`.
+
+---
+
 ## [1.7.8] - 2026-07-09
 
 ### Changed
@@ -229,7 +261,11 @@ All notable changes to this project are documented in this file.
 - Sample Excel generator (`tools/SampleExcelGen`) and downloadable `sample.xlsx`.
 - GitHub Actions CI workflow (restore + Release build).
 
-[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.8...HEAD
+[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.12...HEAD
+[1.7.12]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.11...v1.7.12
+[1.7.11]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.10...v1.7.11
+[1.7.10]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.9...v1.7.10
+[1.7.9]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.8...v1.7.9
 [1.7.8]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.7...v1.7.8
 [1.7.7]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.6...v1.7.7
 [1.7.6]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.5...v1.7.6

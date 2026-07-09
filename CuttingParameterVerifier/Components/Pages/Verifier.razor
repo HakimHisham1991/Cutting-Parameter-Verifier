@@ -86,7 +86,7 @@
                     <span>Imported operations</span>
                     @if (Session.Results.Any())
                     {
-                        <span class="text-muted small ms-1">— test edits are session-only; re-import Excel to restore.</span>
+                        <span class="text-muted small ms-1">— test edits are session-only; press Enter or click away to update checks and charts; re-import Excel to restore.</span>
                     }
                 </div>
                 <span class="badge text-bg-secondary">@OrderedFilteredResults.Count() / @Session.Results.Count</span>
@@ -182,23 +182,23 @@
                                 <tr class="@RowClass(r)">
                                     <td>@r.Source.No</td>
                                     <td>@r.Source.AcType</td>
-                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.ProcessSpecs" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.ProcessSpecs" @bind:event="oninput" @onkeydown="@(e => OnTestEditKeyDown(e, r.Source))" @onfocusout="@(() => OnTestEditBlur(r.Source))" disabled="@_importBusy" /></td>
                                     <td>@r.Source.PartNumber</td>
-                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.Material" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.Material" @bind:event="oninput" @onkeydown="@(e => OnTestEditKeyDown(e, r.Source))" @onfocusout="@(() => OnTestEditBlur(r.Source))" disabled="@_importBusy" /></td>
                                     <td>@r.Source.ToolRefNumber</td>
                                     <td>@r.Source.ToolName</td>
-                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.MillingType" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
-                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.ToolType" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
-                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.StrategyType" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
-                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.SurfaceType" @bind:event="oninput" @bind:after="@(() => ScheduleTestRowEdit(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.MillingType" @bind:event="oninput" @onkeydown="@(e => OnTestEditKeyDown(e, r.Source))" @onfocusout="@(() => OnTestEditBlur(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.ToolType" @bind:event="oninput" @onkeydown="@(e => OnTestEditKeyDown(e, r.Source))" @onfocusout="@(() => OnTestEditBlur(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.StrategyType" @bind:event="oninput" @onkeydown="@(e => OnTestEditKeyDown(e, r.Source))" @onfocusout="@(() => OnTestEditBlur(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input class="form-control form-control-sm cpv-test-edit" @bind="r.Source.SurfaceType" @bind:event="oninput" @onkeydown="@(e => OnTestEditKeyDown(e, r.Source))" @onfocusout="@(() => OnTestEditBlur(r.Source))" disabled="@_importBusy" /></td>
                                     <td>@Format(r.Source.DiameterMm, "0.###")</td>
                                     <td>@FormatInt(r.Source.NumberOfTeethZ)</td>
-                                    <td>@Format(r.Source.FeedRateVfMmMin, "0.###")</td>
-                                    <td>@Format(r.Source.ToolSpeedNRpm, "0.###")</td>
-                                    <td><input type="number" step="any" class="form-control form-control-sm cpv-test-edit" value="@BindFormat(r.Source.AxialDocApMm)" @oninput="@(e => OnTestDoubleEdited(r.Source, e, v => r.Source.AxialDocApMm = v))" disabled="@_importBusy" /></td>
-                                    <td><input type="number" step="any" class="form-control form-control-sm cpv-test-edit" value="@BindFormat(r.Source.RadialDocAeMm)" @oninput="@(e => OnTestDoubleEdited(r.Source, e, v => r.Source.RadialDocAeMm = v))" disabled="@_importBusy" /></td>
-                                    <td><input type="number" step="any" class="form-control form-control-sm cpv-test-edit" value="@BindFormat(r.Source.FeedPerToothFzMm)" @oninput="@(e => OnTestDoubleEdited(r.Source, e, v => r.Source.FeedPerToothFzMm = v))" disabled="@_importBusy" /></td>
-                                    <td><input type="number" step="any" class="form-control form-control-sm cpv-test-edit" value="@BindFormat(r.Source.SurfaceSpeedVcMMin)" @oninput="@(e => OnTestDoubleEdited(r.Source, e, v => r.Source.SurfaceSpeedVcMMin = v))" disabled="@_importBusy" /></td>
+                                    <td><input type="text" inputmode="decimal" class="form-control form-control-sm cpv-test-edit" value="@TestDoubleDisplay(r.Source, TestDoubleField.FeedRate, r.Source.FeedRateVfMmMin)" @oninput="@(e => OnTestDoubleInput(r.Source, TestDoubleField.FeedRate, e))" @onkeydown="@(e => OnTestEditKeyDown(e, r.Source))" @onfocusout="@(() => OnTestEditBlur(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input type="text" inputmode="decimal" class="form-control form-control-sm cpv-test-edit" value="@TestDoubleDisplay(r.Source, TestDoubleField.SpeedRate, r.Source.ToolSpeedNRpm)" @oninput="@(e => OnTestDoubleInput(r.Source, TestDoubleField.SpeedRate, e))" @onkeydown="@(e => OnTestEditKeyDown(e, r.Source))" @onfocusout="@(() => OnTestEditBlur(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input type="text" inputmode="decimal" class="form-control form-control-sm cpv-test-edit" value="@TestDoubleDisplay(r.Source, TestDoubleField.Ap, r.Source.AxialDocApMm)" @oninput="@(e => OnTestDoubleInput(r.Source, TestDoubleField.Ap, e))" @onkeydown="@(e => OnTestEditKeyDown(e, r.Source))" @onfocusout="@(() => OnTestEditBlur(r.Source))" disabled="@_importBusy" /></td>
+                                    <td><input type="text" inputmode="decimal" class="form-control form-control-sm cpv-test-edit" value="@TestDoubleDisplay(r.Source, TestDoubleField.Ae, r.Source.RadialDocAeMm)" @oninput="@(e => OnTestDoubleInput(r.Source, TestDoubleField.Ae, e))" @onkeydown="@(e => OnTestEditKeyDown(e, r.Source))" @onfocusout="@(() => OnTestEditBlur(r.Source))" disabled="@_importBusy" /></td>
+                                    <td>@Format(r.Source.FeedPerToothFzMm, "0.###")</td>
+                                    <td>@Format(r.Source.SurfaceSpeedVcMMin, "0.###")</td>
                                     <td>@r.Source.OperationName</td>
                                     <td class="text-break">
                                         @{
@@ -345,6 +345,14 @@
 
     private static readonly StringComparer SortText = StringComparer.OrdinalIgnoreCase;
 
+    private enum TestDoubleField
+    {
+        FeedRate,
+        SpeedRate,
+        Ap,
+        Ae
+    }
+
     private string _filterValue = "All";
     private TableSortColumn _sortColumn = TableSortColumn.No;
     private bool _sortDescending;
@@ -354,8 +362,8 @@
     private string _importPhase = "";
     private string _importDetail = "";
     private int _importPercent;
-    private CancellationTokenSource? _testEditDebounceCts;
-    private CuttingDataRow? _pendingTestEditRow;
+    private CuttingDataRow? _blurCommitSkippedRow;
+    private readonly Dictionary<(CuttingDataRow Row, TestDoubleField Field), string> _testDoubleDrafts = new();
 
     protected override void OnInitialized()
     {
@@ -541,47 +549,93 @@
     private static string BindFormat(double? v) =>
         v is null ? "" : v.Value.ToString(CultureInfo.InvariantCulture);
 
-    private void OnTestDoubleEdited(CuttingDataRow row, ChangeEventArgs e, Action<double?> assign)
+    private string TestDoubleDisplay(CuttingDataRow row, TestDoubleField field, double? value)
     {
-        var text = e.Value?.ToString();
-        if (string.IsNullOrWhiteSpace(text))
-            assign(null);
-        else if (double.TryParse(text, NumberStyles.Float, CultureInfo.InvariantCulture, out var value))
-            assign(value);
-        else
-            return;
-
-        ScheduleTestRowEdit(row);
+        if (_testDoubleDrafts.TryGetValue((row, field), out var draft))
+            return draft;
+        return BindFormat(value);
     }
 
-    private void ScheduleTestRowEdit(CuttingDataRow row)
+    private void OnTestDoubleInput(CuttingDataRow row, TestDoubleField field, ChangeEventArgs e)
+    {
+        var text = e.Value?.ToString() ?? "";
+        if (!PartialDoubleInput.IsAllowedWhileTyping(text))
+            return;
+
+        _testDoubleDrafts[(row, field)] = text;
+        StateHasChanged();
+    }
+
+    private void FlushTestDoubleDrafts(CuttingDataRow row)
+    {
+        foreach (var field in Enum.GetValues<TestDoubleField>())
+        {
+            var key = (row, field);
+            if (!_testDoubleDrafts.Remove(key, out var text))
+                continue;
+
+            if (string.IsNullOrWhiteSpace(text))
+            {
+                AssignTestDouble(row, field, null);
+                continue;
+            }
+
+            if (!PartialDoubleInput.TryParseOnCommit(text, out var value))
+                continue;
+
+            AssignTestDouble(row, field, value);
+        }
+    }
+
+    private static void AssignTestDouble(CuttingDataRow row, TestDoubleField field, double? value)
+    {
+        switch (field)
+        {
+            case TestDoubleField.FeedRate:
+                row.FeedRateVfMmMin = value;
+                break;
+            case TestDoubleField.SpeedRate:
+                row.ToolSpeedNRpm = value;
+                break;
+            case TestDoubleField.Ap:
+                row.AxialDocApMm = value;
+                break;
+            case TestDoubleField.Ae:
+                row.RadialDocAeMm = value;
+                break;
+        }
+    }
+
+    private void OnTestEditKeyDown(KeyboardEventArgs e, CuttingDataRow row)
+    {
+        if (!string.Equals(e.Key, "Enter", StringComparison.Ordinal))
+            return;
+
+        _blurCommitSkippedRow = row;
+        CommitTestRowEdit(row);
+    }
+
+    private void OnTestEditBlur(CuttingDataRow row)
+    {
+        if (ReferenceEquals(_blurCommitSkippedRow, row))
+        {
+            _blurCommitSkippedRow = null;
+            return;
+        }
+
+        CommitTestRowEdit(row);
+    }
+
+    private void CommitTestRowEdit(CuttingDataRow row)
     {
         if (_importBusy)
             return;
 
-        _pendingTestEditRow = row;
-        _testEditDebounceCts?.Cancel();
-        _testEditDebounceCts = new CancellationTokenSource();
-        var token = _testEditDebounceCts.Token;
-        _ = DebouncedTestRowEditAsync(token);
-    }
-
-    private async Task DebouncedTestRowEditAsync(CancellationToken token)
-    {
-        try
-        {
-            await Task.Delay(250, token);
-            var row = _pendingTestEditRow;
-            if (row is null)
-                return;
-
-            Session.ApplyTestRowEdit(row);
-            await InvokeAsync(StateHasChanged);
-        }
-        catch (TaskCanceledException)
-        {
-            // superseded
-        }
+        FlushTestDoubleDrafts(row);
+        CuttingParameterDerivations.ApplySpeedRateChange(row);
+        CuttingParameterDerivations.ApplyFeedRateChange(row);
+        Session.ApplyTestRowEdit(row);
+        StateHasChanged();
     }
 
     private async Task OnExcelSelectedAsync(InputFileChangeEventArgs e)
@@ -632,6 +686,7 @@
                 notes.Add("No rows detected — check headers and worksheet layout.");
 
             Session.SetImported(rows, notes);
+            _testDoubleDrafts.Clear();
             ResetSortToNoAscending();
 
             _importPhase = "Import complete.";
@@ -729,10 +784,5 @@
         await Js.InvokeVoidAsync("cpvFiles.downloadBase64", "cutting-parameter-results.xlsx", b64);
     }
 
-    public void Dispose()
-    {
-        Session.Changed -= OnSessionChanged;
-        _testEditDebounceCts?.Cancel();
-        _testEditDebounceCts?.Dispose();
-    }
+    public void Dispose() => Session.Changed -= OnSessionChanged;
 }

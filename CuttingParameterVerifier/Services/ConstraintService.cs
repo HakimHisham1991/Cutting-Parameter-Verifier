@@ -99,6 +99,10 @@ public sealed class ConstraintService : IConstraintService
 
     public void Save(VerificationConfig config)
     {
+        var bundled = BundledBaseline.Value;
+        if (bundled is not null)
+            UpdateBundledRemovalTombstones(config, bundled);
+
         var path = GetConfigPath();
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         File.WriteAllText(path, JsonSerializer.Serialize(config, JsonOptions));
@@ -161,6 +165,8 @@ public sealed class ConstraintService : IConstraintService
             // when disk still points at other bundled figure ids.
             if (IsBundledGraphSupersededByRename(disk, bundled, g.GraphNumber))
                 continue;
+            if (IsGraphTombstoned(disk, g.GraphNumber))
+                continue;
             disk.Graphs.Add(CloneGraph(g));
             addedGraphs++;
         }
@@ -169,6 +175,8 @@ public sealed class ConstraintService : IConstraintService
         foreach (var b in bundled.MappingRules)
         {
             if (HasEquivalentMapping(disk.MappingRules, b))
+                continue;
+            if (IsMappingTombstoned(disk, b))
                 continue;
             // Skip mappings whose target graph was renamed or deleted on disk — otherwise Save→Load
             // would resurrect the old graph number from the embedded baseline.
@@ -180,6 +188,47 @@ public sealed class ConstraintService : IConstraintService
 
         return new MergeResult(addedRules, addedGraphs);
     }
+
+    private static void UpdateBundledRemovalTombstones(VerificationConfig config, VerificationConfig bundled)
+    {
+        config.RemovedBundledGraphNumbers ??= new List<string>();
+        config.RemovedBundledMappingFingerprints ??= new List<string>();
+
+        config.RemovedBundledGraphNumbers.RemoveAll(t =>
+            config.Graphs.Any(g => SameGraphNumber(g.GraphNumber, t)));
+
+        config.RemovedBundledMappingFingerprints.RemoveAll(fp =>
+            bundled.MappingRules.Any(br => MappingRuleMatchLogic.BundledMappingFingerprint(br) == fp) &&
+            config.MappingRules.Any(r => MappingRuleMatchLogic.BundledMappingFingerprint(r) == fp));
+
+        foreach (var bg in bundled.Graphs)
+        {
+            var num = bg.GraphNumber.Trim();
+            if (config.Graphs.Any(g => SameGraphNumber(g.GraphNumber, num)))
+                continue;
+            if (IsBundledGraphSupersededByRename(config, bundled, num))
+                continue;
+            if (!config.RemovedBundledGraphNumbers.Any(t => SameGraphNumber(t, num)))
+                config.RemovedBundledGraphNumbers.Add(num);
+        }
+
+        foreach (var br in bundled.MappingRules)
+        {
+            if (HasEquivalentMapping(config.MappingRules, br))
+                continue;
+            var fp = MappingRuleMatchLogic.BundledMappingFingerprint(br);
+            if (!config.RemovedBundledMappingFingerprints.Contains(fp, StringComparer.Ordinal))
+                config.RemovedBundledMappingFingerprints.Add(fp);
+        }
+    }
+
+    private static bool IsGraphTombstoned(VerificationConfig disk, string graphNumber) =>
+        disk.RemovedBundledGraphNumbers.Any(t => SameGraphNumber(t, graphNumber));
+
+    private static bool IsMappingTombstoned(VerificationConfig disk, MappingRule rule) =>
+        disk.RemovedBundledMappingFingerprints.Contains(
+            MappingRuleMatchLogic.BundledMappingFingerprint(rule),
+            StringComparer.Ordinal);
 
     private static bool IsBundledGraphSupersededByRename(
         VerificationConfig disk,
