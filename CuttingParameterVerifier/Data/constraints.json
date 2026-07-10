@@ -2029,6 +2029,93 @@
           "y": 10
         }
       ]
+    },
+    {
+      "graphNumber": "TABLE 1.6_test",
+      "cuttingPolygon": [
+        {
+          "x": 0,
+          "y": 0.1
+        },
+        {
+          "x": 4000,
+          "y": 0.1
+        },
+        {
+          "x": 4000,
+          "y": 0.3
+        },
+        {
+          "x": 0,
+          "y": 0.3
+        }
+      ],
+      "engagementPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 0,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 1
+        },
+        {
+          "x": 1,
+          "y": 0
+        }
+      ],
+      "engagementMode": 1,
+      "aeVsDiameterInequalities": [
+        {
+          "expression": "ae \u003E= 0"
+        }
+      ],
+      "apVsDiameterInequalities": [
+        {
+          "expression": "ap \u003E= 0"
+        }
+      ],
+      "diameterPlotMaxMm": 200,
+      "engagementAeVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 10
+        },
+        {
+          "x": 0,
+          "y": 10
+        }
+      ],
+      "engagementApVsDiameterPolygon": [
+        {
+          "x": 0,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 0
+        },
+        {
+          "x": 200,
+          "y": 10
+        },
+        {
+          "x": 0,
+          "y": 10
+        }
+      ]
     }
   ],
   "removedBundledGraphNumbers": [

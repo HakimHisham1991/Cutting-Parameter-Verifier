@@ -1,7 +1,6 @@
 @page "/login"
 @layout LoginLayout
 @attribute [AllowAnonymous]
-@rendermode InteractiveServer
 @using Microsoft.AspNetCore.Authorization
 @inject NavigationManager Navigation
 @inject IAuthService Auth
@@ -14,7 +13,7 @@
     <h1>CAM Cutting Verifier</h1>
 </div>
 
-<EditForm Model="_model" OnValidSubmit="SignInAsync" FormName="login">
+<EditForm FormName="login" Model="Input!" OnValidSubmit="SignInAsync" method="post">
     <DataAnnotationsValidator />
 
     @if (!string.IsNullOrEmpty(_error))
@@ -24,49 +23,50 @@
 
     <div class="form-group">
         <label for="login-username">Username</label>
-        <InputText id="login-username" class="form-control" @bind-Value="_model.Username" placeholder="Enter your username" autofocus />
+        <InputText id="login-username" class="form-control" @bind-Value="Input!.Username" placeholder="Enter your username" />
     </div>
 
     <div class="form-group">
         <label for="login-password">Password</label>
-        <InputText id="login-password" type="password" class="form-control" @bind-Value="_model.Password" placeholder="Enter your password" />
+        <InputText id="login-password" type="password" class="form-control" @bind-Value="Input!.Password" placeholder="Enter your password" />
     </div>
 
     <button type="submit" class="btn btn-primary btn-block">Login</button>
 </EditForm>
 
 @code {
+    [SupplyParameterFromForm(FormName = "login")]
+    private LoginModel? Input { get; set; }
+
     [SupplyParameterFromQuery(Name = "returnUrl")]
     public string? ReturnUrl { get; set; }
 
-    private readonly LoginModel _model = new();
     private string? _error;
 
     protected override async Task OnInitializedAsync()
     {
+        Input ??= new LoginModel();
+
         var state = await AuthStateProvider.GetAuthenticationStateAsync();
         if (state.User.Identity?.IsAuthenticated == true)
-            Navigation.NavigateTo(NormalizeReturnUrl(ReturnUrl));
+            Navigation.NavigateTo(NormalizeReturnUrl(ReturnUrl), forceLoad: true);
     }
 
     private async Task SignInAsync()
     {
         _error = null;
 
-        if (!Auth.ValidateCredentials(_model.Username, _model.Password))
+        if (!Auth.ValidateCredentials(Input!.Username, Input.Password))
         {
             _error = "Invalid username or password.";
             return;
         }
 
-        if (!await Auth.SignInAsync(_model.Username, _model.Password))
+        if (!await Auth.SignInAsync(Input.Username, Input.Password))
         {
             _error = "Unable to sign in. Please try again.";
             return;
         }
-
-        if (AuthStateProvider is ServerAuthStateProvider serverAuth)
-            serverAuth.NotifyChanged();
 
         Navigation.NavigateTo(NormalizeReturnUrl(ReturnUrl), forceLoad: true);
     }

@@ -1,8 +1,5 @@
 ﻿@inherits LayoutComponentBase
 @using Microsoft.AspNetCore.Components.Authorization
-@inject NavigationManager Navigation
-@inject IAuthService Auth
-@inject AuthenticationStateProvider AuthStateProvider
 
 <div class="page">
     <div class="sidebar">
@@ -13,17 +10,18 @@
         <div class="top-row px-4">
             <div class="app-brand-block">
                 <a class="app-brand text-body text-decoration-none" href="">CAM Cutting Verifier</a>
+                <span class="app-attribution text-muted">Developed by UPECA PDC</span>
                 <span class="app-version text-muted">@AppVersion.Display</span>
             </div>
             <div class="top-row-meta">
                 <AuthorizeView>
                     <Authorized>
-                        <span class="text-muted small me-2">@context.User.Identity?.Name</span>
-                        <button type="button" class="btn btn-sm btn-outline-secondary" @onclick="LogoutAsync">Sign out</button>
+                        <div class="user-session">
+                            <span class="user-session-name text-muted small">@context.User.Identity?.Name</span>
+                            <a href="logout" class="btn btn-sm btn-outline-secondary">Logout</a>
+                        </div>
                     </Authorized>
                 </AuthorizeView>
-                <span class="text-muted small">Blazor Server · CAM parameter verification</span>
-                <span class="text-muted small top-row-attribution">Developed by UPECA PDC</span>
             </div>
         </div>
 
@@ -38,13 +36,3 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
-
-@code {
-    private async Task LogoutAsync()
-    {
-        await Auth.SignOutAsync();
-        if (AuthStateProvider is ServerAuthStateProvider serverAuth)
-            serverAuth.NotifyChanged();
-        Navigation.NavigateTo("/login", forceLoad: true);
-    }
-}

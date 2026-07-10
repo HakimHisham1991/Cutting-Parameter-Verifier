@@ -43,4 +43,12 @@ public static class MappingRuleStatusAnalyzer
 
         return graphs.Any(g => MappingRuleMatchLogic.SameGraphNumber(g.GraphNumber, graphNumber));
     }
+
+    public static bool IsGraphReferencedByAnyMapping(string graphNumber, IReadOnlyList<MappingRule> rules)
+    {
+        if (string.IsNullOrWhiteSpace(graphNumber))
+            return false;
+
+        return rules.Any(r => MappingRuleMatchLogic.SameGraphNumber(r.GraphNumber, graphNumber));
+    }
 }

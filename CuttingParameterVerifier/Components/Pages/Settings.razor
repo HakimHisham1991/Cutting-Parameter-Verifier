@@ -120,6 +120,10 @@
                     <label class="form-label">Rename graph number</label>
                     <input class="form-control form-control-sm" value="@_activeGraph.GraphNumber" @onchange="OnGraphRenamed" />
                     <div class="form-text">Identifiers may include dotted codes (e.g. 3.2.2.4.1.2).</div>
+                    @if (!IsActiveGraphReferencedByMapping())
+                    {
+                        <div class="form-text">Graph is not used</div>
+                    }
                 }
             </div>
         </div>
@@ -329,6 +333,10 @@
     private void AddRule() => _model.MappingRules.Add(new MappingRule());
 
     private void RemoveRule(MappingRule r) => _model.MappingRules.Remove(r);
+
+    private bool IsActiveGraphReferencedByMapping() =>
+        _activeGraph is not null &&
+        MappingRuleStatusAnalyzer.IsGraphReferencedByAnyMapping(_activeGraph.GraphNumber, _model.MappingRules);
 
     private static string MappingStatusLabel(MappingRuleStatus status) => status switch
     {

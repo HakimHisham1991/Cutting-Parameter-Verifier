@@ -2,6 +2,42 @@
 
 All notable changes to this project are documented in this file.
 
+## [1.8.4] - 2026-07-10
+
+### Added
+
+- Settings graph selector — shows **Graph is not used** below the rename hint when no mapping table row references the selected graph.
+
+---
+
+## [1.8.3] - 2026-07-10
+
+### Changed
+
+- Header username and **Logout** button font size increased by 1.25×.
+
+---
+
+## [1.8.2] - 2026-07-10
+
+### Changed
+
+- Header — removed “Blazor Server · CAM parameter verification”; moved “Developed by UPECA PDC” under the app title (above version); username and **Logout** sit side by side.
+
+### Fixed
+
+- **Logout** — uses `/logout` navigation (static layout could not run Blazor click handlers).
+
+---
+
+## [1.8.1] - 2026-07-10
+
+### Fixed
+
+- Login form — fixed static SSR form submission (`FormName` + `[SupplyParameterFromForm]`); sign-in no longer fails silently or errors on second submit.
+
+---
+
 ## [1.8.0] - 2026-07-09
 
 ### Added
@@ -269,7 +305,11 @@ All notable changes to this project are documented in this file.
 - Sample Excel generator (`tools/SampleExcelGen`) and downloadable `sample.xlsx`.
 - GitHub Actions CI workflow (restore + Release build).
 
-[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.8.0...HEAD
+[Unreleased]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.8.4...HEAD
+[1.8.4]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.8.3...v1.8.4
+[1.8.3]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.8.2...v1.8.3
+[1.8.2]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.8.1...v1.8.2
+[1.8.1]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.8.0...v1.8.1
 [1.8.0]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.12...v1.8.0
 [1.7.12]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.11...v1.7.12
 [1.7.11]: https://github.com/HakimHisham1991/Cutting-Parameter-Verifier/compare/v1.7.10...v1.7.11
